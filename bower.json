@@ -1,0 +1,35 @@
+{
+  "name": "angular-gale",
+  "version": "2.1.1",
+  "homepage": "https://github.com/dmunozgaete/angular-gale",
+  "authors": [
+    "David Gaete <dmunozgaete@gmail.com>"
+  ],
+  "description": "Angular Implementation for the Javascript Client GALE",
+  "main": [
+    "src/angular-gale.min.js",
+    "src/angular-gale.min.css"
+  ],
+  "moduleType": [
+    "amd",
+    "es6",
+    "node"
+  ],
+  "keywords": [
+    "GALE", "angularJS", "Valentys", "DmunozGaete"
+  ],
+  "license": "Apache 2.0 License",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "src",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "angular-material": "~0.10.1"
+  }
+}

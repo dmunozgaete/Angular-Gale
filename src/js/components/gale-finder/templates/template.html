@@ -1,0 +1,47 @@
+
+<div class="finder">
+
+	<div class="close" ng-click="close()">
+		<md-icon md-svg-icon="navigation:close"></md-icon>
+	</div>
+	<table>
+		<tr>
+			<td class="icon"> 
+				<md-icon md-svg-icon="action:search"></md-icon>
+			</td>
+			<td class="box">
+				<input ng-change="search(query)" ng-model="query" placeholder="{{placeholder}}" />
+			</td>
+		</tr>
+	</table>
+
+	<div ng-if="results" class="results">
+		<!-- -->
+		<div 
+			ng-repeat="item in results" 
+			ng-click="select(item)" 
+			layout="row" 
+			ng-mouseenter="activeIndex = $index"
+			ng-mouseleave="activeIndex = -1"
+			ng-class="{'active': $index == activeIndex}"
+			layout-align="start center">
+
+			<div flex="5" class="icon">
+				<div class="thumb"> 
+				    <img ng-src="{{item.icon}}" />
+				</div>	
+			</div>
+			<div flex class="name">
+				{{item.name}}
+				<div class="type">
+					{{item.type}}
+				</div>
+			</div>
+
+		</div>
+		<!-- -->
+	</div>
+	<div ng-if="results && results.length > 0" class="footer">
+		{{results.length}} resultados
+	</div>
+</div>

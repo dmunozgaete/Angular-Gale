@@ -1,0 +1,22 @@
+<gale-header 
+	class="gale-header" 
+	layout="row" 
+	layout-align="start center" 
+	ng-transclude>
+</gale-header>
+
+<gale-body class="gale-body">
+	<div class="loading" ng-if="isLoading">
+		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+	</div>
+	<gale-row 
+		layout="row" 
+		class="gale-row" 
+		ng-click="onRowClick(item)" 
+		layout-align="start center" 
+		ng-repeat="item in source" 
+		x="{{$index}}" 
+		formatters="$$formatters" 
+		item="item">
+	</gale-row>
+</gale-body>

@@ -1,0 +1,284 @@
+/*
+	GALE COMPONENTS
+ */
+
+.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
+/*--------------------------------------------------*/
+/*  GALE PAGE
+/*--------------------------------------------------*/
+gale-page {
+	display: block;
+	margin: 0;
+	min-height: 100%;
+	width: 100%;
+}
+
+/*--------------------------------------------------*/
+/*  GALE ALIGN'S
+/*--------------------------------------------------*/
+
+.alignRight,
+.gale-column > div.alignRight,
+gale-cell.alignRight {
+	text-align: right;
+}
+
+.alignLeft,
+.gale-column > div.alignLeft,
+gale-cell.alignLeft {
+	text-align: left;
+}
+
+.alignCenter,
+.gale-column > div.alignCenter,
+gale-cell.alignCenter {
+	text-align: center;
+}
+
+
+/*--------------------------------------------------*/
+/*  GALE TABLE
+/*--------------------------------------------------*/
+.gale-table {
+	display: inline-block;
+	margin: 0;
+	min-height: 100%;
+	width: 100%;
+}
+
+.gale-table > .gale-body,
+.gale-table > .gale-header {
+	margin: 0;
+	min-height: 100%;
+	width: 100%;
+}
+
+.gale-table > .gale-body {
+	display: inline-block;
+	margin-top: 5px;
+}
+
+.gale-table > .gale-header {
+	border-bottom: 1px solid #eee;
+}
+
+.gale-table > .gale-header > .gale-column {
+	display: inline-block;
+	text-align: left;
+	padding: 18px 16px;
+	overflow: hidden;
+	color: #6E6E6E;
+}
+
+.gale-table > .gale-body > .gale-row {
+	text-align: left;
+}
+
+.gale-table.row-click > .gale-body > .gale-row {
+	cursor: pointer;
+}
+
+.gale-table > .gale-body > .gale-row:hover{
+	background-color: #EFF8FF;
+}
+
+.gale-table > .gale-body > .gale-row > gale-cell{
+	color: #2B2B2B;
+	padding:16px;
+	overflow: hidden;
+}
+
+.gale-table > .gale-body > .gale-row .thumb {
+	height: 2.2em;
+	width: 2.2em;
+	overflow: hidden;
+	border-radius: 50%;
+	margin-left: 0px;
+	margin-bottom: 0px;
+}
+
+.gale-table > .gale-body > .gale-row .thumb > img{
+	width: 100%
+}
+
+.gale-table > .gale-body > div.loading md-progress-linear {
+	margin-top: -5px;
+	margin-bottom: 16px;
+}
+
+/*--------------------------------------------------*/
+/*  GALE FINDER
+/*--------------------------------------------------*/
+
+gale-finder {
+	position: fixed;
+	top: 20%;
+	left: 20%;
+	right: 20%;
+	border: none;
+	background-color: rgb(247, 247, 247);
+	border-radius: 5px;
+	padding: 4px 8px;
+	box-shadow: 0px 0px 25px rgb(48, 48, 48);
+	color: rgb(73, 73, 73);
+	display: none;
+	z-index: 999999;
+}
+
+gale-finder.show {
+	display: inline;
+}
+
+gale-finder div.finder .close {
+	position: fixed;
+	top: 18%;
+	right: 19%;
+	border: none;
+	padding: 4px;
+	background-color: rgb(33, 150, 243);
+	border-radius: 50%;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+	cursor: pointer;
+}
+
+gale-finder div.finder .close md-icon {
+	color: #FFF;
+}
+
+gale-finder div.finder table {
+	width: 100%;
+}
+
+gale-finder div.finder table td.icon {
+	width: 25px;
+}
+
+gale-finder div.finder table td.icon md-icon {
+	height: 36px;
+	width: 36px;
+}
+
+gale-finder div.finder table td.box {
+
+}
+
+gale-finder div.finder table td.box > input {
+	background: rgba(0, 0, 0, 0);
+	border: none;
+	width: 98%;
+	padding: 4px;
+	color: rgb(74, 74, 74);
+	outline-color: rgb(255, 255, 255);
+	font-size: 1.5em;
+	line-height: 1.2em;
+}
+
+gale-finder div.finder table td.box{
+
+}
+
+gale-finder div.finder div.results{
+	border-top: 1px solid rgb(232, 232, 232);
+	max-height: 400px;
+	overflow: auto;
+}
+
+gale-finder div.finder div.footer {
+	color: rgb(139, 139, 139);
+	font-style: italic;
+	float: right;
+	font-size: 0.8em;
+}
+
+gale-finder div.finder div.results > div{
+	padding: 4px 8px;
+	color: rgb(112, 109, 108);
+	min-height: 45px;
+	border-radius: 4px;
+}
+
+gale-finder div.finder div.results > div div.thumb {
+	height: 30px;
+	width: 30px;
+	margin: 0px;
+}
+
+gale-finder div.finder div.results > div div.thumb > img{
+	width: 100%;
+}
+
+
+gale-finder div.finder div.results > div div.name {
+	padding-left: 16px;
+}
+
+gale-finder div.finder div.results > div div.type {
+	font-style: italic;
+	color: rgb(148, 148, 148);
+  	font-size: 0.8em;
+}
+
+gale-finder div.finder div.results > div.active,
+gale-finder div.finder div.results > div:hover {
+	background-color: rgb(215, 215, 215);
+	cursor: pointer;
+}
+
+/*--------------------------------------------------*/
+/*  GALE LOADING
+/*--------------------------------------------------*/
+gale-loading {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index: 9999999;
+	background-color: rgba(0, 0, 0, 0.12);
+	display: none !important;
+}
+
+gale-loading.show {
+	display: flex !important
+}
+
+gale-loading > gale-center {
+	background-color: rgb(255, 255, 255);
+	padding: 16px;
+	border-radius: 3px;
+	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),0 2px 2px 0 rgba(0, 0, 0, 0.14),0 1px 5px 0 rgba(0, 0, 0, 0.12);
+	
+
+	/* layout */
+	box-sizing: border-box;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flexbox;
+	display: flex;
+
+	/* layout=row */
+	-webkit-flex-direction: row;
+	-ms-flex-direction: row;
+	flex-direction: row;
+
+	/* layout-align="start center" */
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+gale-loading > gale-center > md-progress-circular {
+  margin: 0px 16px;
+}
