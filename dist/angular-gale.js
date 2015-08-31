@@ -30,15 +30,11 @@
         //Create the namespace via angular style
         angular.forEach(namespaces, function(name) {
 
-            //No dependencies??, check for existence
-            if (!dependencies) {
-
-                //Angular don't have "exists" method, so , try and catch =(
-                try {
-                    angular.module(name)
-                } catch (err) {
-                    angular.module(name, dependencies || []);
-                }
+            //Angular don't have "exists" method, so , try and catch =(
+            try {
+                angular.module(name);
+            } catch (err) {
+                angular.module(name, dependencies || []);
             }
 
         });
@@ -183,7 +179,7 @@
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
                         //ROUTE REGISTRATION STEP
-                        angular.module(application_bundle).config(function($stateProvider) {
+                        angular.module(application_bundle).config(['$stateProvider', function($stateProvider) {
                             angular.forEach(registered_routes, function(route) {
                                 //Register a 'angular like' route
                                 logger.debug("route:", route);
@@ -191,7 +187,7 @@
                                     .state(route.route, route.config);
                             });
                             registered_routes = [];
-                        });
+                        }]);
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
                     })
@@ -215,10 +211,9 @@
   $templateCache.put("gale-table/directives/galeTable.tpl.html",
     "<gale-header class=gale-header layout=row layout-align=\"start center\" ng-transclude></gale-header><gale-body class=gale-body><div class=loading ng-if=isLoading><md-progress-linear md-mode=indeterminate></md-progress-linear></div><gale-row layout=row class=gale-row ng-click=onRowClick(item) layout-align=\"start center\" ng-repeat=\"item in source\" x={{$index}} formatters=$$formatters item=item></gale-row></gale-body>");
 }]);
-;
-//Package Bundle
+;//Package Bundle
 angular.manifiest('gale', [
-    'gale.templates',   
+    'gale.templates',
     'gale.directives',
     'gale.components',
     'gale.filters',
@@ -227,38 +222,40 @@ angular.manifiest('gale', [
     'gale.services.configuration',
     'gale.services.rest',
     'gale.services.storage'
+],
+[
+    'ng'
 ])
 
-.run(function ($Configuration, $LocalStorage, $log, CONFIGURATION){
+.run(['$Configuration', '$LocalStorage', '$log', 'CONFIGURATION', function($Configuration, $LocalStorage, $log, CONFIGURATION) {
     var stored_key = "$_application";
-    var app_conf  = CONFIGURATION.application;
+    var app_conf = CONFIGURATION.application;
     var app_stored = $LocalStorage.getObject(stored_key);
 
-    if(app_stored){
-        
+    if (app_stored) {
+
         //check version configuration , if old , broadcast a changeVersion event;
-        if(app_stored.version !== app_conf.version || app_stored.environment !== app_conf.environment){
+        if (app_stored.version !== app_conf.version || app_stored.environment !== app_conf.environment) {
 
             $log.debug("a new configuration version is available, calling [on_build_new_version] if exist's !", app_conf.version); //Show only in debug mode
 
-            if(angular.isFunction(CONFIGURATION.on_build_new_version)){
-                try{
-                    CONFIGURATION.on_build_new_version(app_conf.version , app_stored.version);
-                }catch(e){
+            if (angular.isFunction(CONFIGURATION.on_build_new_version)) {
+                try {
+                    CONFIGURATION.on_build_new_version(app_conf.version, app_stored.version);
+                } catch (e) {
 
                     $log.debug("failed to execute [on_build_new_version] function defined in config.js", e);
                     throw e;
                 }
             }
         }
-        
+
     }
 
     //Update
     $LocalStorage.setObject(stored_key, app_conf);
 
-});
-
+}]);
 ;angular.module('gale.components')
 
 .directive('galeFinder', function() {
@@ -272,7 +269,7 @@ angular.manifiest('gale', [
             blockUi:        '@'     //Block UI??
         },
         templateUrl: 'gale-finder/directives/galeFinder.tpl.html',
-        controller: function($scope, $element, $log , $galeFinder, $window){
+        controller: ['$scope', '$element', '$log', '$galeFinder', '$window', function($scope, $element, $log , $galeFinder, $window){
             var self        = {};
             var minLength   = $scope.minLength||3;
             var onSearch    = $scope.onSearch;
@@ -395,7 +392,7 @@ angular.manifiest('gale', [
             });
             //-------------------------------------------------
             
-        },
+        }],
 
         link: function (scope, element, attrs, ctrl) {
 
@@ -404,7 +401,7 @@ angular.manifiest('gale', [
 });
 ;angular.module('gale.components')
 
-.factory('$galeFinder', function($q, $rootScope) {
+.factory('$galeFinder', ['$q', '$rootScope', function($q, $rootScope) {
     var self        = this;
     var _component  = null;
 
@@ -437,7 +434,7 @@ angular.manifiest('gale', [
     };
 
     return self;
-});
+}]);
 ;angular.module('gale.components')
 
 .directive('galeCenter', function() {
@@ -446,9 +443,9 @@ angular.manifiest('gale', [
         require: '^galeLoading',
         scope: {
         },
-        controller: function($scope, $element, $log ){
+        controller: ['$scope', '$element', '$log', function($scope, $element, $log ){
            
-        },
+        }],
 
         link: function (scope, element, attrs, ctrl) {
             element.attr("layout", "row");
@@ -465,7 +462,7 @@ angular.manifiest('gale', [
             defaultMessage:     '@'     //Default Message
         },
         templateUrl: 'gale-loading/directives/galeLoading.tpl.html',
-        controller: function($scope, $element, $log , $galeLoading){
+        controller: ['$scope', '$element', '$log', '$galeLoading', function($scope, $element, $log , $galeLoading){
             var self            = {};
             var defaultMesasage = $scope.defaultMessage||"";
 
@@ -495,7 +492,7 @@ angular.manifiest('gale', [
                 $galeLoading.$$unregister();      //UnRegister for Service Interaction
             });
             //-------------------------------------------------
-        },
+        }],
 
         link: function (scope, element, attrs, ctrl) {
             
@@ -508,7 +505,7 @@ angular.manifiest('gale', [
 });
 ;angular.module('gale.components')
 
-.factory('$galeLoading', function($q, $rootScope) {
+.factory('$galeLoading', ['$q', '$rootScope', function($q, $rootScope) {
     var self        = this;
     var _component  = null;
 
@@ -541,7 +538,7 @@ angular.manifiest('gale', [
     };
 
     return self;
-});
+}]);
 ;angular.module('gale.components')
 
 .directive('galePage', function() {
@@ -553,7 +550,7 @@ angular.manifiest('gale', [
             onKeydown: '='
         },
 
-        controller: function($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
             var $window = angular.element(window);
 
             //-------------------------------------------
@@ -571,7 +568,7 @@ angular.manifiest('gale', [
                 $window.off('keydown');
             });
             //-------------------------------------------
-        },
+        }],
 
         link: function (scope, element, attrs) {
             scope.$emit("gale-page:title:changed", {
@@ -593,9 +590,9 @@ angular.manifiest('gale', [
         },
         transclude: true,   
 
-        controller: function($scope, $element, $attrs) {
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
            
-        },
+        }],
 
         link: function (scope, element, attrs, galeTable, $transclude) {
             element.attr("flex", (scope.width ? scope.width :""));
@@ -693,18 +690,18 @@ angular.manifiest('gale', [
         require: '^galeTable',
         compile: function (element, attrs, $transclude) {
         },
-        controller: function($scope, $element, $attrs, $interpolate, $compile) {
-        }
+        controller: ['$scope', '$element', '$attrs', '$interpolate', '$compile', function($scope, $element, $attrs, $interpolate, $compile) {
+        }]
     };
 });;angular.module('gale.components')
 
-.directive('galeRow', function($compile, $interpolate) {
+.directive('galeRow', ['$compile', '$interpolate', function($compile, $interpolate) {
     return {
         restrict: 'E',
         require: '^galeTable',
-        controller: function($scope, $element, $attrs, $interpolate, $compile) {
+        controller: ['$scope', '$element', '$attrs', '$interpolate', '$compile', function($scope, $element, $attrs, $interpolate, $compile) {
               
-        },
+        }],
 		link: function (scope, element, attrs , ctrl) {
             angular.forEach(scope.$$formatters, function(formatter, $index){
 
@@ -755,7 +752,7 @@ angular.manifiest('gale', [
             });
 		}
     };
-});;angular.module('gale.components')
+}]);;angular.module('gale.components')
 
 .directive('galeTable', function() {
     return {
@@ -771,7 +768,7 @@ angular.manifiest('gale', [
         },
         transclude: true,
         templateUrl: 'gale-table/directives/galeTable.tpl.html',
-        controller: function($scope, $element, $interpolate, $compile, $Api, $galeTable, KQLBuilder){
+        controller: ['$scope', '$element', '$interpolate', '$compile', '$Api', '$galeTable', 'KQLBuilder', function($scope, $element, $interpolate, $compile, $Api, $galeTable, KQLBuilder){
             this.$$formatters   = $scope.$$formatters = [];                 //Lazy Load Instantation
             var self            = this;                                     //Auto reference
             var unique_id       = ($scope.name||(new Date()).getTime());    //Component Unique ID
@@ -863,7 +860,7 @@ angular.manifiest('gale', [
                 if (isRest){
                     data.total = data.items.length;
                 }
-            }
+            };
             //------------------------------------------------------------------------------
 
             //Cell Click
@@ -879,7 +876,7 @@ angular.manifiest('gale', [
                 $galeTable.$$unregister(self, unique_id);      //UnRegister for Service Interaction
             });
 
-        },
+        }],
 
         link: function (scope, element, attrs,ctrl) {
 
@@ -926,7 +923,7 @@ angular.manifiest('gale', [
     };
 });;angular.module('gale.components')
 
-.factory('$galeTable', function($q, $rootScope) {
+.factory('$galeTable', ['$q', '$rootScope', function($q, $rootScope) {
     var self        = this;
     var deferred    = $q.defer();
     var components  = {};
@@ -1006,7 +1003,7 @@ angular.manifiest('gale', [
 
 
     return deferred.promise;
-});
+}]);
 ;angular.module('gale.directives')
 
 .directive('selectTextOnClick', function () {
@@ -1019,7 +1016,7 @@ angular.manifiest('gale', [
         }
     };
 });;angular.module('gale.directives')
-    .directive('toNumberOnBlur', function($filter, $locale) {
+    .directive('toNumberOnBlur', ['$filter', '$locale', function($filter, $locale) {
         return {
             require: 'ngModel',
             restrict: 'A',
@@ -1041,13 +1038,13 @@ angular.manifiest('gale', [
                 });
             }
         };
-    });
+    }]);
 ;/**
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
 
-.directive('ngEmail', function($log) {
+.directive('ngEmail', ['$log', function($log) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -1072,12 +1069,12 @@ angular.module('gale.directives')
 
         }
     };
-});;/**
+}]);;/**
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
 
-.directive('ngRange', function($log) {
+.directive('ngRange', ['$log', function($log) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -1130,7 +1127,7 @@ angular.module('gale.directives')
 
         }
     };
-});;/**
+}]);;/**
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
@@ -1204,7 +1201,7 @@ angular.module('gale.directives')
 });
 ;angular.module('gale.filters')	
 
-.filter('localize', function ($Localization, $log, $interpolate) {
+.filter('localize', ['$Localization', '$log', '$interpolate', function ($Localization, $log, $interpolate) {
 	return function (text, parameters) {
 
 		try {
@@ -1224,7 +1221,7 @@ angular.module('gale.directives')
 			return text;
 		}
 	};
-});;(function(){
+}]);;(function(){
 
 	var resourceUrl = function(resourceUrl , Identity){
 		if(Identity.isAuthenticated()){
@@ -1236,16 +1233,16 @@ angular.module('gale.directives')
 
 	angular.module('gale.filters')
 
-	.filter('restricted', function ($Api, Identity) {
+	.filter('restricted', ['$Api', 'Identity', function ($Api, Identity) {
 		return function (resourceUrl) {
 			return resourceUrl(resourceUrl, Identity);
 		};
-	});
+	}]);
 
 })();
 ;angular.module('gale.filters')	
 
-.filter('template', function ($log,$interpolate) {
+.filter('template', ['$log', '$interpolate', function ($log,$interpolate) {
 	return function (template, context) {
 
             var exp = $interpolate(template);
@@ -1253,9 +1250,9 @@ angular.module('gale.directives')
            
            return content;
 	};
-});;angular.module('gale.services.configuration')
+}]);;angular.module('gale.services.configuration')
 
-.service('$Configuration', function ($rootScope, $LocalStorage, CONFIGURATION) {
+.service('$Configuration', ['$rootScope', '$LocalStorage', 'CONFIGURATION', function ($rootScope, $LocalStorage, CONFIGURATION) {
     var _values             = {};
 
     //LOAD THE INITIAL CONFIGURATION
@@ -1286,8 +1283,8 @@ angular.module('gale.directives')
         get: get,
         exists: exists
     };
-});;angular.module('gale.services.configuration')
-.service('$Localization', function(RESOURCES) {
+}]);;angular.module('gale.services.configuration')
+.service('$Localization', ['RESOURCES', function(RESOURCES) {
     function get(name, defaultValue) {
         var v = RESOURCES[name];
         if (typeof v === 'undefined') {
@@ -1323,7 +1320,7 @@ angular.module('gale.directives')
         get: get,
         exists: exists
     };
-});
+}]);
 ;angular.module('gale.services')
 
 .provider('$Api', function() {
@@ -1343,7 +1340,7 @@ angular.module('gale.directives')
     //---------------------------------------------------
 
     //---------------------------------------------------
-    this.$get = function ($rootScope, $http, $log, KQLBuilder) {
+    this.$get = ['$rootScope', '$http', '$log', 'KQLBuilder', function ($rootScope, $http, $log, KQLBuilder) {
         var self            =   this;
         
         //------------------------------------------------------------------------------
@@ -1485,7 +1482,7 @@ angular.module('gale.directives')
 
 
         return self;
-    };
+    }];
     //---------------------------------------------------
 });;angular.module('gale.services')
 
@@ -1560,188 +1557,186 @@ angular.module('gale.directives')
 
 
     return this;
-});;(function() {
-    angular.module('gale.services')
-        .run(function($Identity) {})
-        //----------------------------------------
-        .provider('$Identity', function() {
-            var $this = this;
-            var AUTH_EVENTS = {
-                loginSuccess: 'auth-login-success',
-                loginFailed: 'auth-login-failed',
-                logoutSuccess: 'auth-logout-success',
-                sessionTimeout: 'auth-session-timeout',
-                notAuthenticated: 'auth-not-authenticated',
-                notAuthorized: 'auth-not-authorized'
-            };
-            //Configurable Variable on .config Step
-            var _issuerEndpoint = null;
-            var _logInRoute = null;
-            var _enable = false;
-            var _whiteListResolver = function() {
-                return true;
-            };
-            //
-            $this.setIssuerEndpoint = function(value) {
-                _issuerEndpoint = value;
-                return $this;
-            };
-            $this.setLogInRoute = function(value) {
-                _logInRoute = value;
-                return $this;
-            };
-            $this.enable = function() {
-                _enable = true;
-                return $this;
-            };
-            $this.setWhiteListResolver = function(value) {
-                if (typeof value !== "function") {
-                    throw Error("WHITELIST_RESOLVER_FUNCTION_EXPECTED");
-                }
-                _whiteListResolver = value;
-                return $this;
-            };
-
-            function getIssuerEndpoint() {
-                if (!_issuerEndpoint) {
-                    throw Error("ISSUER_ENDPOINT_NOT_SET");
-                }
-                return _issuerEndpoint;
+});;angular.module('gale.services')
+    .run(['$Identity', function($Identity) {}])
+    //----------------------------------------
+    .provider('$Identity', function() {
+        var $ref = this;
+        var AUTH_EVENTS = {
+            loginSuccess: 'auth-login-success',
+            loginFailed: 'auth-login-failed',
+            logoutSuccess: 'auth-logout-success',
+            sessionTimeout: 'auth-session-timeout',
+            notAuthenticated: 'auth-not-authenticated',
+            notAuthorized: 'auth-not-authorized'
+        };
+        //Configurable Variable on .config Step
+        var _issuerEndpoint = null;
+        var _logInRoute = null;
+        var _enable = false;
+        var _whiteListResolver = function() {
+            return true;
+        };
+        //
+        this.setIssuerEndpoint = function(value) {
+            _issuerEndpoint = value;
+            return $ref;
+        };
+        this.setLogInRoute = function(value) {
+            _logInRoute = value;
+            return $ref;
+        };
+        this.enable = function() {
+            _enable = true;
+            return $ref;
+        };
+        this.setWhiteListResolver = function(value) {
+            if (typeof value !== "function") {
+                throw Error("WHITELIST_RESOLVER_FUNCTION_EXPECTED");
             }
+            _whiteListResolver = value;
+            return $ref;
+        };
 
-            function getLogInRoute() {
-                if (!_logInRoute) {
-                    throw Error("LOGINURL_NOT_SET");
-                }
-                return _logInRoute;
+        function getIssuerEndpoint() {
+            if (!_issuerEndpoint) {
+                throw Error("ISSUER_ENDPOINT_NOT_SET");
             }
+            return _issuerEndpoint;
+        }
 
-            function getAuthorizeResolver() {
-                return _authorizeResolver;
+        function getLogInRoute() {
+            if (!_logInRoute) {
+                throw Error("LOGINURL_NOT_SET");
             }
-            $this.$get = function($rootScope, $Api, $state, $LocalStorage, $location, $templateCache) {
-                var _token_key = "$_identity";
-                var _properties = {};
-                var _authResponse = $LocalStorage.getObject(_token_key);
-                var self = this;
-                //------------------------------------------------------------------------------
-                var _login = function(oauthToken) {
-                    $LocalStorage.setObject(_token_key, oauthToken);
-                    _authResponse = oauthToken;
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, oauthToken);
-                };
-                var _logout = function() {
-                    $LocalStorage.remove(_token_key);
-                    _authResponse = null;
-                    $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-                    $state.go(getLogInRoute());
-                };
-                var _addProperty = function(name, value) {
-                    _properties[name] = value;
-                };
-                //------------------------------------------------------------------------------
-                self.authenticate = function(credentials) {
-                    return $Api.invoke('POST', getIssuerEndpoint(), credentials)
-                        .success(function(data) {
-                            _login(data); //Internal Authentication
-                        })
-                        .error(function() {
-                            $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                        });
-                };
-                self.extend = function(name, value) {
-                    if (typeof name === "object") {
-                        for (var key in name) {
-                            _addProperty(key, name[key]);
-                        }
-                        return;
-                    }
-                    _addProperty(name, value);
-                };
-                self.getAccessToken = function() {
-                    return _authResponse.access_token;
-                };
-                self.logOut = function() {
-                    _logout();
-                };
-                self.getCurrent = function() {
-                    //Get Payload
-                    var payload = self.getAccessToken().split('.')[1];
-                    if (atob) {
-                        data = decodeURIComponent(escape(atob(payload)));
-                    }
-                    else {
-                        throw Error("ATOB_NOT_IMPLEMENTED");
-                    }
-                    data = JSON.parse(data);
-                    //Extend Identity
-                    data.property = function(name) {
-                        return _properties[name];
-                    };
-                    data.isInRole = function(roleName) {
-                        return _.contains(data.role, roleName);
-                    };
-                    return data;
-                };
-                self.isAuthenticated = function() {
-                    return _authResponse !== null;
-                };
-                //------------------------------------------------------------------------------
-                //Add Hook if authentication is enabled
-                if (_enable) {
-                    //API HOOK
-                    $Api.$on("before-send", function(headers) {
-                        //SET AUTHORIZATION HEADER IF USER IS AUTHENTICATED
-                        if (self.isAuthenticated()) {
-                            var jwt = _authResponse;
-                            headers.Authorization = jwt.token_type + " " + jwt.access_token;
-                        }
-                    });
-                    $Api.$on("error", function(data, status) {
-                        /*
-                            401 Unauthorized — The user is not logged in
-                            403 Forbidden — The user is logged in but isn’t allowed access
-                            419 Authentication Timeout (non standard) — Session has expired
-                            440 Login Timeout (Microsoft only) — Session has expired
-                        */
-                        var _event = null;
-                        switch (status) {
-                            case 401:
-                                _logout();
-                                return; //Custom Action
-                            case 403:
-                                _event = AUTH_EVENTS.notAuthorized;
-                                break;
-                            case 419:
-                            case 440:
-                                _event = AUTH_EVENTS.sessionTimeout;
-                                break;
-                        }
-                        if (_event) {
-                            $rootScope.$broadcast(_event, data, status);
-                        }
-                    });
-                    //EVENT HOOK
-                    $rootScope.$on('$stateChangeStart', function(event, toState, current) {
-                        if (!self.isAuthenticated() && toState.name !== getLogInRoute()) {
-                            //Is in Whitelist??
-                            if (!_whiteListResolver(toState, current)) {
-                                //Authentication is Required
-                                $state.go(getLogInRoute());
-                                event.preventDefault();
-                            }
-                        }
-                    });
-                }
-                //------------------------------------------------------------------------------
-                //Call Authentication Method to Adapt all services wich need Authorization
-                return self;
+            return _logInRoute;
+        }
+
+        function getAuthorizeResolver() {
+            return _authorizeResolver;
+        }
+
+        this.$get = ['$rootScope', '$Api', '$state', '$LocalStorage', function($rootScope, $Api, $state, $LocalStorage) {
+            var _token_key = "$_identity";
+            var _properties = {};
+            var _authResponse = $LocalStorage.getObject(_token_key);
+            var self = this;
+            //------------------------------------------------------------------------------
+            var _login = function(oauthToken) {
+                $LocalStorage.setObject(_token_key, oauthToken);
+                _authResponse = oauthToken;
+                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, oauthToken);
             };
-        });
-})();
+            var _logout = function() {
+                $LocalStorage.remove(_token_key);
+                _authResponse = null;
+                $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+                $state.go(getLogInRoute());
+            };
+            var _addProperty = function(name, value) {
+                _properties[name] = value;
+            };
+            //------------------------------------------------------------------------------
+            self.authenticate = function(credentials) {
+                return $Api.invoke('POST', getIssuerEndpoint(), credentials)
+                    .success(function(data) {
+                        _login(data); //Internal Authentication
+                    })
+                    .error(function() {
+                        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                    });
+            };
+            self.extend = function(name, value) {
+                if (typeof name === "object") {
+                    for (var key in name) {
+                        _addProperty(key, name[key]);
+                    }
+                    return;
+                }
+                _addProperty(name, value);
+            };
+            self.getAccessToken = function() {
+                return _authResponse.access_token;
+            };
+            self.logOut = function() {
+                _logout();
+            };
+            self.getCurrent = function() {
+                //Get Payload
+                var payload = self.getAccessToken().split('.')[1];
+                if (atob) {
+                    data = decodeURIComponent(escape(atob(payload)));
+                } else {
+                    throw Error("ATOB_NOT_IMPLEMENTED");
+                }
+                data = JSON.parse(data);
+                //Extend Identity
+                data.property = function(name) {
+                    return _properties[name];
+                };
+                data.isInRole = function(roleName) {
+                    return _.contains(data.role, roleName);
+                };
+                return data;
+            };
+            self.isAuthenticated = function() {
+                return _authResponse !== null;
+            };
+            //------------------------------------------------------------------------------
+            //Add Hook if authentication is enabled
+            if (_enable) {
+                //API HOOK
+                $Api.$on("before-send", function(headers) {
+                    //SET AUTHORIZATION HEADER IF USER IS AUTHENTICATED
+                    if (self.isAuthenticated()) {
+                        var jwt = _authResponse;
+                        headers.Authorization = jwt.token_type + " " + jwt.access_token;
+                    }
+                });
+                $Api.$on("error", function(data, status) {
+                    /*
+                        401 Unauthorized — The user is not logged in
+                        403 Forbidden — The user is logged in but isn’t allowed access
+                        419 Authentication Timeout (non standard) — Session has expired
+                        440 Login Timeout (Microsoft only) — Session has expired
+                    */
+                    var _event = null;
+                    switch (status) {
+                        case 401:
+                            _logout();
+                            return; //Custom Action
+                        case 403:
+                            _event = AUTH_EVENTS.notAuthorized;
+                            break;
+                        case 419:
+                        case 440:
+                            _event = AUTH_EVENTS.sessionTimeout;
+                            break;
+                    }
+                    if (_event) {
+                        $rootScope.$broadcast(_event, data, status);
+                    }
+                });
+                //EVENT HOOK
+                $rootScope.$on('$stateChangeStart', function(event, toState, current) {
+                    if (!self.isAuthenticated() && toState.name !== getLogInRoute()) {
+                        //Is in Whitelist??
+                        if (!_whiteListResolver(toState, current)) {
+                            //Authentication is Required
+                            $state.go(getLogInRoute());
+                            event.preventDefault();
+                        }
+                    }
+                });
+            }
+            //------------------------------------------------------------------------------
+            //Call Authentication Method to Adapt all services wich need Authorization
+            return self;
+        }];
+    });
 ;angular.module('gale.services')
 
-.factory('$LocalStorage', function ($window) {
+.factory('$LocalStorage', ['$window', function ($window) {
     return {
         set: function (key, value) {
             $window.localStorage[key] = value;
@@ -1765,9 +1760,9 @@ angular.module('gale.directives')
              return $window.localStorage[key] != null;
         }
     };
-});;angular.module('gale.services')
+}]);;angular.module('gale.services')
 
-.factory("$Timer", function( $timeout ) {
+.factory("$Timer", ['$timeout', function( $timeout ) {
 
     // I provide a simple wrapper around the core $timeout that allows for
     // the timer to be easily reset.
@@ -1888,4 +1883,4 @@ angular.module('gale.directives')
     // Return the factory.
     return( timerFactory );
 
-});
+}]);

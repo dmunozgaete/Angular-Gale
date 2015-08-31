@@ -30,15 +30,11 @@
         //Create the namespace via angular style
         angular.forEach(namespaces, function(name) {
 
-            //No dependencies??, check for existence
-            if (!dependencies) {
-
-                //Angular don't have "exists" method, so , try and catch =(
-                try {
-                    angular.module(name)
-                } catch (err) {
-                    angular.module(name, dependencies || []);
-                }
+            //Angular don't have "exists" method, so , try and catch =(
+            try {
+                angular.module(name);
+            } catch (err) {
+                angular.module(name, dependencies || []);
             }
 
         });
