@@ -106,7 +106,7 @@ angular.module('gale.components')
                 if (isRest){
                     data.total = data.items.length;
                 }
-            }
+            };
             //------------------------------------------------------------------------------
 
             //Cell Click
