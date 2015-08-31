@@ -7,8 +7,8 @@
   ],
   "description": "Angular Implementation for the Javascript Client GALE",
   "main": [
-    "src/angular-gale.min.js",
-    "src/angular-gale.min.css"
+    "dist/angular-gale.min.js",
+    "dist/angular-gale.min.css"
   ],
   "moduleType": [
     "amd",
@@ -24,6 +24,7 @@
     "node_modules",
     "bower_components",
     "test",
+    "grunt",
     "src",
     "Gruntfile.js",
     "package.json"

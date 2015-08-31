@@ -13,7 +13,7 @@ angular.module('gale.components')
             name:       '@'     // gale Table Unique ID
         },
         transclude: true,
-        templateUrl: 'bundles/gale/js/components/gale-table/templates/template.html',
+        templateUrl: 'gale-table/directives/galeTable.tpl.html',
         controller: function($scope, $element, $interpolate, $compile, $Api, $galeTable, KQLBuilder){
             this.$$formatters   = $scope.$$formatters = [];                 //Lazy Load Instantation
             var self            = this;                                     //Auto reference

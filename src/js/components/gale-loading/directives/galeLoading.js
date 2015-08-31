@@ -6,7 +6,7 @@ angular.module('gale.components')
         scope: {
             defaultMessage:     '@'     //Default Message
         },
-        templateUrl: 'bundles/gale/js/components/gale-loading/templates/template.html',
+        templateUrl: 'gale-loading/directives/galeLoading.tpl.html',
         controller: function($scope, $element, $log , $galeLoading){
             var self            = {};
             var defaultMesasage = $scope.defaultMessage||"";
