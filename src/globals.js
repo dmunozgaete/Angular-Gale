@@ -29,7 +29,18 @@
     angular.manifiest = function(bundle, namespaces, dependencies) {
         //Create the namespace via angular style
         angular.forEach(namespaces, function(name) {
-            angular.module(name, dependencies || []);
+
+            //No dependencies??, check for existence
+            if (!dependencies) {
+
+                //Angular don't have "exists" method, so , try and catch =(
+                try {
+                    angular.module(name)
+                } catch (err) {
+                    angular.module(name, dependencies || []);
+                }
+            }
+
         });
         //Register a 'angular like' module
         return angular.module(bundle, namespaces);
@@ -69,30 +80,30 @@
 
 
         var viewPath = 'views{0}.html'.format([url]);
-        
+
         // "/index" => replace for default page
         if (url.endsWith(default_document)) {
             var regex = new RegExp(default_document, "ig");
             url = url.replace(regex, "");
             route = route.replace(regex, "");
         }
-        
-         //has parameter's bindng in url??
-        if(route.indexOf(parameter_separator)>=0){
+
+        //has parameter's bindng in url??
+        if (route.indexOf(parameter_separator) >= 0) {
             viewPath = viewPath.substring(0, viewPath.indexOf(parameter_separator)) + ".html";
             route = route.substring(0, route.indexOf(parameter_separator));
         }
 
 
         var config = null;
-        if(layout === ""){   
+        if (layout === "") {
             //Config Without Layout Base Content
             config = {
                 url: url,
                 templateUrl: viewPath,
                 controller: controller
             };
-        }else{
+        } else {
             //Config With Layout Template's
             config = {
                 url: url,
@@ -123,8 +134,7 @@
                 for (var s in p) {
                     r = r[p[s]];
                 }
-            }
-            catch (e) {
+            } catch (e) {
                 r = a;
             }
             return (typeof r === 'string' || typeof r === 'number') ? r : a;
@@ -148,13 +158,13 @@
     });
     //MANUAL BOOTSTRAP
     angular.element(document).ready(function() {
-        
+
         //Namespace Searching
         var application_bundle = "App";
-        var $injector = angular.injector(['ng','config']);
+        var $injector = angular.injector(['ng', 'config']);
         var INITIAL_CONFIGURATION = $injector.get('GLOBAL_CONFIGURATION');
         var $http = $injector.get('$http');
-        var logger= getLogger();
+        var logger = getLogger();
         //--------------------------------------------------------------------------------------------------------------------
         //ENVIRONMENT CONFIGURATION
         var environment = (INITIAL_CONFIGURATION.application.environment + "").toLowerCase();
