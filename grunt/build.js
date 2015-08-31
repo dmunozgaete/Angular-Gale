@@ -8,10 +8,11 @@ module.exports = function(grunt, options) {
     var run = function() {
         //-----------------------------------------------------------------------------
         grunt.task.run('clean:dist');
+        grunt.task.run('html2js');
         grunt.task.run('concat');
         grunt.task.run('uglify');
         grunt.task.run('cssmin');
-        //grunt.task.run('injector:production');
+        grunt.task.run('clean:post');
 
     };
     grunt.registerTask('build', run);

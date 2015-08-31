@@ -1,6 +1,7 @@
 
 //Package Bundle
 angular.manifiest('gale', [
+    'gale.templates',   
     'gale.directives',
     'gale.components',
     'gale.filters',
@@ -39,18 +40,5 @@ angular.manifiest('gale', [
     //Update
     $LocalStorage.setObject(stored_key, app_conf);
 
-})
-
-.config(function($mdIconProvider) {
-    //Icons Set's (https://github.com/nkoterba/material-design-iconsets)
-    var bundle_src = "bundles/gale/svg/icons/{0}-icons.svg";
-    angular.forEach([
-        "action", "alert", "av", "communication", "content",
-        "device", "editor", "file", "hardware", "icons", "image",
-        "maps", "navigation", "notification", "social", "toggle"
-    ], function(toolset) {
-        $mdIconProvider.iconSet(toolset, bundle_src.format([toolset]), 24);
-    });
 });
-
 

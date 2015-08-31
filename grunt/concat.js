@@ -16,7 +16,10 @@ module.exports = function(grunt, options) {
             },
             files: {
                 'dist/angular-gale.js': [
-                    'src/**/*.js'
+                    'src/globals.js',
+                    'src/gale_templates.js',
+                    'src/gale.js',
+                    'src/js/**/*.js'
                 ],
 
                 'dist/angular-gale.css': [

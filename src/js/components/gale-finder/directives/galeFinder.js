@@ -10,7 +10,7 @@ angular.module('gale.components')
             minLength:      '@',    // Search Minimun Length
             blockUi:        '@'     //Block UI??
         },
-        templateUrl: 'bundles/gale/js/components/gale-finder/templates/template.html',
+        templateUrl: 'gale-finder/directives/galeFinder.tpl.html',
         controller: function($scope, $element, $log , $galeFinder, $window){
             var self        = {};
             var minLength   = $scope.minLength||3;

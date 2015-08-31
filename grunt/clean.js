@@ -12,7 +12,13 @@ module.exports = function(grunt, options) {
 
 	return {
 		dist: [
-			'dist/**/*.*'
+			'dist/**/*.*',
+			'src/gale_templates.js'
+		],
+
+		post: [
+			'dist/src',
+			'src/gale_templates.js'
 		]
 	};
 
