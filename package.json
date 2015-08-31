@@ -1,8 +1,6 @@
 {
   "name": "angular-gale",
-  "version": "2.1.1",
   "description": "Angular GALE",
-  "main": "index.js",
   "author": "David Antonio Muñoz Gaete",
   "homepage": "https://github.com/dmunozgaete/angular-gale",
   "repository": {
@@ -13,20 +11,20 @@
   "devDependencies": {
     "bower": "^1.3.1",
     "grunt": "^0.4.5",
-    "grunt-bower-concat": "^0.5.0",
+    "load-grunt-config": "^0.16.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-compress": "^0.13.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-cssmin": "^0.13.0",
     "grunt-contrib-uglify": "^0.8.0",
+    "grunt-contrib-jshint": "^0.11.2",
     "grunt-html2js": "^0.3.4",
-    "grunt-include-replace": "^3.2.0",
-    "grunt-injector": "^0.6.0",
-    "load-grunt-config": "^0.16.0",
-    "shelljs": "^0.2.6"
+    "grunt-ng-annotate": "^1.0.1",
+    "jshint-stylish": "^2.0.1"
   },
   "scripts": {
     "postinstall": "bower update",
     "prestart": "npm update"
-  }
+  },
+  "dependencies": {}
 }
