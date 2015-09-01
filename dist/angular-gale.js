@@ -224,7 +224,8 @@ angular.manifiest('gale', [
     'gale.services.storage'
 ],
 [
-    'ng'
+    'ui.router',     //NG ROUTE
+    'ngMaterial'   //MATERIAL DESIGN DIRECTIVES
 ])
 
 .run(['$Configuration', '$LocalStorage', '$log', 'CONFIGURATION', function($Configuration, $LocalStorage, $log, CONFIGURATION) {
