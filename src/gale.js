@@ -1,4 +1,14 @@
-//Package Bundle
+//------------------------------------------------------
+// Company: Valentys Ltda.
+// Author: dmunozgaete@gmail.com
+// 
+// Description: Angular Gale Implementation
+// 
+// URL: https://github.com/dmunozgaete/angular-gale
+// 
+// Documentation:
+//      http://gale-docs.azurewebsites.net/
+//------------------------------------------------------
 angular.manifiest('gale', [
     'gale.templates',
     'gale.directives',
