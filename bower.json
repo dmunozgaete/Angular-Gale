@@ -1,11 +1,10 @@
 {
   "name": "angular-gale",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "homepage": "https://github.com/dmunozgaete/angular-gale",
   "authors": [
     "David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)"
   ],
-
   "description": "Angular Implementation for the Javascript Client GALE",
   "main": [
     "dist/angular-gale.js",
@@ -15,9 +14,10 @@
     "es6"
   ],
   "keywords": [
-    "Gale", 
-    "AngularJS", 
-    "Valentys", 
+    "Gale",
+    "AngularJS",
+    "Valentys",
+    "Angular",
     "DmunozGaete"
   ],
   "license": "Apache 2.0 License",
@@ -32,9 +32,13 @@
     "package.json"
   ],
   "dependencies": {
-    "angular-material": "~0.9.8"
+    "angular-material": "~0.9.8",
+    "angular-ui-router": "~0.2.15",
+    "lodash": "~3.10.1"
   },
   "devDependencies": {
-    "angular-material": "~0.9.8"
+    "angular-material": "~0.9.8",
+    "angular-ui-router": "~0.2.15",
+    "lodash": "~3.10.1"
   }
 }

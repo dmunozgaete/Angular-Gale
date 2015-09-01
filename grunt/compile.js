@@ -17,5 +17,5 @@ module.exports = function(grunt, options) {
         grunt.task.run('clean:post');
 
     };
-    grunt.registerTask('build', run);
+    grunt.registerTask('compile', run);
 }
