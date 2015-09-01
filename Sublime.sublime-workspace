@@ -1,0 +1,1122 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"font",
+				"font-style"
+			],
+			[
+				"pad",
+				"padding-bottom"
+			],
+			[
+				"web",
+				"webkit-flex"
+			],
+			[
+				"E",
+				"ERROR"
+			],
+			[
+				"_a",
+				"_authResponse"
+			],
+			[
+				"ENI",
+				"ENVIRONMENT_CONFIGURATION"
+			],
+			[
+				"appli",
+				"application_bundle"
+			],
+			[
+				"view",
+				"viewPath"
+			],
+			[
+				"no",
+				"normal"
+			],
+			[
+				"text",
+				"text-decoration"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"op",
+				"opacity"
+			],
+			[
+				"font-",
+				"font-size"
+			],
+			[
+				"min-",
+				"min-height"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"bundle",
+				"bundle_src"
+			],
+			[
+				"block",
+				"blockUi"
+			],
+			[
+				"tex",
+				"text-shadow"
+			],
+			[
+				"ma",
+				"max-height"
+			],
+			[
+				"max-",
+				"max-width"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"karma",
+				"karmaLoading"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"edit",
+				"editedPolygon"
+			],
+			[
+				"zinde",
+				"currentZIndex"
+			],
+			[
+				"resolve",
+				"resolves"
+			],
+			[
+				"polygons",
+				"polygonsPromise"
+			],
+			[
+				"backgr",
+				"background-color"
+			],
+			[
+				"padding",
+				"padding-left"
+			],
+			[
+				"w",
+				"width"
+			],
+			[
+				"progr",
+				"programming"
+			],
+			[
+				"programm",
+				"programmed"
+			],
+			[
+				"border-top",
+				"border-top"
+			],
+			[
+				"padd",
+				"padding-bottom"
+			],
+			[
+				"paddin",
+				"padding-top"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"min",
+				"min-height"
+			],
+			[
+				"pin_",
+				"pin_icon"
+			],
+			[
+				"first",
+				"first_route"
+			],
+			[
+				"border-",
+				"border-color"
+			],
+			[
+				"vehic",
+				"vehicles"
+			],
+			[
+				"vehi",
+				"vehicles_key"
+			],
+			[
+				"total",
+				"total_pendings"
+			],
+			[
+				"polygon",
+				"polygonCoords"
+			],
+			[
+				"realtim",
+				"realTimeTimer"
+			],
+			[
+				"realtime",
+				"realtimePromise"
+			],
+			[
+				"margn",
+				"margin-bottom"
+			],
+			[
+				"tool",
+				"toolbar"
+			],
+			[
+				"layers",
+				"layersConfigurations"
+			],
+			[
+				"tempor",
+				"temporal_point"
+			],
+			[
+				"poin",
+				"pointToRemove"
+			],
+			[
+				"availa",
+				"availablePolygons"
+			],
+			[
+				"text-tr",
+				"text-transform"
+			],
+			[
+				"trans",
+				"transparent"
+			],
+			[
+				"time",
+				"angular: $timeout"
+			],
+			[
+				"_p",
+				"_polygonoptions"
+			],
+			[
+				"header",
+				"headers"
+			],
+			[
+				"prof",
+				"profiles"
+			],
+			[
+				"progre",
+				"progressPercentage"
+			],
+			[
+				"_get",
+				"_getByHandle"
+			],
+			[
+				"max",
+				"max-width"
+			],
+			[
+				"poly",
+				"polygon"
+			],
+			[
+				"drawin",
+				"drawingManager"
+			],
+			[
+				"compon",
+				"component"
+			],
+			[
+				"forr",
+				"formatters"
+			],
+			[
+				"chart",
+				"chartOptions"
+			],
+			[
+				"cha",
+				"chart_option"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"for",
+				"formatter"
+			],
+			[
+				"c",
+				"customHeader"
+			],
+			[
+				"err",
+				"error_message"
+			],
+			[
+				"tet",
+				"text-align"
+			],
+			[
+				"toke",
+				"token_key"
+			],
+			[
+				"de",
+				"dependencies"
+			],
+			[
+				"app",
+				"app_conf"
+			],
+			[
+				"para",
+				"parameters"
+			],
+			[
+				"param",
+				"parameter_value"
+			],
+			[
+				"va",
+				"validating"
+			],
+			[
+				"ba",
+				"background-color"
+			],
+			[
+				"con",
+				"conf"
+			],
+			[
+				"depe",
+				"dependencies_path"
+			],
+			[
+				"re",
+				"rebuild_dependencies"
+			],
+			[
+				"ex",
+				"exists_dependencies"
+			],
+			[
+				"name",
+				"namespaces"
+			],
+			[
+				"nam",
+				"Namespace"
+			],
+			[
+				"bc",
+				"background-color"
+			],
+			[
+				"Serv",
+				"Service-Informacion"
+			],
+			[
+				"Configur",
+				"configuración"
+			],
+			[
+				"inter",
+				"integer"
+			],
+			[
+				"Est",
+				"Establecimiento"
+			],
+			[
+				"Nombre",
+				"NombreValor-Informacion"
+			],
+			[
+				"Eva",
+				"Evaluacion-Crear"
+			],
+			[
+				"EV",
+				"Evaluacion-Informacion"
+			],
+			[
+				"Digi",
+				"Digitacion-Crear"
+			],
+			[
+				"Grupo",
+				"GrupoPersonal-Informacion"
+			],
+			[
+				"Sin",
+				"Sincronizacion-Informacion"
+			],
+			[
+				"Form",
+				"FormularioFolioReasingnado-Informacion"
+			],
+			[
+				"Formu",
+				"FormularioReemplazo-Crear"
+			],
+			[
+				"Estud",
+				"Estudiante"
+			],
+			[
+				"For",
+				"FormularioReemplazo-Crear"
+			],
+			[
+				"Esta",
+				"Establecimiento"
+			],
+			[
+				"Digit",
+				"Digitacion-Crear"
+			],
+			[
+				"Elim",
+				"Eliminado"
+			],
+			[
+				"Inform",
+				"InformeAvance-Informacion"
+			],
+			[
+				"Calenc",
+				"Calendarización"
+			],
+			[
+				"Cale",
+				"Calendarización"
+			],
+			[
+				"Calen",
+				"calendarizacion"
+			],
+			[
+				"Op",
+				"OpcionPreguntaCuestionario-Editar"
+			],
+			[
+				"PReg",
+				"PreguntaCuestionario-Crear"
+			],
+			[
+				"Cues",
+				"Cuestionario-Crear"
+			],
+			[
+				"Cuestio",
+				"Cuestionario-Informacion"
+			],
+			[
+				"Opcio",
+				"OpcionPreguntaCuestionario-Informacion"
+			],
+			[
+				"Configurac",
+				"ConfiguracionItem-Informacion"
+			],
+			[
+				"lo",
+				"longitude"
+			],
+			[
+				"ion-conte",
+				"ion-content"
+			],
+			[
+				"user",
+				"user_cache"
+			],
+			[
+				"ser",
+				"Services"
+			],
+			[
+				"col",
+				"columnName"
+			],
+			[
+				"table",
+				"tableName"
+			],
+			[
+				"server",
+				"server_sync"
+			],
+			[
+				"get",
+				"getItems"
+			],
+			[
+				"state",
+				"stateParams"
+			],
+			[
+				"debu",
+				"debug_data"
+			],
+			[
+				"st",
+				"stateParams"
+			],
+			[
+				"ima",
+				"imageData"
+			],
+			[
+				"image",
+				"imageURI"
+			],
+			[
+				"update",
+				"updateStore"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "bower.json",
+			"settings":
+			{
+				"buffer_size": 913,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Gruntfile.js",
+			"settings":
+			{
+				"buffer_size": 108,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Sublime.sublime-project",
+			"settings":
+			{
+				"buffer_size": 147,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/SASS Build/SASS - Compressed.sublime-build",
+					""
+				],
+				[
+					"Packages/SASS Build/SASS.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/SASS Build/SASS - Compressed.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 347.0,
+		"last_filter": "Package Control: ",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: re",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: rm",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control:re",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: INS",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"intall",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 575.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+	],
+	"file_history":
+	[
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/src/gale.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/dist/angular-gale.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/src/globals.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/bower.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/compile.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/Application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/views/security/request-access/step-1.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/views/home/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/bower.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/package.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/grunt/uglify.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/grunt/bower_concat.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/Gruntfile.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/bower_components/angular-gale/dist/angular-gale.min.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/grunt/jshint.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/dist/js/bower.min.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/dist/js/application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/bower_components/angular-gale/dist/angular-gale.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/bower_components/angular-gale/bower.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/dist/js/bower.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/grunt/deploy.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/grunt/ngAnnotate.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Solution.sublime-project",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/html2js.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/src/js/components/gale-table/directives/galeTable.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/build.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/src/gale_templates.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/dist/angular-gale.min.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/clean.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/concat.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/src/js/components/gale-loading/directives/galeLoading.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/src/js/components/gale-finder/directives/galeFinder.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/dist/populate_template_cache.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/dist/src/js/components/gale-finder/directives/galeFinder.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/dist/galeFinder.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/uglify.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/cssmin.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/Gruntfile.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/src/js/components/gale-finder/templates/template.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/package.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/dist/gale.css",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Client/grunt/injector.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/NET/Clarens/BackOffice/Web2/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/app/css/default.scss",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/helpus/about.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/config/Config.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/helpus/resources.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/definition.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/models/example.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/controllers/restController.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/models/definition.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/gale/js/components/gale-table/directives/galeColumn.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/app/js/demos/scripts.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/ux/components/gale-table.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/ux/services/$api.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/gale/js/components/gale-table/directives/galeTable.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/grunt/connect.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/Gruntfile.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/gettingstarted/installation.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/layouts/2-columns.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/gettingstarted/introduction.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/Application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/gettingstarted/about.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/security/jwt.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/HttpReadActionResult.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/HttpFileActionResult.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/HttpQueryableActionResult.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/HttpUpdateActionResult.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/controllers/queryableController.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/HttpDeleteActionResult.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/HttpBaseActionResult.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/api/services/HttpCreationActionResult.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/API/v1/Areas/Account/Models/Account.designer.cs",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/layouts/2-columns.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/bundles/gale/js/services/security/$Identity.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/README.md",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/package.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/README.md",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/home/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/home/installation.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/bundles/gale/js/filters/restricted.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/bundles/gale/js/services/rest/$Api.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/config/config.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/gale/js/services/security/$Identity.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/services/identity.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Starter/Web/app/config/Config.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/directives/ngEmail.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/services/$api.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/views/services/$configuration.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/gale/js/services/configuration/$Configuration.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/gale/js/services/rest/$Api.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/app/bundles/gale/js/services/configuration/$Localization.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Web/bower.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Gale/Docs/Solution.sublime-project",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/Application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/package.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/bower.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/config/config.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/views/layouts/2-columns.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/Application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/views/layouts/2-columns.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/controllers/shared/2ColumnsController.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/bundles/gale/gale.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/bundles/app/js/demos/mocks.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/config/Config.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/bundles/app/app.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/views/shared/2-columns.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/bundles/app/css/default.scss",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/views/home/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Solution.sublime-project",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/LICENSE",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/README.md",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/application.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/views/security/request-access/step-1.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/views/security/request-access/step-1.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/bundles/gale/css/gale.css",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/views/home/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/grunt/deploy.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/index.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/bundles/app/js/locale/moment-es.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/bower.json",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/views/security/request-access/step-2.html",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/views/security/request-access/step-2.js",
+		"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Starter/Web/app/bower_components/angular-i18n/angular-locale_vai-latn.js"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"<project>",
+			"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/Caronte",
+			"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/",
+			"/Users/davidmunozgaete/Documents/Shared/Proyectos/BitBucket/Arquitectura/NET/Docs/Web/app/views",
+			"<project>",
+			"/Users/davidmunozgaete/Documents/Shared/Proyectos/Carabineros/Sigpreco"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"$get=",
+			"\"use strict\"",
+			"use strict",
+			"$LocalStorage",
+			"$Identity",
+			"'$Api'",
+			"angular.injector(['gale']",
+			"injector",
+			"$Identity",
+			"$Iden",
+			"render",
+			"<",
+			">",
+			"<",
+			">",
+			"<",
+			">",
+			"<",
+			",        ",
+			"ENVIRONMENT_CONFIGURATION",
+			"indigo",
+			"jQuery hashchange event, v1.4, 2013-11-29",
+			"angularJS_RESTful_Seed_Project",
+			"<md-icon class=\"chevron\" md-svg-src=\"{{ 'navigation' | icon: 'ic_expand_more_24px' }}\"></md-icon>",
+			"ic_expand_more_24px",
+			"<md-icon md-svg-src=\"{{ 'hardware' | icon:'ic_keyboard_arrow_right_48px' }}\"></md-icon>",
+			"ic_keyboard_arrow_right_48px",
+			"<md-icon md-svg-src=\"{{ 'action' | icon:'ic_code_24px' }}\"></md-icon>",
+			"bower",
+			"ngRange",
+			"karma",
+			"core",
+			"logo",
+			"navigate",
+			"setEditable",
+			"wrapPolygon",
+			"modified",
+			"polygon",
+			"VEHICLE\"",
+			"task",
+			"alert",
+			"karma-empty-rows",
+			"programming",
+			"ic_timer_auto_24px",
+			"alert",
+			"alert =\n",
+			"alert=",
+			"%;\n",
+			"overflow: scroll",
+			"overflow:",
+			"overflow",
+			",\n",
+			"'\n",
+			"page-content",
+			"hojaRut",
+			"hojaRuta",
+			"TPolygons",
+			"md-content",
+			"md-context",
+			"md-content",
+			"MdAutocomplete ($mdTheming",
+			"MdAutocomplete",
+			".thumb",
+			"HomeDetailsController",
+			"geocode(",
+			"medium",
+			"branches",
+			"Identity",
+			"md",
+			"sln",
+			" .",
+			"photo",
+			"bower",
+			"$User",
+			"sdk.services.configuration",
+			"sdk.con",
+			"sdk.",
+			"'",
+			"\"",
+			"d27c36",
+			"ec7136",
+			"727272",
+			"});",
+			"113",
+			"Ilustraciones",
+			"Aislada",
+			"No da Información",
+			"checkGeo",
+			"errorSumm",
+			"log",
+			"ener",
+			"Dsdqwdqwdevice",
+			".id",
+			"cordovaStatusBarProvider",
+			"fbtoken",
+			"$OpenFB",
+			"alert(",
+			"/Carabineros/Front.Web/Public",
+			"/Carabineros/Front.Web/Public/",
+			"  ",
+			">\n",
+			"();\n",
+			"fold",
+			"flod",
+			"cliente"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"&lt;",
+			"&gt;",
+			"&lt;",
+			"&gt;",
+			"&lt;",
+			"&gt;",
+			"&lt;",
+			"gale-starter-project",
+			"<md-icon class=\"chevron\" md-svg-icon=\"navigation:expand_more\"></md-icon>",
+			"<md-icon md-svg-icon=\"hardware:keyboard_arrow_right\"></md-icon>",
+			"<md-icon md-svg-icon=\"action:code\"></md-icon>",
+			"gale",
+			"overflow: auto",
+			"\"",
+			"'",
+			"E97D38",
+			"d27c36",
+			"666666",
+			"AISLADA",
+			"NO DA INFORMACIÓN",
+			"$Facebook",
+			""
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "bower.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 913,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								413,
+								413
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Gruntfile.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 108,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Sublime.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 147,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 124.0
+	},
+	"output.find_results":
+	{
+		"height": 100.0
+	},
+	"output.git":
+	{
+		"height": 124.0
+	},
+	"pinned_build_system": "Packages/SASS Build/SASS.sublime-build",
+	"project": "Sublime.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"app/controllers/home/HomeController.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 67.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 219.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
