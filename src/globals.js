@@ -182,7 +182,9 @@
                         angular.module(application_bundle).config(function($stateProvider) {
                             angular.forEach(registered_routes, function(route) {
                                 //Register a 'angular like' route
-                                logger.debug("route:", route);
+                                if(CONFIGURATION.debugging){
+                                    logger.debug("route:", route);
+                                }
                                 $stateProvider
                                     .state(route.route, route.config);
                             });
