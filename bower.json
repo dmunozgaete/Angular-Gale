@@ -32,13 +32,8 @@
     "package.json"
   ],
   "dependencies": {
-    "angular-material": "~0.9.8",
-    "angular-ui-router": "~0.2.15",
-    "lodash": "~3.10.1"
-  },
-  "devDependencies": {
-    "angular-material": "~0.9.8",
-    "angular-ui-router": "~0.2.15",
+    "angular-material": "0.10.1",
+    "angular-ui-router": "0.2.15",
     "lodash": "~3.10.1"
   }
 }
