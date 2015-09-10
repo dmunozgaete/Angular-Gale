@@ -1,6 +1,6 @@
 {
   "name": "angular-gale",
-  "version": "2.1.9",
+  "version": "2.2.0",
   "homepage": "https://github.com/dmunozgaete/angular-gale",
   "authors": [
     "David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)"
@@ -32,13 +32,8 @@
     "package.json"
   ],
   "dependencies": {
-    "angular-material": "~0.9.8",
-    "angular-ui-router": "~0.2.15",
-    "lodash": "~3.10.1"
-  },
-  "devDependencies": {
-    "angular-material": "~0.9.8",
-    "angular-ui-router": "~0.2.15",
+    "angular-material": "0.10.1",
+    "angular-ui-router": "0.2.15",
     "lodash": "~3.10.1"
   }
 }
