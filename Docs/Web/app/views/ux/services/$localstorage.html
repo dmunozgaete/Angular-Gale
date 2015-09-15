@@ -1,0 +1,222 @@
+<p>
+	<!-- DESCRIPTION -->
+	El servicio <code>$LocalStorage</code> permite gestionar colecciones de variables a 
+	través del almacenamiento local del navegador web por lo que su visibilidad y alcance 
+	de persistencia es <code>Local</code>
+
+	<br />
+
+	<h2 class="md-headline">
+		Recomendaciones:
+	</h2>
+	<ul class="doc-list">
+		<li>
+			Por seguridad se recomienda nunca persistir valores sensibles debido a que estas
+			variable son públicas y se encuentran enlazadas al navegador con el cúal el cliente
+			este operando.
+		</li>
+		<li>
+			Las variables almacenadas en el servicio, son de caracter local, por lo que si 
+			el usuario cambia el navegador estas variables no se encontrarán cargadas; Es por ello
+			que se recomienda manejar lógica de excepción para estos casos.
+		</li>
+	</ul>
+
+	<!-- /DESCRIPTION -->
+
+	<!-- USAGE -->
+	<h2 class="md-headline">
+		Uso Basico
+	</h2>
+	<hljs language="js">
+app.controller('MyController', function($scope, $LocalStorage) {
+
+  var locale = $LocalStorage.get('labels.helloWorld');
+  
+  console.log(locale);	//Hola Mundo
+
+});
+	</hljs>
+	<!-- /USAGE -->
+
+	<!-- METHODS -->
+	<h2 class="md-headline">
+		Métodos
+	</h2>
+	<ul class="methods">
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				$LocalStorage.get(key [,defaultValue]);
+			</h3>
+			<div class="service-desc">
+				<p>
+					Obtiene el valor de la variable almacenada
+				</p>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Tipo</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- -->
+						<tr>
+							<td>
+								<code class="required">
+									key
+								</code>
+							</td>
+							<td>
+								String
+							</td>
+							<td class="description">
+								<p>
+									Identificador del recurso asociado.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+						<tr>
+							<td>
+								<code>
+									defaultValue
+								</code>
+							</td>
+							<td>
+								Object
+							</td>
+							<td class="description">
+								<p>
+									Valor por defecto a retornar si es que no se encuentra 
+									configurada la llave.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+					</tbody>
+				</table>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Retorno</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+				<tbody>
+					<!-- -->
+					<tr>
+						<td>
+							<code>
+								object
+							</code>
+						</td>
+						<td class="description">
+							<p>
+								Retorna el valor de la llave; 
+								En el caso de no encontrarse la variable se 
+								ejecutará una excepción de control indicando que no 
+								existe tal variable.
+								</br />
+								<i>
+									Si se encuentra establecido el parametro 
+									<code>
+										defaultValue
+									</code> y, no se encuentra la variable , la excepción 
+									será omitida y se retornará el valor de 
+									<code>
+										defaultValue
+									</code>
+								</i>
+
+							</p>
+						</td>
+					</tr>
+					<!-- -->
+				</tbody>
+				</table>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				$LocalStorage.exists(name);
+			</h3>
+			<div class="service-desc">
+				<p>
+					Verifica la existencia de la variable en el almacenamiento.
+				</p>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Tipo</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- -->
+						<tr>
+							<td>
+								<code class="required">
+									name
+								</code>
+							</td>
+							<td>
+								String
+							</td>
+							<td class="description">
+								<p>
+									Nombre de la llave a verificar.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+					</tbody>
+				</table>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Retorno</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- -->
+						<tr>
+							<td>
+								<code>
+									boolean
+								</code>
+							</td>
+							<td class="description">
+								<p>
+									Retorna <code>verdadero</code> si la variable se 
+									encuentra en cargada en el sistema; 
+									De lo contrario retornará <code>falso</code>.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+					</tbody>
+				</table>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+	</ul>
+	<!-- /METHODS -->
+</p>

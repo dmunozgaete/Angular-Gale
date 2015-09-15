@@ -1,0 +1,147 @@
+<p>
+    <!-- DESCRIPTION -->
+    Clase base que hereda de 
+    <a ui-sref="app.api-services-HttpBaseActionResult">HttpBaseActionResult</a> y 
+    utilizada la carga de archivos a través del principio RESTFul.
+    <!-- /DESCRIPTION -->
+
+    <!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>
+                        Uso Basico
+                    </span>
+                </h2>
+            </div>
+        </md-toolbar>
+        <!-- VIEWS -->
+        <div>
+            <md-tabs md-border-bottom class="md-primary">
+                <md-tab label="FileController.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web.Http;
+using System.Net.Http;
+using System.Web.Http.Description;
+using System.Web;
+
+namespace API.Areas.File.Services
+{
+
+  /// &lt;summary&gt;
+  /// File API
+  /// &lt;/summary&gt;
+  [Gale.Security.Oauth.Jwt.Authorize]
+  public class FileController : Gale.REST.RestController
+  {
+
+    /// &lt;summary&gt;
+    /// Create a File
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public IHttpActionResult Post()
+    {
+      return new Services.Upload(this.Request);
+    }
+
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="Upload.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Web;
+
+namespace API.Areas.File.Services
+{
+
+  /// &lt;summary&gt;
+  /// File Upload
+  /// &lt;/summary&gt;
+  public class Upload : Gale.REST.Http.HttpActionFileResult
+  {
+    
+    /// &lt;summary&gt;
+    /// Constructor
+    /// &lt;/summary&gt;
+    /// &lt;param name="request"&gt;Http Request&lt;/param&gt;
+    public Upload(HttpRequestMessage request): base(request){ }
+
+    /// &lt;summary&gt;
+    /// Save Files into DB
+    /// &lt;/summary&gt;
+    /// &lt;param name="files"&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public override System.Net.Http.HttpResponseMessage SaveFiles(List&lt;System.Net.Http.HttpContent&gt; files)
+    {
+
+      List&lt;Object&gt; _files = new List&lt;object&gt;();
+
+      foreach (HttpContent file in files)
+      {
+        // You would get hold of the inner memory stream here
+        System.IO.Stream stream = file.ReadAsStreamAsync().Result;
+
+        using (Gale.Db.DataService svc = new Gale.Db.DataService("PA_MAE_INS_Archivo"))
+        {
+          string name = file.Headers.ContentDisposition.FileName.Replace("\"", "");
+
+          svc.Parameters.Add("ARCH_Nombre", name);
+          svc.Parameters.Add("ARCH_Tamano", file.Headers.ContentLength);
+          svc.Parameters.Add("ARCH_ContentType", file.Headers.ContentType.MediaType);
+          svc.Parameters.Add("ARCH_Temporal", 1);
+          svc.Parameters.Add("ARCH_Binario", stream);
+
+          System.Guid token = (System.Guid)this.ExecuteScalar(svc);
+
+          _files.Add(new
+          {
+            token = token,
+            name = name,
+            length = file.Headers.ContentLength,
+            md5 = Gale.Security.Cryptography.MD5.GenerateHash(stream),
+            contentType = file.Headers.ContentType.MediaType,
+            createdAt = DateTime.Now.ToString("s")
+          });
+        }
+
+      }
+
+      //---------------------------------
+      return new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+      {
+        Content = new ObjectContent&lt;Object&gt;(
+          _files,
+          System.Web.Http.GlobalConfiguration.Configuration.Formatters.JsonFormatter
+        )
+      };
+      //---------------------------------
+    }
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+            
+            </md-tabs>
+        </div>
+        <!-- /VIEWS -->
+    </section>
+    <!-- /USAGE -->
+</p>

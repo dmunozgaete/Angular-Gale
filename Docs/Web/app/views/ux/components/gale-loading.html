@@ -1,0 +1,140 @@
+<p>
+    <!-- DESCRIPTION -->
+    La directiva <code>gale-loading</code> es un control grafico para indicar un proceso 
+    de carga en el sistema.
+    <!-- /DESCRIPTION -->
+
+    <!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1" ng-class="{'show-source': $showSource}">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+
+                <h2>
+                	<span>
+                		Uso Basico
+                	</span>
+                </h2>
+                <span flex></span>
+                <button class="md-button md-primary" aria-label="al" ng-class="{ active: $showSource }" ng-click="$showSource = !$showSource">
+                    <md-icon md-svg-icon="action:code"></md-icon>
+                </button>
+
+            </div>
+        </md-toolbar>
+
+    	<div ng-if="$showSource">
+	        <!-- Views -->
+	        <md-tabs  md-border-bottom class="md-primary">
+	            <md-tab label="html">
+	                <md-content class="md-padding">
+	                	<!-- SOURCE CODE -->
+	                    <hljs language="html">
+<div ng-controller="GaleLoadingDemoController">
+  <form name="form"> 
+    <gale-loading></gale-loading>
+
+    <md-button class="md-raised md-primary" ng-click="show()">
+      &nbsp;Mostrar 2 segundos.
+    </md-button>
+
+    <md-button class="md-raised md-primary" ng-click="showWithMessage()">
+      &nbsp;Mostrar Con Mensaje 2 segundos.
+    </md-button>
+  </form>
+</div>
+	                    </hljs>
+	                    <!-- /SOURCE CODE -->
+	                </md-content>
+	            </md-tab>
+
+                <md-tab label="js">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="js">
+.controller("GaleLoadingDemoController", function($scope, $galeLoading) {
+    
+  var delay = 2000;
+
+  $scope.show = function() {
+    setTimeout($galeLoading.hide, delay):
+    $galeLoading.show();
+  };
+
+  $scope.showWithMessage = function() {
+    setTimeout($galeLoading.hide, delay);
+    $galeLoading.show("Este es un mensaje de Ejemplo!");
+  };
+});
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+	        </md-tabs>
+        </div>
+        <!-- /Views -->
+
+        <!-- Live Demos -->
+        <md-content class="md-padding live-demo">
+            <div ng-controller="GaleLoadingDemoController">
+                <form name="form"> 
+           			<gale-loading></gale-loading>
+
+                    <md-button class="md-raised md-primary" type="button" ng-click="show()">
+                        &nbsp;Mostrar 2 segundos.
+                    </md-button>
+
+                    <md-button class="md-raised md-primary" type="button" ng-click="showWithMessage()">
+                        &nbsp;Mostrar Con Mensaje 2 segundos.
+                    </md-button>
+                </form>
+            </div>
+	    </md-content>
+        <!-- /Live Demos -->
+    </section>
+    <!-- /USAGE -->
+
+    <!-- FILTER -->
+    <h2 class="md-headline">
+		Atributos
+	</h2>
+    <ul class="methods">
+        <!-- -->
+        <li>
+            <!-- METHOD -->
+            <div class="api-param-table">
+                <table class="no-style">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- -->
+                        <tr>
+                            <td>
+                                <code>
+									default-message
+								</code>
+                            </td>
+                            <td>
+                                String
+                            </td>
+                            <td class="description">
+                                <p>
+                                    Mensaje por defecto al mostrar , cuando se visualize el 
+                                    cargador.
+                                </p>
+                            </td>
+                        </tr>
+                        <!-- -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- /METHOD -->
+        </li>
+        <!-- -->
+    </ul>
+    <!-- /FILTER -->
+</p>

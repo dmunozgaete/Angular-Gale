@@ -1,0 +1,82 @@
+<p>
+    <!-- DESCRIPTION -->
+    Selecciona el texto del contenedor al hacer click sobre él.
+    <!-- /DESCRIPTION -->
+
+    <!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1" ng-class="{'show-source': $showSource}">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+
+                <h2>
+                	<span>
+                		Uso Basico
+                	</span>
+                </h2>
+                <span flex></span>
+                <button class="md-button md-primary" aria-label="al" ng-class="{ active: $showSource }" ng-click="$showSource = !$showSource">
+                    <md-icon md-svg-icon="action:code"></md-icon>
+                </button>
+
+            </div>
+        </md-toolbar>
+
+    	<div ng-if="$showSource">
+	        <!-- Views -->
+	        <md-tabs  md-border-bottom class="md-primary">
+	            <md-tab label="html">
+	                <md-content class="md-padding">
+	                	<!-- SOURCE CODE -->
+	                    <hljs language="html">
+<div ng-controller="toNumberOnBlurDemoController">
+  <form name="form"> 
+
+    <div>
+      <md-input-container>
+        <label>Ingrese el monto a transferir:</label>
+        <input  ng-model="amount" to-number-on-blur >
+      </md-input-container>
+    </div>
+
+  </form>
+</div>
+	                    </hljs>
+	                    <!-- /SOURCE CODE -->
+	                </md-content>
+	            </md-tab>
+
+                <md-tab label="js">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="js">
+app.controller("toNumberOnBlurDemoController", function($scope) {
+  $scope.amount = 999999;
+});
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+	        </md-tabs>
+        </div>
+        <!-- /Views -->
+
+        <!-- Live Demos -->
+        <md-content class="md-padding live-demo">
+            <div ng-controller="toNumberOnBlurDemoController">
+                <form name="form"> 
+
+					<div>
+						<md-input-container>
+							<label>Ingrese el monto a transferir</label>
+							<input  ng-model="amount" to-number-on-blur maxlength="6" select-text-on-click>
+						</md-input-container>
+					</div>
+
+                </form>
+            </div>
+	    </md-content>
+        <!-- /Live Demos -->
+    </section>
+    <!-- /USAGE -->
+
+</p>

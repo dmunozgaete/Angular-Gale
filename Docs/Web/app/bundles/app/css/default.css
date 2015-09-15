@@ -1,0 +1,308 @@
+/*
+    -----------------------------
+    GLOBALS
+    -----------------------------
+ */
+a {
+  color: #0D47A1;
+  text-decoration: none;
+  font-weight: normal; }
+
+.pointer {
+  cursor: pointer; }
+
+.logo div {
+  width: 90%;
+  max-width: 95px;
+  padding-top: 32px; }
+  .logo div img {
+    width: 100%; }
+.logo span {
+  color: #fff;
+  padding-top: 8px;
+  padding-bottom: 16px;
+  font-size: 1.4em; }
+
+/*  
+  -----------------------------
+  SIDENAV STYLE
+  -----------------------------
+ */
+.md-sidenav-left {
+  min-width: 260px !important;
+  background-color: #000; }
+  .md-sidenav-left md-content {
+    background-color: #000;
+    max-height: 520px;
+    overflow-x: auto; }
+  .md-sidenav-left .section {
+    border: 1px solid transparent;
+    border-bottom: 1px solid #2A2A2A; }
+    .md-sidenav-left .section md-icon {
+      transition: transform 0.45s ease-in-out;
+      -webkit-transition: -webkit-transform 0.45s ease-in-out; }
+  .md-sidenav-left .section.toggled {
+    background-color: #2A2A2A; }
+    .md-sidenav-left .section.toggled md-icon {
+      transform: rotate(180deg);
+      -webkit-transform: rotate(180deg); }
+  .md-sidenav-left .section:focus {
+    outline: none; }
+  .md-sidenav-left md-list {
+    padding: 0px; }
+    .md-sidenav-left md-list md-list-item {
+      color: #fff; }
+      .md-sidenav-left md-list md-list-item button:hover {
+        background-color: #2A2A2A !important; }
+      .md-sidenav-left md-list md-list-item md-icon {
+        color: #fff; }
+  .md-sidenav-left md-list.items md-list-item button {
+    padding-left: 32px; }
+  .md-sidenav-left md-divider {
+    color: #6E6E6E;
+    padding: 8px 16px; }
+
+/*  
+  -----------------------------
+  LAYOUT (DOC'S)
+  -----------------------------
+ */
+section {
+  background-color: #F7F7F7;
+  /* High Light JS */ }
+  section .contributors {
+    padding: 0.5em; }
+    section .contributors > div {
+      width: 80px;
+      height: 80px;
+      float: left;
+      margin: 0.2em;
+      text-align: center; }
+      section .contributors > div > a > img {
+        width: 80%;
+        border-radius: 50%; }
+  section .source-icons {
+    position: fixed;
+    top: 10px;
+    right: 24px;
+    height: 40px; }
+    section .source-icons .github img {
+      height: 30px;
+      margin-top: 10px; }
+  section .doc-title {
+    background-color: #F7F7F7;
+    color: #525252;
+    min-height: 63px; }
+    section .doc-title h2 {
+      font-size: 1.4em;
+      font-weight: normal;
+      padding-left: 16px; }
+  section ol.doc-list,
+  section ul.doc-list {
+    padding-bottom: 16px; }
+    section ol.doc-list li,
+    section ul.doc-list li {
+      font-size: 1em;
+      line-height: 1.6em;
+      text-align: justify;
+      padding-bottom: 4px; }
+  section ul.documents {
+    margin: 0px;
+    padding: 0px; }
+    section ul.documents li {
+      padding-bottom: 4px;
+      list-style-type: none; }
+      section ul.documents li.divider {
+        padding: 10px 0px;
+        font-size: 1.3em;
+        color: #545454; }
+      section ul.documents li a {
+        color: #525252; }
+        section ul.documents li a div:first-child {
+          flex: 0 0 10%;
+          webkit-flex: 0 0 10%;
+          align-items: center;
+          justify-content: center;
+          flex-direction: row;
+          display: flex; }
+        section ul.documents li a div:last-child {
+          padding: 2px 0px 2px 8px; }
+          section ul.documents li a div:last-child h3 {
+            margin: 0px;
+            font-weight: normal;
+            font-size: 1.2em; }
+          section ul.documents li a div:last-child span {
+            font-size: 0.8em; }
+  section md-content[name=content] {
+    background-color: #F7F7F7;
+    margin-top: 8px;
+    padding: 0px 16px 16px 16px; }
+    section md-content[name=content] p {
+      line-height: 1.6em;
+      text-align: justify; }
+  section code:not(.hljs) {
+    color: #131313;
+    margin-left: 1px;
+    margin-right: 1px;
+    -webkit-font-smoothing: auto;
+    padding: 0.125em 0.35em;
+    border-radius: 2px;
+    font-size: 1.2em; }
+  section code {
+    background: rgba(0, 0, 0, 0.065); }
+  section pre,
+  section code {
+    margin: 0;
+    padding: 0;
+    overflow-wrap: break-word; }
+  section .api-param-table {
+    padding: 0px 0px 16px 0px; }
+    section .api-param-table table {
+      margin-bottom: 8px;
+      max-width: 100%;
+      width: 100%;
+      border-spacing: 0;
+      border-radius: 2px;
+      overflow: hidden; }
+      section .api-param-table table th {
+        background-color: #6C6C6C;
+        color: #FFF;
+        padding: 12px 16px;
+        text-align: left; }
+      section .api-param-table table tr:nth-child(odd) td {
+        background-color: #FFF; }
+      section .api-param-table table tr td:first-child {
+        white-space: nowrap; }
+      section .api-param-table table tr td {
+        border-bottom: 1px solid #E3ECF5;
+        padding: 12px 16px;
+        text-align: left; }
+        section .api-param-table table tr td code.required:before {
+          content: '*';
+          font-weight: bold;
+          color: red; }
+  section ul.methods {
+    padding: 0px;
+    list-style: none;
+    margin: 0px; }
+    section ul.methods > li {
+      padding-bottom: 32px; }
+    section ul.methods li:last-child {
+      padding-bottom: 0px; }
+    section ul.methods h3.method-function-syntax {
+      padding: 0 16px;
+      background: #000;
+      color: #FFF;
+      line-height: 48px;
+      margin: 0px;
+      border-radius: 2px;
+      display: block;
+      font-family: "Menlo, Monaco, " Andale Mono ", " Lucida Console ", " Courier New ", monospace;"; }
+    section ul.methods div.service-desc {
+      overflow: hidden;
+      background: #FFF;
+      padding: 0px 16px;
+      margin: 0 0 22px; }
+  section hljs:before {
+    content: attr(language);
+    text-transform: uppercase;
+    display: block;
+    background: #000;
+    color: #FFF;
+    line-height: 48px;
+    padding: 0 16px;
+    border-radius: 2px 2px 0 0; }
+  section .hljs-title {
+    color: #E5C3A2 !important;
+    font-weight: normal; }
+  section .hljs-string,
+  section .hljs-value,
+  section .hljs-inheritance,
+  section .hljs-header,
+  section .ruby .symbol,
+  section .xml .cdata {
+    color: #8F9C6C !important; }
+  section .hljs {
+    background-color: #1F1F1F; }
+  section .hljs-link_url,
+  section .hljs-tag .hljs-value,
+  section .hljs-string,
+  section .hljs-bullet,
+  section .hljs-subst,
+  section .hljs-emphasis,
+  section .hljs-type,
+  section .hljs-preprocessor,
+  section .hljs-pragma,
+  section .ruby .hljs-class .hljs-parent,
+  section .hljs-built_in,
+  section .django .hljs-template_tag,
+  section .django .hljs-variable,
+  section .smalltalk .hljs-class,
+  section .hljs-javadoc,
+  section .django .hljs-filter .hljs-argument,
+  section .smalltalk .hljs-localvars,
+  section .smalltalk .hljs-array,
+  section .hljs-attr_selector,
+  section .hljs-pseudo,
+  section .hljs-addition,
+  section .hljs-stream,
+  section .hljs-envvar,
+  section .apache .hljs-tag,
+  section .apache .hljs-cbracket,
+  section .tex .hljs-command,
+  section .hljs-prompt,
+  section .hljs-name {
+    color: #9CCC65 !important; }
+  section .hljs-link_label,
+  section .hljs-attribute,
+  section .hljs-symbol,
+  section .hljs-symbol .hljs-string,
+  section .hljs-value,
+  section .hljs-params,
+  section .hljs-regexp {
+    color: #7DB9F4; }
+
+snapshot {
+  text-align: center;
+  display: block; }
+  snapshot > img {
+    width: 90%;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.14), 0 4px 5px 0 rgba(0, 0, 0, 0.098), 0 1px 10px 0 rgba(0, 0, 0, 0.084); }
+  snapshot > iframe {
+    width: 80%;
+    height: 350px;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.14), 0 4px 5px 0 rgba(0, 0, 0, 0.098), 0 1px 10px 0 rgba(0, 0, 0, 0.084); }
+  snapshot > span {
+    display: block; }
+
+section.demo-container md-toolbar {
+  background-color: #494848; }
+  section.demo-container md-toolbar button,
+  section.demo-container md-toolbar md-button:hover {
+    background-color: transparent !important;
+    float: right; }
+    section.demo-container md-toolbar button md-icon,
+    section.demo-container md-toolbar md-button:hover md-icon {
+      color: #fff !important; }
+section.demo-container md-tabs md-tabs-wrapper {
+  background-color: #494848; }
+section.demo-container md-tabs md-content {
+  padding: 0px; }
+  section.demo-container md-tabs md-content hljs:before {
+    content: "";
+    text-transform: inherits;
+    background: #000;
+    color: #FFF;
+    line-height: 48px;
+    padding: 0 16px;
+    border-radius: 2px 2px 0 0; }
+  section.demo-container md-tabs md-content > img {
+    width: 100%; }
+section.demo-container md-tabs md-tab-content {
+  background-color: #1F1F1F; }
+section.demo-container md-tabs:not(.md-no-tab-content):not([md-dynamic-height]) {
+  min-height: 350px; }
+section.demo-container span.demo-error {
+  color: red; }
+
+/*# sourceMappingURL=default.css.map */

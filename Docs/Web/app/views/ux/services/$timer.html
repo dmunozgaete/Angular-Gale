@@ -1,0 +1,269 @@
+<p>
+	<!-- DESCRIPTION -->
+	El servicio <code>$Timer</code> es un servicio de apoyo sobre el servicio base 
+	<a target="_blank" href="https://docs.angularjs.org/api/ng/service/$interval">$interval</a>
+	y permite disponer de un mayor control como detenciones y reinicios del contador de acuerdo
+	a la lógica del sistema desarrollado.
+	
+	<br />
+
+	<h2 class="md-headline">
+		Recomendaciones:
+	</h2>
+	<ul class="doc-list">
+		<li>
+			Al igual que el servicio <code>$timeout</code> o <code>$interval</code> 
+			el ciclo de eliminación del componente se debe producir en el evento 
+			<a target="_blank" href="http://www.bennadel.com/blog/2548-don-t-forget-to-cancel-timeout-timers-in-your-destroy-events-in-angularjs.htm">$destroy</a>
+			dispuesto por la variable <code>$scope</code> de angularJS, y de esta forma asegurar un 
+			buen grado de "salud" en el sistema evitando las conocidas 
+			<a href="https://es.wikipedia.org/wiki/Fuga_de_memoria" target="_blank">Fugas de memoria</a>
+			en nuestros desarrollos.
+		</li>
+	</ul>
+
+	<!-- /DESCRIPTION -->
+
+	<!-- USAGE -->
+	<h2 class="md-headline">
+		Uso Basico
+	</h2>
+	<hljs language="js">
+app.controller('MyController', function($scope, $Timer) {
+	
+  var frequency	= 5000;	//5 segundos
+  var callback = function(){
+
+    console.log(
+      'Servicio ejecutado cada {0} segundos!'.format([
+      	frequency
+      ])
+    );
+
+  };
+  var timer = $Timer(callback, frequency);
+
+  //No olvidar eliminar el timer!
+  $scope.$on("$destroy", function(){
+    timer.destroy();
+  });
+
+});
+	</hljs>
+	<!-- /USAGE -->
+
+	<!-- CONSTRUCTOR -->
+	<h2 class="md-headline">
+		Constructor
+	</h2>
+	<ul class="methods">
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Tipo</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- -->
+						<tr>
+							<td>
+								<code class="required">
+									callback
+								</code>
+							</td>
+							<td>
+								function
+							</td>
+							<td class="description">
+								<p>
+									Función a ejecutar una vez que el contador haya
+									completado el ciclo asignado en la frecuencia.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+						<tr>
+							<td>
+								<code>
+									frequency
+								</code>
+							</td>
+							<td>
+								int
+							</td>
+							<td class="description">
+								<p>
+									Frecuencia (en milisegundos) , en que se ejecutará 
+									la función de <code>callback</code> establecida en el 
+									constructor.
+									<br />
+									Una vez completado el ciclo establecido por la frecuencia
+									el contador se reinicializará si no ha sido detenido manualmente. 
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+					</tbody>
+				</table>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Retorno</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+				<tbody>
+					<!-- -->
+					<tr>
+						<td>
+							<code>
+								Timer
+							</code>
+						</td>
+						<td class="description">
+							<p>
+								Retorna un objeto estandar de control de tiempo 
+								con el contador activo y configurado según el parametro 
+								<code>frecuency</code>.
+							</p>
+						</td>
+					</tr>
+					<!-- -->
+				</tbody>
+				</table>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+	</ul>
+	<!-- /CONSTRUCTOR -->
+
+
+	<!-- METHODS -->
+	<h2 class="md-headline">
+		Métodos Timer
+	</h2>
+	<ul class="methods">
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				timer.isActive();
+			</h3>
+			<div class="service-desc">
+				<p>
+					Verifica si el contador del timer se encuentra activo o ha sido 
+					detenido de forma manual.
+				</p>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Retorno</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+				<tbody>
+					<!-- -->
+					<tr>
+						<td>
+							<code>
+								boolean
+							</code>
+						</td>
+						<td class="description">
+							<p>
+								Retorna <code>verdadero</code> si el contador se encuentra
+								activo, de lo contrario retornará <code>falso</code>.
+							</p>
+						</td>
+					</tr>
+					<!-- -->
+				</tbody>
+				</table>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				timer.start();
+			</h3>
+			<div class="service-desc">
+				<p>
+					Vuelve a iniciar el contador del <code>$Timer</code> reinicializando
+					la frecuencia y activando nuevamente el contador.
+				</p>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				timer.stop();
+			</h3>
+			<div class="service-desc">
+				<p>
+					Detiene el contador del timer y su ejecución actual en forma manual, 
+					hasta que este no sea iniciado a través del método <code>start</code>
+					manualmente.
+				</p>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				timer.restart();
+			</h3>
+			<div class="service-desc">
+				<p>
+					Reinicia la frecuencia de ejecución establecida en el contador.
+				</p>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				timer.flush();
+			</h3>
+			<div class="service-desc">
+				<p>
+					Ejecuta inmediatamente la función <code>callback</code> 
+					establecida en el constructor del servicio $Timer.
+				</p>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				timer.destroy();
+			</h3>
+			<div class="service-desc">
+				<p>
+					Método que se debe usar una vez ya no se requiera el uso del timer creado 
+					a través del servicio <code>$Timer</code>.
+				</p>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+	</ul>
+	<!-- /METHODS -->
+</p>

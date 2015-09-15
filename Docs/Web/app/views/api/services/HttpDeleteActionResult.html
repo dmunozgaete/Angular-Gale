@@ -1,0 +1,250 @@
+<p>
+    <!-- DESCRIPTION -->
+    Clase base que hereda de 
+    <a ui-sref="app.api-services-HttpBaseActionResult">HttpBaseActionResult</a> y 
+    utilizada para estructurar una <strong>Solicitud de Eliminación</strong> 
+    sobre el principio RESTFul (DELETE).
+
+    <br /> 
+    <br /> 
+    A continuación se presenta un ejemplo con la firma definida segun 
+    definición para un <code>endpoint</code> de la API.
+    <!-- /DESCRIPTION -->
+
+    <!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>
+                        Uso Basico
+                    </span>
+                </h2>
+            </div>
+        </md-toolbar>
+        <!-- VIEWS -->
+        <div>
+            <md-tabs md-border-bottom class="md-primary">
+                <md-tab label="AccountController.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Net.Http;
+using Gale.REST.Http;
+
+namespace API.Areas.Account
+{
+  /// &lt;summary&gt;
+  /// Account API (Securified)
+  /// &lt;/summary&gt;
+  [Gale.Security.Oauth.Jwt.Authorize]
+  public class AccountController : Gale.REST.RestController
+  {
+
+    /// &lt;summary&gt;
+    /// Delete Target Account
+    /// &lt;/summary&gt;
+    /// &lt;param name="id"&gt;Account Token&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public IHttpActionResult Delete(Guid id)
+    {
+      return new Services.Delete(id.ToString());
+    }
+
+  }                
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="Delete.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Threading.Tasks;
+using System.Net.Http;
+using Gale.REST.Http;
+
+namespace API.Areas.Account.Services
+{
+  /// &lt;summary&gt;
+  /// Delete User in DB
+  /// &lt;/summary&gt;
+  public class Delete : HttpDeleteActionResult&lt;String&gt;
+  {
+
+    /// &lt;summary&gt;
+    /// Constructor
+    /// &lt;/summary&gt;
+    /// &lt;param name="token"&gt;User Token&lt;/param&gt;
+    public Delete(String token) : base(token) { }
+
+    /// &lt;summary&gt;
+    ///  Async Process
+    /// &lt;/summary&gt;
+    /// &lt;param name="token"&gt;User Token&lt;/param&gt;
+    /// &lt;param name="cancellationToken"&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public override Task&lt;System.Net.Http.HttpResponseMessage&gt; ExecuteAsync(string token, System.Threading.CancellationToken cancellationToken)
+    {
+      //---------------------------------------------
+      // GUARD EXCEPTIONS
+      Gale.Exception.RestException.Guard(() =&gt; token == null, "BODY_EMPTY", API.Resources.Errors.ResourceManager);
+      //---------------------------------------------
+
+      //---------------------------------------------
+      // DB Execution
+      using (Gale.Db.DataService svc = new Gale.Db.DataService("PA_MAE_DEL_Usuario"))
+      {
+        svc.Parameters.Add("ENTI_Token", token);
+        
+        this.ExecuteAction(svc);
+      }
+      //---------------------------------------------
+
+      HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.Ok);
+
+      return Task.FromResult(response);
+    }
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+               
+                <md-tab label="Account.dbml">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+[TableAttribute(Name="dbo.TB_MAE_Usuario")]
+public class Account
+{
+  private System.Guid _token;
+  private System.DateTime _createdAt;
+  private string _identifier;
+  private System.Nullable&lt;System.Guid&gt; _photo;
+  private string _email;
+  private string _fullname;
+  private System.DateTime _lastConnection;
+  private int _active;
+    
+  [ColumnAttribute(Name="ENTI_Token", Storage="_token", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+  public System.Guid token
+  {
+    get
+    {
+      return this._token;
+    }
+    set
+    {
+      this._token = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ENTI_FechaCreacion", Storage="_createdAt", DbType="DateTime NOT NULL")]
+  public System.DateTime createdAt
+  {
+    get
+    {
+      return this._createdAt;
+    }
+    set
+    {
+      this._createdAt = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ENTI_Identificador", Storage="_identifier", DbType="VarChar(200) NOT NULL", CanBeNull=false)]
+  public string identifier
+  {
+    get
+    {
+      return this._identifier;
+    }
+    set
+    {
+      this._identifier = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ARCH_Token", Storage="_photo", DbType="UniqueIdentifier")]
+  public System.Nullable&lt;System.Guid&gt; photo
+  {
+    get
+    {
+      return this._photo;
+    }
+    set
+    {
+      this._photo = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_Email", Storage="_email", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+  public string email
+  {
+    get
+    {
+      return this._email;
+    }
+    set
+    {   
+      this._email = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_NombreCompleto", Storage="_fullname", DbType="VarChar(250) NOT NULL", CanBeNull=false)]
+  public string fullname
+  {
+    get
+    {
+      return this._fullname;
+    }
+    set
+    {
+      this._fullname = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_UltimaConexion", Storage="_lastConnection", DbType="DateTime NOT NULL")]
+  public System.DateTime lastConnection
+  {
+    get
+    {
+      return this._lastConnection;
+    }
+    set
+    {
+      this._lastConnection = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_Activo", Storage="_active")]
+  public int active
+  {
+    get
+    {
+      return this._active;
+    }
+    set
+    {
+      this._active = value;
+    }
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </div>
+        <!-- /VIEWS -->
+    </section>
+    <!-- /USAGE -->
+</p>
