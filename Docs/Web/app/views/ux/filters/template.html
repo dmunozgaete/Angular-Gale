@@ -1,0 +1,94 @@
+<p>
+	<!-- DESCRIPTION -->
+	Interpola (<a target="_blank" href="https://docs.angularjs.org/api/ng/service/$interpolate">$interpolate</a>) 
+	una cadena de caracteres con el objeto como argumento de contexto y 
+	retorna su valor.
+	<br />
+
+	<!-- /DESCRIPTION -->
+
+	<!-- USAGE -->
+	<h2 class="md-headline">
+		Uso Declarativo
+	</h2>
+	<hljs language="html">
+<div ng-app="demoApp" ng-controller="MyController"> 
+  
+    <label>
+      <!-- RESX: Bienvenido {{name}} -->
+      {{ 'login.welcome' | localize | template: {name:'David!'} }}
+      <!-- Bienvenido David! -->
+    </label>
+  
+</div>
+	</hljs>
+	<!-- /USAGE -->
+
+	<!-- FILTER -->
+	<h2 class="md-headline">
+		Uso
+	</h2>
+	<ul class="methods">
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				$filter('template')(template, context);
+			</h3>
+			<div class="service-desc">
+				<p>
+					
+				</p>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Tipo</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- -->
+						<tr>
+							<td>
+								<code class="required">
+									template
+								</code>
+							</td>
+							<td>
+								String
+							</td>
+							<td class="description">
+								<p>
+									Plantilla a interpolar.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+						<tr>
+							<td>
+								<code class="required">
+									context
+								</code>
+							</td>
+							<td>
+								String
+							</td>
+							<td class="description">
+								<p>
+									Contexto a utilizar en la interpolación.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+					</tbody>
+				</table>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+	</ul>
+	<!-- /FILTER -->
+</p>

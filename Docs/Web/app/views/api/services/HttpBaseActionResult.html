@@ -1,0 +1,542 @@
+<p>
+    <!-- DESCRIPTION -->
+    
+    Clase base que define propiedades y metodos, para la devolución de 
+    respuestas sobre un canal HTTP, ademas de proveer de funcionalidades de conexión a 
+    la(las) fuentes de datos utilizadas en el proyecto.
+    <br />
+    <br /> 
+    Si bien las respuestas (responses) HTTP, se encuentran 
+    directamente relacionadas con el principio RESTFul, en GALE se 
+    han creado tipos de respuestas para cada tipo de solicitud, 
+    para una mejor estructuración y optimización de los tiempos de desarrollo.
+    <br />
+    <h2 class="md-headline">
+        Tipos de Respuestas vs Verbos HTTP:
+    </h2>
+
+    <ul class="doc-list">
+        <li>
+            <strong>GET</strong>: Se recomienda usar el tipo de respuesta 
+            personalizada <code>HttpReadActionResult</code> o en el caso en que se 
+            desee exponer un listado de datos "consultable" se recomienda usar el tipo
+            de respuesta <code>HttpQueryableActionResult</code> 
+            <i>
+            (para mas información: 
+            veasé <a target="_blank" href="http://odata.org">ODATA</a>)
+            </i>.
+        </li>
+        <li>
+            <strong>POST</strong>: Se recomienda usar el tipo de respuesta 
+            personalizada <code>HttpCreationActionResult</code>.
+            <br />
+            <i>
+                Para la extracción de archivos binarios bajo el formato de 
+                <code>multipart/form-data</code>
+                se recomienda usar el tipo de respuesta personalizada 
+                <code>HttpFileActionResult</code>.
+            </i>
+        </li>
+        <li>
+            <strong>PUT</strong>: Se recomienda usar el tipo de respuesta 
+            personalizada <code>HttpUpdateActionResult</code>.
+        </li>
+        <li>
+            <strong>DELETE</strong>: Se recomienda usar el tipo de respuesta 
+            personalizada <code>HttpDeleteActionResult</code>.
+        </li>
+    </ul>
+
+    <!-- /DESCRIPTION -->
+
+    <!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>
+                        Uso Basico
+                    </span>
+                </h2>
+            </div>
+        </md-toolbar>
+        <!-- VIEWS -->
+        <div>
+            <md-tabs md-border-bottom class="md-primary">
+                <md-tab label="AccountController.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Description;
+using Gale.REST.Http;
+
+namespace API.Areas.Account
+{
+  /// &lt;summary&gt;
+  /// Account API (Securified)
+  /// &lt;/summary&gt;
+  [Gale.Security.Oauth.Jwt.Authorize]
+  public class AccountController : Gale.REST.RestController
+  {
+
+    /// &lt;summary&gt;
+    /// Retrieve Target Account Information
+    /// &lt;/summary&gt;
+    /// &lt;param name="id"&gt;Account Token&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public IHttpActionResult Get(Guid id)
+    {
+      return new Services.Get(id.ToString());
+    }
+
+  }                
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="Get.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
+
+namespace API.Areas.Account.Services
+{
+  /// &lt;summary&gt;
+  /// Retrieve a Target User
+  /// &lt;/summary&gt;
+  public class Get : Gale.REST.Http.HttpActionResult
+  {
+
+    String _token = null;
+
+    /// &lt;summary&gt;
+    /// Constructor
+    /// &lt;/summary&gt;
+    /// &lt;param name="token"&gt;&lt;/param&gt;
+    public Get(String token){ 
+      this._token = token;
+    }
+
+    /// &lt;summary&gt;
+    /// Async Process
+    /// &lt;/summary&gt;
+    /// &lt;param name="cancellationToken"&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public override System.Threading.Tasks.Task&lt;System.Net.Http.HttpResponseMessage&gt; ExecuteAsync(System.Threading.CancellationToken cancellationToken)
+    {
+      using (Gale.Db.DataService svc = new Gale.Db.DataService("PA_MAE_OBT_InformacionUsuario"))
+      {
+        svc.Parameters.Add("USUA_Token", this._token);
+
+        Gale.Db.EntityRepository rep = this.ExecuteQuery(svc);
+
+        Models.Account account = rep.GetModel&lt;Models.Account&gt;().FirstOrDefault();
+
+        //--------------------------------------------------------------
+        //Create Response
+        var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+        {
+          Content = new ObjectContent&lt;Object&gt;(
+            new
+            {
+              token = account.token,
+              email = account.email,
+              fullName = account.fullname,
+              identifier = account.identifier,
+              avatar = (account.photo == System.Guid.Empty ? null : account.photo.ToString()),
+              lastConnection = account.lastConnection
+            },
+            System.Web.Http.GlobalConfiguration.Configuration.Formatters.JsonFormatter
+          )
+        };
+
+        //Return Task
+        return Task.FromResult(response);
+        //--------------------------------------------------------------
+      }
+    }
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="User.dbml (Visual Studio Designer)">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+[TableAttribute(Name="dbo.TB_MAE_Usuario")]
+public class Account
+{
+  private System.Guid _token;
+  private System.DateTime _createdAt;
+  private string _identifier;
+  private System.Nullable&lt;System.Guid&gt; _photo;
+  private string _email;
+  private string _fullname;
+  private System.DateTime _lastConnection;
+  private int _active;
+    
+  [ColumnAttribute(Name="ENTI_Token", Storage="_token", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+  public System.Guid token
+  {
+    get
+    {
+      return this._token;
+    }
+    set
+    {
+      this._token = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ENTI_FechaCreacion", Storage="_createdAt", DbType="DateTime NOT NULL")]
+  public System.DateTime createdAt
+  {
+    get
+    {
+      return this._createdAt;
+    }
+    set
+    {
+      this._createdAt = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ENTI_Identificador", Storage="_identifier", DbType="VarChar(200) NOT NULL", CanBeNull=false)]
+  public string identifier
+  {
+    get
+    {
+      return this._identifier;
+    }
+    set
+    {
+      this._identifier = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ARCH_Token", Storage="_photo", DbType="UniqueIdentifier")]
+  public System.Nullable&lt;System.Guid&gt; photo
+  {
+    get
+    {
+      return this._photo;
+    }
+    set
+    {
+      this._photo = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_Email", Storage="_email", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+  public string email
+  {
+    get
+    {
+      return this._email;
+    }
+    set
+    {   
+      this._email = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_NombreCompleto", Storage="_fullname", DbType="VarChar(250) NOT NULL", CanBeNull=false)]
+  public string fullname
+  {
+    get
+    {
+      return this._fullname;
+    }
+    set
+    {
+      this._fullname = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_UltimaConexion", Storage="_lastConnection", DbType="DateTime NOT NULL")]
+  public System.DateTime lastConnection
+  {
+    get
+    {
+      return this._lastConnection;
+    }
+    set
+    {
+      this._lastConnection = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_Activo", Storage="_active")]
+  public int active
+  {
+    get
+    {
+      return this._active;
+    }
+    set
+    {
+      this._active = value;
+    }
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </div>
+        <!-- /VIEWS -->
+    </section>
+    <!-- /USAGE -->
+
+
+    <!-- METHODS -->
+    <h2 class="md-headline">
+        Métodos
+    </h2>
+    <ul class="methods">
+        <!-- -->
+        <li>
+            <!-- METHOD -->
+            <h3 class="method-function-syntax" id="ExecuteQuery">
+                ExecuteQuery(Gale.Db.DataService Service)
+            </h3>
+            <div class="service-desc">
+                <p>
+                    Ejecuta un procedimiento de almacenado en la base de datos 
+                    configurada, y retorna el resultado contenido en una colección de 
+                    entidades del tipo <code>Gale.Db.EntityRepository</code>.
+                </p>
+            </div>
+            <div class="api-param-table">
+                <table class="no-style">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- -->
+                        <tr>
+                            <td>
+                                <code class="required">
+                                    Service
+                                </code>
+                            </td>
+                            <td>
+                                Gale.Db.DataService
+                            </td>
+                            <td class="description">
+                                <p>
+                                    Servicio de configuración a ejecutar en la fuente de datos.
+                                    Generalmente , se utiliza para configurar los parametros de 
+                                    entrada y el procedimiento de almacenado o función a ejecutar.
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="api-param-table">
+                <table class="no-style">
+                    <thead>
+                        <tr>
+                            <th>Retorno</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    <!-- -->
+                    <tr>
+                        <td>
+                            <code>
+                                Gale.Db.EntityRepository
+                            </code>
+                        </td>
+                        <td class="description">
+                            <p>
+                                Retorna el repositorio de entidades devueltas por el 
+                                servicio ejecutado en la fuente de datos, El repositorio 
+                                ya se encuentra fuertemente tipeado con el contenido devuelto de acuerdo a 
+                                la configuración establecida en el(los) modelos devueltos por la fuente.
+
+                                </br />
+                                </br />
+                                
+                                Para extraer una colección de modelos (consulta) , 
+                                existe el metodo generico<code>GetModel&lt;TModel&gt;()</code>
+                                donde 
+                                <code>TModel</code> define el modelo a devolver de la fuente.
+                                
+                                </br />
+                                </br />
+
+                                <i>
+                                    <strong>PD:</strong> para las fuentes de datos que permiten devolver
+                                    mas de una consulta a través de un procedimiento de almacenado, el
+                                    metodo GetModel<>(Int32 ordinal), permite el envió de un parametro
+                                    numérico para indicar el ordinal de la consulta a devolver.
+                                </i>
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- -->
+                </tbody>
+                </table>
+            </div>
+            <!-- /METHOD -->
+        </li>
+        <!-- -->
+        <li>
+            <!-- METHOD -->
+            <h3 class="method-function-syntax">
+                ExecuteScalar(Gale.Db.DataService Service)
+            </h3>
+            <div class="service-desc">
+                <p>
+                    Ejecuta un procedimiento de almacenado en la base de datos 
+                    configurada, y retorna el primer resultado de la 
+                    primera consulta devuelta de la fuente de datos.
+                    <br />
+                    <br />
+                    <i>
+                        <strong>PD</strong>: Es útil para ejecutar procedimientos de 
+                        inserción o actualización que devuelven el identificador de 
+                        registro y debe ser devuelto hacia la capa de cliente.
+                    </i>
+                </p>
+            </div>
+            <div class="api-param-table">
+                <table class="no-style">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- -->
+                        <tr>
+                            <td>
+                                <code class="required">
+                                    Service
+                                </code>
+                            </td>
+                            <td>
+                                Gale.Db.DataService
+                            </td>
+                            <td class="description">
+                                <p>
+                                    Servicio de configuración a ejecutar en la fuente de datos.
+                                    Generalmente , se utiliza para configurar los parametros de 
+                                    entrada y el procedimiento de almacenado o función a ejecutar.
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="api-param-table">
+                <table class="no-style">
+                    <thead>
+                        <tr>
+                            <th>Retorno</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    <!-- -->
+                    <tr>
+                        <td>
+                            <code>
+                                Object
+                            </code>
+                        </td>
+                        <td class="description">
+                            <p>
+                                Retorna un objeto, el cúal es el valor de la 
+                                primera columna de la primera fila de la primera 
+                                consulta devuelta.
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- -->
+                </tbody>
+                </table>
+            </div>
+            <!-- /METHOD -->
+        </li>
+        <!-- -->
+        <li>
+            <!-- METHOD -->
+            <h3 class="method-function-syntax">
+                ExecuteAction(Gale.Db.DataService Service)
+            </h3>
+            <div class="service-desc">
+                <p>
+                    Ejecuta un procedimiento de almacenado en la fuente de datos 
+                    configurada, sin devolver o retornar ningun valor
+                    <br />
+                    <br />
+                    <i>
+                        <strong>PD</strong>: Es útil para ejecutar procedimientos de 
+                        eliminación o actualización que no devuelven nada hacia el 
+                        negocio.
+                    </i>
+                </p>
+            </div>
+            <div class="api-param-table">
+                <table class="no-style">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- -->
+                        <tr>
+                            <td>
+                                <code class="required">
+                                    Service
+                                </code>
+                            </td>
+                            <td>
+                                Gale.Db.DataService
+                            </td>
+                            <td class="description">
+                                <p>
+                                    Servicio de configuración a ejecutar en la fuente de datos.
+                                    Generalmente , se utiliza para configurar los parametros de 
+                                    entrada y el procedimiento de almacenado o función a ejecutar.
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /METHOD -->
+        </li>
+        <!-- -->
+    </ul>
+    <!-- /METHODS -->
+</p>

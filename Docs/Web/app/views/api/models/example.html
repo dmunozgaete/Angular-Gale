@@ -1,0 +1,103 @@
+<p>
+    <br />
+	<!-- DESCRIPTION -->
+	Un archivo DBML , es un archivo que define un esquema o agrupación de modelos de 
+	la base de datos conectada (SQL Server, Oracle, MySql, MongoDB , etc.).
+	<br />
+	<br />
+	En GALE, el contenedor del esquema usado para la API, es el archivo dbml, 
+	y este puede contener modelos conectados con la base de datos o no.
+	<br />
+    <br />
+    Estos modelos son vinculados a través de los servicios creados para tu proyecto o 
+    creando un <code>endpoint</code> (Controlador API) heredando de la clase base 
+    <code>QueryableController</code>
+    que generará de forma automatica el principio RESTFul.
+    <br />
+    <br />
+    <!-- YOUTUBE -->
+    <snapshot>
+        <iframe 
+            
+            src="https://www.youtube.com/embed/ycXbDPiIy0s" 
+            frameborder="0" 
+            allowfullscreen>
+        </iframe>
+
+        <span>
+            Creación y Exposición de un Modelo con QueryableController.
+        </span>
+    </snapshot>
+    <!-- /YOUTUBE -->
+    <br />
+	<br />
+	<!-- /DESCRIPTION -->
+
+	<!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+
+                <h2>
+                	<span>
+                		Uso Basico
+                	</span>
+                </h2>
+
+            </div>
+        </md-toolbar>
+
+    	<div>
+	        <!-- Views -->
+	        <md-tabs  md-border-bottom class="md-primary">
+	            <md-tab label="UserController.cs">
+	                <md-content class="md-padding">
+	                	<!-- SOURCE CODE -->
+	                    <hljs language="cs" escape="false">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Gale.REST;
+
+namespace API.Areas.User
+{
+    /// &lt;summary&gt;
+    /// /Account API, With auto generated CRUD Operation's 
+    /// (POST, READ, UPDATE, DELETE)
+    /// &lt;/summary&gt;
+    public class UserController: QueryableController&lt;Models.User&gt;{}
+}
+						</hljs>
+	                    <!-- /SOURCE CODE -->
+	                </md-content>
+	            </md-tab>
+
+                <md-tab label="User.dbml (Visual Studio Designer)">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+    					<img src="bundles/app/static/api_models_example-designer.png" />
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+
+                <md-tab label="Swagger Definition">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+    					<img src="bundles/app/static/api_models_example-swagger.png" />
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+	        </md-tabs>
+        </div>
+        <!-- /Views -->
+
+        
+    </section>
+    <!-- /USAGE -->
+
+    <!-- IMAGES -->
+    
+    <!-- /IMAGES -->
+
+</p>

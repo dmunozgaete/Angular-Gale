@@ -1,0 +1,325 @@
+<p>
+    <!-- DESCRIPTION -->
+    Clase base que hereda de <a ui-sref="app.api-services-HttpBaseActionResult">HttpBaseActionResult</a> y utilizada para estructurar una <strong>Solicitud de Creación</strong> 
+    sobre el principio RESTFul (POST).
+
+    <br /> 
+    <br /> 
+    A continuación se presenta un ejemplo con la firma definida segun 
+    definición para un <code>endpoint</code> de la API.
+    <!-- /DESCRIPTION -->
+
+    <!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>
+                        Uso Basico
+                    </span>
+                </h2>
+            </div>
+        </md-toolbar>
+        <!-- VIEWS -->
+        <div>
+            <md-tabs md-border-bottom class="md-primary">
+                <md-tab label="AccountController.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Net.Http;
+using Gale.REST.Http;
+
+namespace API.Areas.Account
+{
+  /// &lt;summary&gt;
+  /// Account API (Securified)
+  /// &lt;/summary&gt;
+  [Gale.Security.Oauth.Jwt.Authorize]
+  public class AccountController : Gale.REST.RestController
+  {
+
+    /// &lt;summary&gt;
+    /// Pre-Register an account in the system
+    /// &lt;/summary&gt;
+    /// &lt;param name="account"&gt;Account information&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public IHttpActionResult Post([FromBody]Models.Create account){
+      return new Services.Create(account);
+    }
+
+  }                
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="Create.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
+using Gale.REST.Http;
+using System.Security.Claims;
+
+namespace API.Areas.Account.Services
+{
+  /// &lt;summary>
+  /// Add User to DB
+  /// &lt;/summary>
+  public class Create : HttpCreateActionResult&lt;Models.Create>
+  {
+    /// &lt;summary>
+    /// Constructor
+    /// &lt;/summary>
+    /// &lt;param name="user">New User Information&lt;/param>
+    public Create(Models.Create user): base(user){}
+
+    /// &lt;summary>
+    /// Async Process
+    /// &lt;/summary>
+    /// &lt;param name="cancellationToken">&lt;/param>
+    /// &lt;returns>&lt;/returns>
+    public override System.Threading.Tasks.Task&lt;System.Net.Http.HttpResponseMessage> ExecuteAsync(System.Threading.CancellationToken cancellationToken)
+    {
+      //-----------------------------------------------
+      // GUARD EXCEPTIONS
+      Gale.Exception.RestException.Guard(() => Model == null, "BODY_EMPTY", API.Resources.Errors.ResourceManager);
+      Gale.Exception.RestException.Guard(() => Model.fullname == String.Empty, "NAME_EMPTY", API.Resources.Errors.ResourceManager);
+      Gale.Exception.RestException.Guard(() => Model.email == String.Empty, "EMAIL_EMPTY", API.Resources.Errors.ResourceManager);
+      //-----------------------------------------------
+
+      //-----------------------------------------------
+      // DB Execution
+      using (Gale.Db.DataService svc = new Gale.Db.DataService("PA_MAE_INS_Usuario"))
+      {
+        svc.Parameters.Add("ENTI_Token", HttpContext.Current.User.PrimarySid());
+        svc.Parameters.Add("ENTI_Nombre", Model.fullname);
+        svc.Parameters.Add("ENTI_Identificador", Model.email);
+        svc.Parameters.Add("ENTI_Email", Model.email);
+        svc.Parameters.Add("USUA_Contrasena", Gale.Security.Cryptography.MD5.GenerateHash(System.Web.Security.Membership.GeneratePassword(20, 3)));
+        svc.Parameters.Add("PRF_Tokens", String.Join(",", Model.profiles));
+
+        //http://sqlhints.com/2013/06/30/differences-between-raiserror-and-throw-in-sql-server/
+        try
+        {
+          this.ExecuteAction(svc);
+        }
+        catch (Gale.Exception.SqlClient.CustomDatabaseException ex)
+        {
+          //50001 = USER_ALREADY_EXISTS
+          throw new Gale.Exception.RestException(ex.Message, null);
+        }
+      }
+      //-----------------------------------------------
+  
+      //-----------------------------------------------      
+      // REPLICATES A BASIC TOKEN AND 2 HOURS EXPIRATION
+      List&lt;Claim> claims = new List&lt;System.Security.Claims.Claim>();
+
+      claims.Add(new Claim(ClaimTypes.Email, Model.email));
+      claims.Add(new Claim(ClaimTypes.PrimarySid, Model.email));
+      claims.Add(new Claim(ClaimTypes.Name, Model.fullname));
+
+      //RETURN TOKEN
+      var token = Gale.Security.Oauth.Jwt.Manager.CreateToken(claims, DateTime.Now.AddMinutes(60 * 2));  //2 hours        
+
+      //SEND A CONFIRMATION EMAIL TO THE USER ;)!
+      dynamic email = new Postal.Email(@"Account\Register");
+      email.To = Model.email;
+      email.Nombre = Model.fullname;
+      email.Url = String.Format("{0}#/account/register/{1}", "http://valentys.com/", token.access_token);
+      email.Send();
+      //-----------------------------------------------
+
+
+      HttpResponseMessage response = new HttpResponseMessage(System.Net.HttpStatusCode.Created);
+      return Task.FromResult(response);
+    }
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="Register.cshtml">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="xml" escape="false">
+Subject: Activa tu Cuenta
+&lt;html&gt;
+  &lt;body style="font-family:arial; color: rgb(128, 128, 128);"&gt;
+  &lt;center&gt;
+    &lt;div style="border: 1px solid rgb(229, 229, 229); width: 80%; padding:24px; border-radius:3px; text-align:left"&gt;
+
+      &lt;span style="font-size: 1.3em;"&gt;
+        &lt;strong&gt;Hola @ViewBag.Nombre!&lt;/strong&gt;
+      &lt;/span&gt;
+      &lt;br /&gt;  
+      &lt;br /&gt;
+      &lt;strong&gt;Excelente!&lt;/strong&gt;
+      &lt;br /&gt;
+      &lt;br /&gt;
+      &lt;span&gt;
+        Has configurado con exito tu cuenta!, ahora solo falta configurar tu acceso y una que otra cosa mas!,
+        pero ya estas aquí , por lo que todo va de maravilla!.
+      &lt;/span&gt;
+      &lt;br /&gt;
+      &lt;br /&gt;
+      &lt;span&gt;
+        Saludos!.
+      &lt;/span&gt;
+      &lt;br /&gt;
+      &lt;br /&gt;
+      Equipo Grupo Valentys
+      &lt;br /&gt;
+      http://www.valentys.com
+      &lt;br /&gt;
+    &lt;/div&gt;
+    &lt;div style="width: 80%; padding:8px 0px 0px 0px; text-align:right"&gt;
+      Orgullosamente desarrollado en &lt;a href="http://gale-docs.azurewebsites.net/"&gt;Gale&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/center&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+
+                <md-tab label="Account.dbml">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+[TableAttribute(Name="dbo.TB_MAE_Usuario")]
+public class Account
+{
+  private System.Guid _token;
+  private System.DateTime _createdAt;
+  private string _identifier;
+  private System.Nullable&lt;System.Guid&gt; _photo;
+  private string _email;
+  private string _fullname;
+  private System.DateTime _lastConnection;
+  private int _active;
+    
+  [ColumnAttribute(Name="ENTI_Token", Storage="_token", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+  public System.Guid token
+  {
+    get
+    {
+      return this._token;
+    }
+    set
+    {
+      this._token = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ENTI_FechaCreacion", Storage="_createdAt", DbType="DateTime NOT NULL")]
+  public System.DateTime createdAt
+  {
+    get
+    {
+      return this._createdAt;
+    }
+    set
+    {
+      this._createdAt = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ENTI_Identificador", Storage="_identifier", DbType="VarChar(200) NOT NULL", CanBeNull=false)]
+  public string identifier
+  {
+    get
+    {
+      return this._identifier;
+    }
+    set
+    {
+      this._identifier = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="ARCH_Token", Storage="_photo", DbType="UniqueIdentifier")]
+  public System.Nullable&lt;System.Guid&gt; photo
+  {
+    get
+    {
+      return this._photo;
+    }
+    set
+    {
+      this._photo = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_Email", Storage="_email", DbType="VarChar(100) NOT NULL", CanBeNull=false)]
+  public string email
+  {
+    get
+    {
+      return this._email;
+    }
+    set
+    {   
+      this._email = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_NombreCompleto", Storage="_fullname", DbType="VarChar(250) NOT NULL", CanBeNull=false)]
+  public string fullname
+  {
+    get
+    {
+      return this._fullname;
+    }
+    set
+    {
+      this._fullname = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_UltimaConexion", Storage="_lastConnection", DbType="DateTime NOT NULL")]
+  public System.DateTime lastConnection
+  {
+    get
+    {
+      return this._lastConnection;
+    }
+    set
+    {
+      this._lastConnection = value;
+    }
+  }
+    
+  [ColumnAttribute(Name="USUA_Activo", Storage="_active")]
+  public int active
+  {
+    get
+    {
+      return this._active;
+    }
+    set
+    {
+      this._active = value;
+    }
+  }
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </div>
+        <!-- /VIEWS -->
+    </section>
+    <!-- /USAGE -->
+</p>

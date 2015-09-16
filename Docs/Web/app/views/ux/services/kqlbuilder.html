@@ -1,0 +1,145 @@
+<p>
+	<!-- DESCRIPTION -->
+	El servicio <code>KQLBuilder</code> es un servicio de apoyo para crear
+	URL's con el formato KQL (Karma Query Language), sobre un recurso Web
+	con tecnología basada en <code>Karma</code>.
+
+	<br />
+	<h2 class="md-headline">	
+		Recomendaciones:
+	</h2>
+	<ul class="doc-list">
+		<li>
+			Para casos de consulta hacia un recurso Web basado en Karma , 
+			es recomendable utilizar el método <code>kql</code> que se encuentra en el 
+			servicio <a ui-sref="app.services-$api">$Api</a>
+		</li>
+	</ul>
+	<!-- /DESCRIPTION -->
+
+	<!-- USAGE -->
+	<h2 class="md-headline">	
+		Uso Basico
+	</h2>
+	<hljs language="js" escape="false">
+app.controller('MyController', function($scope, KQLBuilder) {
+
+  var url = "http://demoApp.valentys.com/API/v1/Account";
+  var kql = {
+    limit: 1,
+    offset: 2,
+    orderBy: 'firstname asc',
+    filters: [
+      {
+        name: 'email',
+        operator: 'contains',
+        value: 'dmunoz@valentys.com'
+      }
+    ]
+  };
+
+  console.log( KQLBuilder.build(kql) );	
+  //http://demoApp.valentys.com/API/v1/Account?$limit=1&offset=2&filter=email contains 'dmunoz@valentys.com'&orderBy=firstname asc
+
+});
+	</hljs>
+	<!-- /USAGE -->
+
+	<!-- METHODS -->
+	<h2 class="md-headline">
+		Métodos
+	</h2>
+	<ul class="methods">
+		<!-- -->
+		<li>
+			<!-- METHOD -->
+			<h3 class="method-function-syntax">
+				KQLBuilder.build(endpoint, kql);
+			</h3>
+			<div class="service-desc">
+				<p>
+					Compila la url con la configuración en formato kql y retorna la 
+					URL completa.
+				</p>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Tipo</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- -->
+						<tr>
+							<td>
+								<code class="required">
+									endpoint
+								</code>
+							</td>
+							<td>
+								String
+							</td>
+							<td class="description">
+								<p>
+									URL base del recurso Web con tecnología basada en
+									<code>Karma</code>.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+						<tr>
+							<td>
+								<code>
+									kql
+								</code>
+							</td>
+							<td>
+								JSON
+							</td>
+							<td class="description">
+								<p>
+									Objeto con la configuración a establecer en el recursos
+									Web con tecnología basada en
+									<code>Karma</code>.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+					</tbody>
+				</table>
+			</div>
+			<div class="api-param-table">
+				<table class="no-style">
+					<thead>
+						<tr>
+							<th>Retorno</th>
+							<th>Descripción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- -->
+						<tr>
+							<td>
+								<code>
+									String
+								</code>
+							</td>
+							<td class="description">
+								<p>
+									Retorna la URL compilada con el formato JSON.
+								</p>
+							</td>
+						</tr>
+						<!-- -->
+					</tbody>
+				</table>
+			</div>
+			<!-- /METHOD -->
+		</li>
+		<!-- -->
+	</ul>
+	<!-- /METHODS -->
+</p>

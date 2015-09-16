@@ -1,0 +1,202 @@
+<p>
+
+	Los servicios de seguridad se encuentran implícitos en cada uno de los 
+	servicios de negocios y permiten administrar el acceso a los recursos a través de 
+	un protocolo o estructura de seguridad predefinida entre los puntos de comunicación.
+	<br />
+	<br />
+	Para los extremos de comunicación entre la interfaz de usuario y los 
+	servicios de negocios se propone usar el estandar 
+	<a href="http://jwt.io" target="_blank">JWT</a>
+	<br />
+	<br />
+	Siguiendo esta recomendación <code>GALE</code> presenta un modelo de autenticación 
+	por <a href="https://en.wikipedia.org/wiki/Claims-based_identity" target="_blank">Claims</a>
+	que es establecida a nivel de <code>action</code> o <code>endpoint</code>.
+
+	<br />
+	<br />
+	<strong>Autenticación Basada en Token: </strong> 
+	Este protocolo de seguridad se recomienda para ser  usado en la 
+	comunicación de la interfaz de usuario y los servicios de negocios que se 
+	deban exponer a través de llamadas REST API. 
+	
+	Este protocolo de seguridad elimina las sesiones y cookies por el lado del servidor 
+	y restringe los accesos a las Apis a través de un token (bearer token) de 
+	autenticación en cada una de las llamadas que se realicen hacia 
+	los servicios de negocios.
+	<br />
+	<br />
+ 	Las ventajas que provee este protocolo es la <i>eliminación de las 
+	sesiones</i> permitiendo ejecutar los servicios desde cualquier parte o 
+	dispositivo (móvil, web) utilizando un token generado por el servidor, 
+	eliminando el control de la sesión en los servidor, 
+	permitiendo escalar a través de un balanceador de carga ya que el 
+	servidor no debe controlar las sesiones, sino simplemente validar que el 
+	token sea válido. 
+
+	<br />
+	<br />
+	<!-- IMAGES -->
+    <snapshot>
+        <img style="width:70%" src="bundles/app/static/api_security_jwt-flow.png" />
+        <span>
+            Flujo de Autenticación para obtener el token de autorización (Bearer Token)
+        </span>
+    <snapshot>
+    <!-- /IMAGES -->
+
+    <ol class="doc-list">
+    	<li>
+    		El cliente envía un requerimiento POST al servicio de 
+    		Autenticación del servidor.
+    	</li>
+    	<li>
+    		El servidor valida la información usuario y contraseña contra 
+    		la fuente de usuario, si es válida, genera un token de autenticación 
+    		que es enviado en la respuesta con código de estado 200 (OK).
+    		<br/>
+  			Un token de autenticación basado en JSON Web Token se compone de 3 partes:
+			<ul class="doc-list">
+				<li>
+					<strong>Encabezado</strong>: 
+					Es la parte del token que mantiene el tipo del token y el 
+					método de encriptación de este, esta información además 
+					siempre se encuentra encriptada en base64.
+				</li>
+				<li>
+					<strong>Carga</strong>: 
+					Contiene la información que hace único el token, esta información 
+					puede ser el email del usuario si es único, o la combinación de 
+					usuario y apellido, etc., esta información se encripta en base64.
+				</li>
+
+				<li>
+					<strong>Firma</strong>: 
+					Consiste en la combinación de Encabezado, Carga  y la llave 
+					privada, la Llave privada no se envía sino que se usa para 
+					encriptar os dos valores anteriores, la llave privada debe 
+					estar en el servidor en alguna locación segura.
+				</li>
+			</ul>
+    	</li>
+    	<li>
+    		El cliente almacena el token y lo utiliza para cada una de las 
+    		llamadas a los servicios de negocios a través del 
+    		encabezado “authorization”.
+    	</li>
+    	<li>
+    		Para cada requerimiento que se reciba en el servidor, se validara 
+    		el token de autenticación del usuario, restringiendo el 
+    		acceso al recurso según la lógica de validación dispuesta para ello. 
+    	</li>
+    </ol>
+
+    <!-- USAGE -->
+    <section class="demo-container md-whiteframe-z1">
+        <md-toolbar class="demo-toolbar">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>
+                        Uso Basico
+                    </span>
+                </h2>
+            </div>
+        </md-toolbar>
+        <!-- VIEWS -->
+        <div>
+            <md-tabs md-border-bottom class="md-primary">
+                <md-tab label="RestrictedController.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Net.Http;
+using Gale.REST.Http;
+
+namespace API.Areas.Account
+{
+  /// &lt;summary&gt;
+  /// Restricted API (Securified)
+  /// &lt;/summary&gt;
+  [Gale.Security.Oauth.Jwt.Authorize]
+  public class RestrictedController : Gale.REST.RestController
+  {
+  }                
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="ActionRestrictedController.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Net.Http;
+using Gale.REST.Http;
+
+namespace API.Areas.Account
+{
+  /// &lt;summary&gt;
+  /// Restricted API
+  /// &lt;/summary&gt;
+  public class ActionRestrictedController : Gale.REST.RestController
+  {
+
+    /// &lt;summary&gt;
+    /// Retrieve Target Account Information (Securified)
+    /// &lt;/summary&gt;
+    /// &lt;param name="id"&gt;Account Token&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    [Gale.Security.Oauth.Jwt.Authorize]
+    public IHttpActionResult Get(Guid id)
+    {
+      return new Services.Get(id.ToString());
+    }
+
+  }                
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+                <md-tab label="PublicController.cs">
+                    <md-content class="md-padding">
+                        <!-- SOURCE CODE -->
+                        <hljs language="cs" escape="false">
+using System;
+using System.Net.Http;
+using Gale.REST.Http;
+
+namespace API.Areas.Account
+{
+  /// &lt;summary&gt;
+  /// Public API
+  /// &lt;/summary&gt;
+  public class PublicController : Gale.REST.RestController
+  {
+
+    /// &lt;summary&gt;
+    /// Retrieve Target Account Information (Securified)
+    /// &lt;/summary&gt;
+    /// &lt;param name="id"&gt;Account Token&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public IHttpActionResult Get(Guid id)
+    {
+      return new Services.Get(id.ToString());
+    }
+
+  }                
+}
+                        </hljs>
+                        <!-- /SOURCE CODE -->
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </div>
+        <!-- /VIEWS -->
+    </section>
+    <!-- /USAGE -->
+
+</p>

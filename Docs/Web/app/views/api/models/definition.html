@@ -1,0 +1,44 @@
+<p>
+	<!-- DESCRIPTION -->
+	Un modelo contiene la representación de la información con la cual el sistema
+    opera, y por ende queda definida como una entidad de negocio.
+
+    <br />
+    <br />
+	<i>
+	En GALE, el modelo puede tener directa o indirecta relación con la base de datos y se 
+    construye a través de la herramienta visual disponible en Visual Studio.
+	<i>
+
+	<!-- /DESCRIPTION -->
+
+	
+	<!-- TIP -->
+	<h2 class="md-headline">
+		Restricciones
+	</h2>
+	<ul class="doc-list">
+		<li>
+			A diferencia del patrón MVC, donde se dispone metodos de consulta y acceso a través del
+            modelo, en GALE, se encuentra una capa de Servicios que permite la manipulación
+            de uno o mas modelos de acuerdo a la logica de negocio dispuesta en la API.
+		</li>
+		<li>
+			Se recomienda el Uso de Archivo DBML (Database Model), para cada uno de los 
+            controladores generados en cada <i>característica del proyecto</i>, y de 
+            esta forma tener un control mas limpio de la estructura del proyecto a realizar.
+		</li>
+	</ul>
+	<!-- /TIP -->
+
+
+    <!-- IMAGES -->
+    <snapshot>
+        <img src="bundles/app/static/api_models_definition-dbmlDesigner.png" />
+        <span>
+            Diseño de un modelo a través del Database Model Designer
+        </span>
+    </snapshot>
+    <!-- /IMAGES -->
+
+</p>
