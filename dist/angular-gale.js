@@ -288,8 +288,9 @@ angular.manifiest('gale', [
         //------------------------------------------------------------
         var toRGB = function(color)
         {
-            if (typeof(color) !== "string")
+            if (color.value)    //Array Format
             {
+                color = color.value;
                 return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
             }
             else
