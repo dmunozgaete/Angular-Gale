@@ -17,8 +17,6 @@ Sitio Web:
 
 <br />
 <br />
-<br />
-<br />
 Referencias.
 ============
 
@@ -26,8 +24,6 @@ Referencias.
 - [Grupo Valentys](http://www.valentys.com)
 
 
-Angular-Gale
+Angular-Gale (Dev Mode  - Compile Source Files)
 =====================
-
-##Build and Minify
 bash: grunt compile
