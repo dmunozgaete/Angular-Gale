@@ -286,6 +286,18 @@ angular.manifiest('gale', [
     setTimeout(function()
     {
         //------------------------------------------------------------
+        var toRGB = function(color)
+        {
+            if (typeof(color) !== "string")
+            {
+                return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+            }
+            else
+            {
+                return color;
+            }
+        };
+        //------------------------------------------------------------
         var style = angular.element('<style></style>');
         document.head.appendChild(style[0]);
         stylesheet = style[0].sheet;
@@ -305,8 +317,8 @@ angular.manifiest('gale', [
             var palette = $mdThemingProvider._THEMES[defaultTheme].colors[theme].name;
             var color = $mdThemingProvider._PALETTES[palette][500]; //Default color is 500
 
-            stylesheet.insertRule(".md-" + theme + ".text { color: " + color + " }", 0);
-            stylesheet.insertRule(".md-" + theme + ".background { background-color: " + color + " }", 0);
+            stylesheet.insertRule(".md-" + theme + ".text { color: " + toRGB(color) + " }", 0);
+            stylesheet.insertRule(".md-" + theme + ".background { background-color: " + toRGB(color) + " }", 0);
         }
         //------------------------------------------------------------
 
