@@ -213,7 +213,17 @@
   $templateCache.put("gale-table/directives/galeTable.tpl.html",
     "<gale-header class=gale-header layout=row layout-align=\"start center\" ng-transclude></gale-header><gale-body class=gale-body><div class=loading ng-if=isLoading><md-progress-linear md-mode=indeterminate></md-progress-linear></div><gale-row layout=row class=gale-row ng-click=onRowClick(item) layout-align=\"start center\" ng-repeat=\"item in source\" x={{$index}} formatters=$$formatters item=item></gale-row></gale-body>");
 }]);
-;//Package Bundle
+;//------------------------------------------------------
+// Company: Valentys Ltda.
+// Author: dmunozgaete@gmail.com
+// 
+// Description: Angular Gale Implementation
+// 
+// URL: https://github.com/dmunozgaete/angular-gale
+// 
+// Documentation:
+//      http://gale-docs.azurewebsites.net/
+//------------------------------------------------------
 angular.manifiest('gale', [
     'gale.templates',
     'gale.directives',
@@ -1405,8 +1415,17 @@ angular.module('gale.directives')
             fire(EVENTS.BEFORE_SEND, [_headers, url, body]);
             //---------------------------------------------------
 
+            //Supposing is a Fragment and need to use the API
+            var fullURL = self.getEndpoint() + url;
+
+            //Url is a valid URL ??
+            var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+            if(!regex .test(url)) {
+                fullURL = url;
+            }
+
             var cfg = {
-                url: self.getEndpoint() + url,
+                url: fullURL,
                 method: method,
                 headers: _headers
             };
