@@ -1419,8 +1419,7 @@ angular.module('gale.directives')
             var fullURL = self.getEndpoint() + url;
 
             //Url is a valid URL ??
-            var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-            if(!regex .test(url)) {
+            if(/(http|https):\/\//.test(url)) {
                 fullURL = url;
             }
 
