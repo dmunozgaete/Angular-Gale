@@ -74,6 +74,11 @@ gale-cell.alignCenter {
 	border-bottom: 1px solid #eee;
 }
 
+.gale-table > .gale-empty {
+	padding: 16px;
+    color: #6E6E6E;
+}
+
 .gale-table > .gale-header > .gale-column {
 	display: inline-block;
 	text-align: left;

@@ -1,6 +1,6 @@
 angular.module('gale.components')
 
-.directive('galeColumn', function() {
+.directive('column', function() {
     return {
         restrict: 'E',
         require: '^galeTable',

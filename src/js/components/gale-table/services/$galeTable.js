@@ -8,6 +8,8 @@ angular.module('gale.components')
     //Entry Point to register
     var $$register = function(component, uniqueID){
         components[uniqueID] = component;
+        
+        deferred.resolve(component, uniqueID);
     };
 
     //Entry Point to register
@@ -72,12 +74,6 @@ angular.module('gale.components')
 
     deferred.promise.$$register = $$register;
     deferred.promise.$$unregister = $$unregister;
-
-    // Resolve when the view has Completely Loaded ,and all gale-table's are registered
-    $rootScope.$on('$viewContentLoaded', function(event) {
-        deferred.resolve(self);
-    });
-
 
     return deferred.promise;
 });

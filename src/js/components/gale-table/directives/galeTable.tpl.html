@@ -5,11 +5,11 @@
 	ng-transclude>
 </gale-header>
 
-<gale-body class="gale-body">
+<gale-body class="gale-body" ng-if="source.length>0">
 	<div class="loading" ng-if="isLoading">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 	</div>
-	<gale-row 
+	<row 
 		layout="row" 
 		class="gale-row" 
 		ng-click="onRowClick(item)" 
@@ -18,5 +18,9 @@
 		x="{{$index}}" 
 		formatters="$$formatters" 
 		item="item">
-	</gale-row>
+	</row>
 </gale-body>
+
+
+<gale-empty class="gale-empty" layout="column"  layout-align="center center">
+</gale-empty>

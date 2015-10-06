@@ -211,7 +211,7 @@
   $templateCache.put("gale-loading/directives/galeLoading.tpl.html",
     "<gale-center><md-progress-circular class=md-hue-2 md-mode=indeterminate></md-progress-circular><gale-text></gale-text></gale-center>");
   $templateCache.put("gale-table/directives/galeTable.tpl.html",
-    "<gale-header class=gale-header layout=row layout-align=\"start center\" ng-transclude></gale-header><gale-body class=gale-body><div class=loading ng-if=isLoading><md-progress-linear md-mode=indeterminate></md-progress-linear></div><gale-row layout=row class=gale-row ng-click=onRowClick(item) layout-align=\"start center\" ng-repeat=\"item in source\" x={{$index}} formatters=$$formatters item=item></gale-row></gale-body>");
+    "<gale-header class=gale-header layout=row layout-align=\"start center\" ng-transclude></gale-header><gale-body class=gale-body ng-if=\"source.length>0\"><div class=loading ng-if=isLoading><md-progress-linear md-mode=indeterminate></md-progress-linear></div><row layout=row class=gale-row ng-click=onRowClick(item) layout-align=\"start center\" ng-repeat=\"item in source\" x={{$index}} formatters=$$formatters item=item></row></gale-body><gale-empty class=gale-empty layout=column layout-align=\"center center\"></gale-empty>");
 }]);
 ;//------------------------------------------------------
 // Company: Valentys Ltda.
@@ -647,7 +647,7 @@ angular.manifiest('gale', [
     };
 });;angular.module('gale.components')
 
-.directive('galeColumn', function() {
+.directive('column', function() {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -753,7 +753,7 @@ angular.manifiest('gale', [
     };
 });;angular.module('gale.components')
 
-.directive('galeItem', function() {
+.directive('item', function() {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -764,7 +764,7 @@ angular.manifiest('gale', [
     };
 });;angular.module('gale.components')
 
-.directive('galeRow', ['$compile', '$interpolate', function($compile, $interpolate) {
+.directive('row', ['$compile', '$interpolate', function($compile, $interpolate) {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -823,174 +823,220 @@ angular.manifiest('gale', [
     };
 }]);;angular.module('gale.components')
 
-.directive('galeTable', function() {
+.directive('galeTable', function()
+{
     return {
         restrict: 'E',
-        scope: {
-            paginate:   '@',    // Paginate the items or not??
-            items:      '=',    // Object with contains and Array ob Object to render
-            endpoint:   '@',    // OData Endpoint
-            showHeader: '@',    // Show Header in Table or Not
-            rowClick:   '&',    // Row Click Handler
-            cellClick:  '&',    // Cell Click Handler
-            name:       '@'     // gale Table Unique ID
+        scope:
+        {
+            paginate: '@', // Paginate the items or not??
+            items: '=', // Object with contains and Array ob Object to render
+            endpoint: '@', // OData Endpoint
+            showHeader: '@', // Show Header in Table or Not
+            rowClick: '&', // Row Click Handler
+            cellClick: '&', // Cell Click Handler
+            name: '@' // gale Table Unique ID
         },
         transclude: true,
         templateUrl: 'gale-table/directives/galeTable.tpl.html',
-        controller: ['$scope', '$element', '$interpolate', '$compile', '$Api', '$galeTable', 'KQLBuilder', function($scope, $element, $interpolate, $compile, $Api, $galeTable, KQLBuilder){
-            this.$$formatters   = $scope.$$formatters = [];                 //Lazy Load Instantation
-            var self            = this;                                     //Auto reference
-            var unique_id       = ($scope.name||(new Date()).getTime());    //Component Unique ID
-            var configuration   = {};                                       //Configuration if 'setup'
+        controller: ['$scope', '$element', '$interpolate', '$compile', '$Api', '$galeTable', 'KQLBuilder', function($scope, $element, $interpolate, $compile, $Api, $galeTable, KQLBuilder)
+        {
+            this.$$formatters = $scope.$$formatters = []; //Lazy Load Instantation
+            var self = this; //Auto reference
+            var unique_id = ($scope.name || (new Date()).getTime()); //Component Unique ID
+            var configuration = {}; //Configuration if 'setup'
 
             //------------------------------------------------------------------------------
             // EVENT IMPLEMENTATION
-            var $$listeners     =   {};   
-            self.$on = function(name, listener){
+            var $$listeners = {};
+            self.$on = function(name, listener)
+            {
 
                 //----------------------------------------
                 //If hook, via $on change the pointer to hand
-                if(name === "row-click"){
+                if (name === "row-click")
+                {
                     $element.addClass("row-click");
                 }
                 //----------------------------------------
-                
+
                 var namedListeners = $$listeners[name];
-                if (!namedListeners) {
-                  $$listeners[name] = namedListeners = [];
+                if (!namedListeners)
+                {
+                    $$listeners[name] = namedListeners = [];
                 }
                 namedListeners.push(listener);
 
                 //de-register Function
-                return function() {
-                  namedListeners[indexOf(namedListeners, listener)] = null;
+                return function()
+                {
+                    namedListeners[indexOf(namedListeners, listener)] = null;
                 };
             };
 
-            self.hasEventHandlersFor = function(name){
+            self.hasEventHandlersFor = function(name)
+            {
                 return $$listeners[name] != null;
             };
 
-            self.$fire = function(name, args){
+            self.$fire = function(name, args)
+            {
                 var listeners = $$listeners[name];
-                if(!listeners){
+                if (!listeners)
+                {
                     return;
                 }
-                
-                angular.forEach(listeners, function(listener){
+
+                angular.forEach(listeners, function(listener)
+                {
                     listener.apply(listener, args);
                 });
             };
             //------------------------------------------------------------------------------
-            
+
             //------------------------------------------------------------------------------
             //Register for Service Interaction
-            $galeTable.$$register(self, unique_id);   
-            
+            $galeTable.$$register(self, unique_id);
+
             //Retrieve the Unique Id for the gale Table
-            self.getUniqueId = function(){
+            self.getUniqueId = function()
+            {
                 return unique_id;
             };
 
             //Manual Bootstrap
-            self.setup = function(endpoint, cfg){
-                
+            self.setup = function(endpoint, cfg)
+            {
+
                 var url = endpoint;
-                if(cfg){
+                if (cfg)
+                {
                     url = KQLBuilder.build(url, cfg);
                 }
 
-                configuration = cfg||{};    //Save current configuration
+                configuration = cfg ||
+                {}; //Save current configuration
 
                 $scope.endpoint = url;
             };
 
             //Bind to Endpoint
-            self.bind = function(endpoint){
+            self.bind = function(endpoint)
+            {
                 $scope.isLoading = true;
 
                 $Api.invoke('GET', endpoint, null, configuration.headers)
-                .success(function(data){
+                    .success(function(data)
+                    {
 
-                    self.render(data, true);
-                    self.$fire("load-complete", [data, unique_id]);
-                    
-                })
-                .finally(function(){
-                    $scope.isLoading = false;
-                });
+                        self.render(data, true);
+                        self.$fire("load-complete", [data, unique_id]);
+
+                    })
+                    .finally(function()
+                    {
+                        $scope.isLoading = false;
+                    });
             };
-            
+
             //Render table
-            self.render = function(data, isRest){
+            self.render = function(data, isRest)
+            {
                 self.$fire("before-render", [data, unique_id]);
 
                 $scope.source = isRest ? data.items : data;
-                if (isRest){
+                if (isRest)
+                {
                     data.total = data.items.length;
+                }
+
+                if ($scope.source.length === 0)
+                {
+                    //Put the empty-data placeholder into the gale-empty directive
+                    $element.find("gale-empty").append(
+                        $element.find("empty-data").css("display", "block")
+                    );
                 }
             };
             //------------------------------------------------------------------------------
 
             //Cell Click
             var cellClickHandler = $scope.cellClick();
-            self.$$cellClick = function(ev, item , cellIndex, rowIndex){
-                
+            self.$$cellClick = function(ev, item, cellIndex, rowIndex)
+            {
+
                 //Scale to Row Click
-                self.$fire("cell-click", [ev, item , {x: rowIndex, y: cellIndex}, self.getUniqueId()]);                
-            };            
+                self.$fire("cell-click", [ev, item,
+                {
+                    x: rowIndex,
+                    y: cellIndex
+                }, self.getUniqueId()]);
+            };
 
             //Garbage Collector Destroy
-            $scope.$on('$destroy', function() {
-                $galeTable.$$unregister(self, unique_id);      //UnRegister for Service Interaction
+            $scope.$on('$destroy', function()
+            {
+                $galeTable.$$unregister(self, unique_id); //UnRegister for Service Interaction
             });
-
         }],
 
-        link: function (scope, element, attrs,ctrl) {
+        link: function(scope, element, attrs, ctrl)
+        {
 
             var rowClickHandler = scope.rowClick();
 
-            if(scope.showHeader && !scope.$eval(scope.showHeader)) {
+            if (scope.showHeader && !scope.$eval(scope.showHeader))
+            {
                 element.find("gale-header").css("display", "none");
             }
 
             //General Clases on gale Table
-            element.attr("layout-fill","");
+            element.attr("layout-fill", "");
             element.addClass("gale-table");
 
             //Watch for Changes
-            scope.$watch('endpoint', function(value) {
-                if (value) {
+            scope.$watch('endpoint', function(value)
+            {
+                if (value)
+                {
                     ctrl.bind(value);
                 }
             });
 
             //Watch for Changes
-            scope.$watch('items', function(value) {
-                if (value) {
+            scope.$watch('items', function(value)
+            {
+                if (value)
+                {
                     ctrl.render(value, false);
                 }
             });
 
             //Add cursor if handler exists
-            if(rowClickHandler || ctrl.hasEventHandlersFor("row-click")){
+            if (rowClickHandler || ctrl.hasEventHandlersFor("row-click"))
+            {
                 element.addClass("row-click");
             }
 
-            scope.onRowClick = function(item){
-                
+
+            element.find("empty-data").css("display", "none");
+
+            scope.onRowClick = function(item)
+            {
+
                 //Row Click
-                ctrl.$fire("row-click", [event, item , ctrl.getUniqueId()]);
-                if(rowClickHandler){
-                   rowClickHandler(item);
+                ctrl.$fire("row-click", [event, item, ctrl.getUniqueId()]);
+                if (rowClickHandler)
+                {
+                    rowClickHandler(item);
                 }
 
             };
-           
+
         }
     };
-});;angular.module('gale.components')
+});
+;angular.module('gale.components')
 
 .factory('$galeTable', ['$q', '$rootScope', function($q, $rootScope) {
     var self        = this;
@@ -1000,6 +1046,8 @@ angular.manifiest('gale', [
     //Entry Point to register
     var $$register = function(component, uniqueID){
         components[uniqueID] = component;
+        
+        deferred.resolve(component, uniqueID);
     };
 
     //Entry Point to register
@@ -1064,12 +1112,6 @@ angular.manifiest('gale', [
 
     deferred.promise.$$register = $$register;
     deferred.promise.$$unregister = $$unregister;
-
-    // Resolve when the view has Completely Loaded ,and all gale-table's are registered
-    $rootScope.$on('$viewContentLoaded', function(event) {
-        deferred.resolve(self);
-    });
-
 
     return deferred.promise;
 }]);
@@ -1292,19 +1334,20 @@ angular.module('gale.directives')
 	};
 }]);;(function(){
 
-	var resourceUrl = function(resourceUrl , Identity){
-		if(Identity.isAuthenticated()){
-			resourceUrl += "&access_token=" + Identity.token().access_token;
+	var resourceUrl = function(resource , $Identity){
+		var url = resource;
+		if($Identity.isAuthenticated()){
+			url += "&access_token=" + $Identity.getAccessToken();
 		}
 
-		return resourceUrl;
+		return url;
 	};
 
 	angular.module('gale.filters')
 
-	.filter('restricted', ['$Api', 'Identity', function ($Api, Identity) {
-		return function (resourceUrl) {
-			return resourceUrl(resourceUrl, Identity);
+	.filter('restricted', ['$Api', '$Identity', function ($Api, $Identity) {
+		return function (resource) {
+			return resourceUrl(resource, $Identity);
 		};
 	}]);
 
