@@ -56,6 +56,7 @@ gale-cell.alignCenter {
 	margin: 0;
 	min-height: 100%;
 	width: 100%;
+	font-size: 14px;
 }
 
 .gale-table > .gale-body,
@@ -67,24 +68,24 @@ gale-cell.alignCenter {
 
 .gale-table > .gale-body {
 	display: inline-block;
-	margin-top: 5px;
 }
 
 .gale-table > .gale-header {
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #EEE;
 }
 
 .gale-table > .gale-empty {
 	padding: 16px;
-    color: #6E6E6E;
+    color: rgba(0,0,0,0.87);
 }
 
 .gale-table > .gale-header > .gale-column {
 	display: inline-block;
 	text-align: left;
-	padding: 18px 16px;
+	padding: 18px 8px;
 	overflow: hidden;
-	color: #6E6E6E;
+	color: rgba(0,0,0,0.57);
+
 }
 
 .gale-table > .gale-body > .gale-row {
@@ -93,15 +94,16 @@ gale-cell.alignCenter {
 
 .gale-table.row-click > .gale-body > .gale-row {
 	cursor: pointer;
+	border-bottom: 1px solid #EEE;
 }
 
 .gale-table > .gale-body > .gale-row:hover{
-	background-color: #EFF8FF;
+	background-color: #F5F5F5;
 }
 
 .gale-table > .gale-body > .gale-row > gale-cell{
-	color: #2B2B2B;
-	padding:16px;
+	color: rgba(0,0,0,0.87);;
+	padding:8px;
 	overflow: hidden;
 }
 

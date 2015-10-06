@@ -72,9 +72,6 @@ angular.module('gale.components')
             //------------------------------------------------------------------------------
 
             //------------------------------------------------------------------------------
-            //Register for Service Interaction
-            $galeTable.$$register(self, unique_id);
-
             //Retrieve the Unique Id for the gale Table
             self.getUniqueId = function()
             {
@@ -94,7 +91,7 @@ angular.module('gale.components')
                 configuration = cfg ||
                 {}; //Save current configuration
 
-                $scope.endpoint = url;
+                self.bind(url);
             };
 
             //Bind to Endpoint
@@ -121,6 +118,7 @@ angular.module('gale.components')
             {
                 self.$fire("before-render", [data, unique_id]);
 
+
                 $scope.source = isRest ? data.items : data;
                 if (isRest)
                 {
@@ -131,7 +129,7 @@ angular.module('gale.components')
                 {
                     //Put the empty-data placeholder into the gale-empty directive
                     $element.find("gale-empty").append(
-                        $element.find("empty-data").css("display", "block")
+                        $element.find("gale-empty-data").css("display", "block")
                     );
                 }
             };
@@ -153,8 +151,15 @@ angular.module('gale.components')
             //Garbage Collector Destroy
             $scope.$on('$destroy', function()
             {
+                self.endpoint = null;
+                $scope.source = null;
+
                 $galeTable.$$unregister(self, unique_id); //UnRegister for Service Interaction
             });
+
+
+            //Register for Service Interaction
+            $galeTable.$$register(self, unique_id);
         },
 
         link: function(scope, element, attrs, ctrl)
@@ -196,7 +201,7 @@ angular.module('gale.components')
             }
 
 
-            element.find("empty-data").css("display", "none");
+            element.find("gale-empty-data").css("display", "none");
 
             scope.onRowClick = function(item)
             {

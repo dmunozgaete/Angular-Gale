@@ -1,6 +1,6 @@
 angular.module('gale.components')
 
-.directive('item', function() {
+.directive('galeItem', function() {
     return {
         restrict: 'E',
         require: '^galeTable',
