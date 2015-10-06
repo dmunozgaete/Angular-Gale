@@ -68,7 +68,7 @@ angular.module('gale.components')
                 //--------------------------------------------------------
                 //Try to get item element (CUSTOM)
                 var item = _.find(fragments,function(elm){
-                    return elm.nodeName.toLowerCase() === "gale-item";
+                    return elm.nodeName.toLowerCase() === "item";
                 });
 
                 if(!item){
