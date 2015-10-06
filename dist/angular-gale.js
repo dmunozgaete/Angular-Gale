@@ -211,7 +211,7 @@
   $templateCache.put("gale-loading/directives/galeLoading.tpl.html",
     "<gale-center><md-progress-circular class=md-hue-2 md-mode=indeterminate></md-progress-circular><gale-text></gale-text></gale-center>");
   $templateCache.put("gale-table/directives/galeTable.tpl.html",
-    "<gale-header class=gale-header layout=row layout-align=\"start center\" ng-transclude></gale-header><gale-body class=gale-body ng-if=\"source.length>0\"><div class=loading ng-if=isLoading><md-progress-linear md-mode=indeterminate></md-progress-linear></div><row layout=row class=gale-row ng-click=onRowClick(item) layout-align=\"start center\" ng-repeat=\"item in source\" x={{$index}} formatters=$$formatters item=item></row></gale-body><gale-empty class=gale-empty layout=column layout-align=\"center center\"></gale-empty>");
+    "<gale-header class=gale-header layout=row layout-align=\"start center\" ng-transclude title={{source}}></gale-header><div class=loading ng-if=isLoading><md-progress-linear md-mode=indeterminate></md-progress-linear></div><gale-body class=gale-body><gale-row layout=row class=gale-row ng-click=onRowClick(item) layout-align=\"start center\" ng-repeat=\"item in source\" x={{$index}} formatters=$$formatters item=item></gale-row></gale-body><gale-empty class=gale-empty layout=column layout-align=\"center center\"></gale-empty>");
 }]);
 ;//------------------------------------------------------
 // Company: Valentys Ltda.
@@ -647,7 +647,7 @@ angular.manifiest('gale', [
     };
 });;angular.module('gale.components')
 
-.directive('column', function() {
+.directive('galeColumn', function() {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -664,7 +664,7 @@ angular.manifiest('gale', [
         }],
 
         link: function (scope, element, attrs, galeTable, $transclude) {
-            element.attr("flex", (scope.width ? scope.width :""));
+            element.addClass("flex" + (scope.width ? "-" + scope.width :""));
             element.addClass("gale-column");
             
             $transclude( scope, function( fragments ) {
@@ -715,7 +715,7 @@ angular.manifiest('gale', [
                 //--------------------------------------------------------
                 //Try to get item element (CUSTOM)
                 var item = _.find(fragments,function(elm){
-                    return elm.nodeName.toLowerCase() === "item";
+                    return elm.nodeName.toLowerCase() === "gale-item";
                 });
 
                 if(!item){
@@ -753,7 +753,7 @@ angular.manifiest('gale', [
     };
 });;angular.module('gale.components')
 
-.directive('item', function() {
+.directive('galeItem', function() {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -764,7 +764,7 @@ angular.manifiest('gale', [
     };
 });;angular.module('gale.components')
 
-.directive('row', ['$compile', '$interpolate', function($compile, $interpolate) {
+.directive('galeRow', ['$compile', '$interpolate', function($compile, $interpolate) {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -778,7 +778,7 @@ angular.manifiest('gale', [
                 var cell = $compile(template)(scope);
 
                 //PROPERTY: WIDTH
-                cell.attr("flex", (formatter.width ? formatter.width :""));
+                cell.addClass("flex" + (formatter.width ? "-" + formatter.width :""));
 
                 //PROPERTY: WIDTH
                 var cls = null;
@@ -895,9 +895,6 @@ angular.manifiest('gale', [
             //------------------------------------------------------------------------------
 
             //------------------------------------------------------------------------------
-            //Register for Service Interaction
-            $galeTable.$$register(self, unique_id);
-
             //Retrieve the Unique Id for the gale Table
             self.getUniqueId = function()
             {
@@ -917,7 +914,7 @@ angular.manifiest('gale', [
                 configuration = cfg ||
                 {}; //Save current configuration
 
-                $scope.endpoint = url;
+                self.bind(url);
             };
 
             //Bind to Endpoint
@@ -944,6 +941,7 @@ angular.manifiest('gale', [
             {
                 self.$fire("before-render", [data, unique_id]);
 
+
                 $scope.source = isRest ? data.items : data;
                 if (isRest)
                 {
@@ -954,7 +952,7 @@ angular.manifiest('gale', [
                 {
                     //Put the empty-data placeholder into the gale-empty directive
                     $element.find("gale-empty").append(
-                        $element.find("empty-data").css("display", "block")
+                        $element.find("gale-empty-data").css("display", "block")
                     );
                 }
             };
@@ -976,8 +974,15 @@ angular.manifiest('gale', [
             //Garbage Collector Destroy
             $scope.$on('$destroy', function()
             {
+                self.endpoint = null;
+                $scope.source = null;
+
                 $galeTable.$$unregister(self, unique_id); //UnRegister for Service Interaction
             });
+
+
+            //Register for Service Interaction
+            $galeTable.$$register(self, unique_id);
         }],
 
         link: function(scope, element, attrs, ctrl)
@@ -1019,7 +1024,7 @@ angular.manifiest('gale', [
             }
 
 
-            element.find("empty-data").css("display", "none");
+            element.find("gale-empty-data").css("display", "none");
 
             scope.onRowClick = function(item)
             {
@@ -1040,19 +1045,23 @@ angular.manifiest('gale', [
 
 .factory('$galeTable', ['$q', '$rootScope', function($q, $rootScope) {
     var self        = this;
-    var deferred    = $q.defer();
     var components  = {};
-
+    var callbacks   = [];
+    
     //Entry Point to register
     var $$register = function(component, uniqueID){
         components[uniqueID] = component;
         
-        deferred.resolve(component, uniqueID);
+        //Call all then function registered
+        angular.forEach(callbacks, function(callback){
+            callback(component, uniqueID);
+        });
     };
 
     //Entry Point to register
-    var $$unregister = function(component, uniqueID){
+    var $$unregister = function(uniqueID){
         delete components[uniqueID];
+        callbacks = [];
     };
 
     var _getByHandle = function(uniqueID){
@@ -1094,7 +1103,6 @@ angular.manifiest('gale', [
         return components;
     };
 
-
     //Call to directive endpoint
     self.endpoint = function(value, uniqueID){
         return _getByHandle(uniqueID).endpoint(value);
@@ -1110,10 +1118,14 @@ angular.manifiest('gale', [
         component.$on(eventName, callback);   //
     };
 
-    deferred.promise.$$register = $$register;
-    deferred.promise.$$unregister = $$unregister;
+    self.then = function(callback){
+        callbacks.push(callback);
+    };
 
-    return deferred.promise;
+    self.$$register = $$register;
+    self.$$unregister = $$unregister;
+
+    return self;
 }]);
 ;angular.module('gale.directives')
 

@@ -1,6 +1,6 @@
 angular.module('gale.components')
 
-.directive('row', function($compile, $interpolate) {
+.directive('galeRow', function($compile, $interpolate) {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -14,7 +14,7 @@ angular.module('gale.components')
                 var cell = $compile(template)(scope);
 
                 //PROPERTY: WIDTH
-                cell.attr("flex", (formatter.width ? formatter.width :""));
+                cell.addClass("flex" + (formatter.width ? "-" + formatter.width :""));
 
                 //PROPERTY: WIDTH
                 var cls = null;
