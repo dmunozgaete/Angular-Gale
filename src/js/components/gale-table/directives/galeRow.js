@@ -1,6 +1,6 @@
 angular.module('gale.components')
 
-.directive('galeRow', function($compile, $interpolate) {
+.directive('row', function($compile, $interpolate) {
     return {
         restrict: 'E',
         require: '^galeTable',

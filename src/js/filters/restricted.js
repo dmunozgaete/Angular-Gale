@@ -1,18 +1,19 @@
 (function(){
 
-	var resourceUrl = function(resourceUrl , Identity){
-		if(Identity.isAuthenticated()){
-			resourceUrl += "&access_token=" + Identity.token().access_token;
+	var resourceUrl = function(resource , $Identity){
+		var url = resource;
+		if($Identity.isAuthenticated()){
+			url += "&access_token=" + $Identity.getAccessToken();
 		}
 
-		return resourceUrl;
+		return url;
 	};
 
 	angular.module('gale.filters')
 
-	.filter('restricted', function ($Api, Identity) {
-		return function (resourceUrl) {
-			return resourceUrl(resourceUrl, Identity);
+	.filter('restricted', function ($Api, $Identity) {
+		return function (resource) {
+			return resourceUrl(resource, $Identity);
 		};
 	});
 
