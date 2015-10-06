@@ -1,6 +1,6 @@
 angular.module('gale.components')
 
-.directive('column', function() {
+.directive('galeColumn', function() {
     return {
         restrict: 'E',
         require: '^galeTable',
@@ -17,7 +17,7 @@ angular.module('gale.components')
         },
 
         link: function (scope, element, attrs, galeTable, $transclude) {
-            element.attr("flex", (scope.width ? scope.width :""));
+            element.addClass("flex" + (scope.width ? "-" + scope.width :""));
             element.addClass("gale-column");
             
             $transclude( scope, function( fragments ) {
@@ -68,7 +68,7 @@ angular.module('gale.components')
                 //--------------------------------------------------------
                 //Try to get item element (CUSTOM)
                 var item = _.find(fragments,function(elm){
-                    return elm.nodeName.toLowerCase() === "item";
+                    return elm.nodeName.toLowerCase() === "gale-item";
                 });
 
                 if(!item){

@@ -2,14 +2,18 @@
 	class="gale-header" 
 	layout="row" 
 	layout-align="start center" 
-	ng-transclude>
+	ng-transclude title="{{source}}">
+
+	
+
 </gale-header>
 
-<gale-body class="gale-body" ng-if="source.length>0">
-	<div class="loading" ng-if="isLoading">
-		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-	</div>
-	<row 
+<div class="loading" ng-if="isLoading">
+	<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+</div>
+
+<gale-body class="gale-body">
+	<gale-row
 		layout="row" 
 		class="gale-row" 
 		ng-click="onRowClick(item)" 
@@ -18,9 +22,11 @@
 		x="{{$index}}" 
 		formatters="$$formatters" 
 		item="item">
-	</row>
+	</gale-row>
 </gale-body>
 
 
+
 <gale-empty class="gale-empty" layout="column"  layout-align="center center">
+
 </gale-empty>

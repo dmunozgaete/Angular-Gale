@@ -2,19 +2,23 @@ angular.module('gale.components')
 
 .factory('$galeTable', function($q, $rootScope) {
     var self        = this;
-    var deferred    = $q.defer();
     var components  = {};
-
+    var callbacks   = [];
+    
     //Entry Point to register
     var $$register = function(component, uniqueID){
         components[uniqueID] = component;
         
-        deferred.resolve(component, uniqueID);
+        //Call all then function registered
+        angular.forEach(callbacks, function(callback){
+            callback(component, uniqueID);
+        });
     };
 
     //Entry Point to register
-    var $$unregister = function(component, uniqueID){
+    var $$unregister = function(uniqueID){
         delete components[uniqueID];
+        callbacks = [];
     };
 
     var _getByHandle = function(uniqueID){
@@ -56,7 +60,6 @@ angular.module('gale.components')
         return components;
     };
 
-
     //Call to directive endpoint
     self.endpoint = function(value, uniqueID){
         return _getByHandle(uniqueID).endpoint(value);
@@ -72,8 +75,12 @@ angular.module('gale.components')
         component.$on(eventName, callback);   //
     };
 
-    deferred.promise.$$register = $$register;
-    deferred.promise.$$unregister = $$unregister;
+    self.then = function(callback){
+        callbacks.push(callback);
+    };
 
-    return deferred.promise;
+    self.$$register = $$register;
+    self.$$unregister = $$unregister;
+
+    return self;
 });
