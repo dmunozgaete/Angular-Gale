@@ -10,7 +10,7 @@ angular.module('gale.components')
 		link: function (scope, element, attrs , ctrl) {
             angular.forEach(scope.$$formatters, function(formatter, $index){
 
-                var template = "<gale-cell class='karma-cell'>" + formatter.template + "</gale-cell>";
+                var template = "<gale-cell class='gale-cell'>" + formatter.template + "</gale-cell>";
                 var cell = $compile(template)(scope);
 
                 //PROPERTY: WIDTH
