@@ -41,8 +41,8 @@ angular.module('gale.components')
 
         link: function (scope, element, attrs, ctrl) {
             
-            element.attr("layout", "row");
-            element.attr("layout-align", "center center");
+            element.addClass("layout-row");
+            element.addClass("layout-align-center-center");
 
 
         }

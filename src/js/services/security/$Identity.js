@@ -99,6 +99,9 @@ angular.module('gale.services')
             self.getAccessToken = function() {
                 return _authResponse.access_token;
             };
+            self.getTokenType = function() {
+                return _authResponse.token_type;
+            };
             self.logOut = function() {
                 _logout();
             };

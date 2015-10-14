@@ -11,8 +11,6 @@ angular.module('gale.components')
         },
 
         link: function (scope, element, attrs, ctrl) {
-            element.attr("layout", "row");
-            element.attr("layout-align", "start center");
         }
     };
 });
