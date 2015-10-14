@@ -58,7 +58,6 @@
         };
         //------------------------------------------------------------------------------
 
-
         //------------------------------------------------------------------------------
         self.getEndpoint = function(value)
         {
@@ -101,9 +100,10 @@
                     delete body[parameter];
                 });
 
-                //Add Others Params on the URL or in the payload Body
-                cfg[(cfg.method === "GET" ? "params" : "data")] = body;
             }
+
+            //Add Others Params on the URL or in the payload Body
+            cfg[(cfg.method === "GET" ? "params" : "data")] = body;
 
             return cfg;
         };
