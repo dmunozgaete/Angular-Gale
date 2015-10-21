@@ -31,7 +31,7 @@
     "package.json"
   ],
   "dependencies": {
-    "angular-ui-router": "0.2.15",
+    "angular-ui-router": "0.2.13",
     "lodash": "~3.10.1"
   }
 }
