@@ -100,7 +100,27 @@
                     delete body[parameter];
                 });
 
+                //If the method is [POST or PUT], check the coherence with the
+                // RESTful restriction:
+                //    You can't send more than one parameter in the payload
+                //    (Only one entity can pass in the payload accord to the RESTFul Principales)
+                if (body && cfg.method === "POST" || cfg.method === "PUT")
+                {
+                    var keys = Object.keys(body);
+
+                    if (keys.length >= 2)
+                    {
+                        throw Error("RESTFUL_RESTRICTION: ONLY_ONE_PARAMETER_IS_PERMITTED_IN_PAYLOAD");
+                    }
+
+                    if (keys.length === 1)
+                    {
+                        body = body[keys[0]];
+                    }
+                }
+
             }
+
 
             //Add Others Params on the URL or in the payload Body
             cfg[(cfg.method === "GET" ? "params" : "data")] = body;
@@ -177,14 +197,6 @@
 
 
         //------------------------------------------------------------------------------
-        //CRUD: CREATE OPERATION
-        self.create = function(url, body, headers)
-        {
-            return self.invoke('POST', url, body, headers);
-        };
-        //------------------------------------------------------------------------------
-
-        //------------------------------------------------------------------------------
         //CRUD: GET OPERATION
         self.kql = function(url, kql, headers)
         {
@@ -192,8 +204,21 @@
             //Has OData Configuration???
             url = KQLBuilder.build(url, kql);
 
-            return self.invoke('GET', url,
-            {}, headers);
+            //Clean KQL default configuration
+            delete kql.select;
+            delete kql.filters;
+            delete kql.limit;
+            delete kql.orderBy;
+
+            return self.invoke('GET', url, kql, headers);
+        };
+        //------------------------------------------------------------------------------
+
+        //------------------------------------------------------------------------------
+        //CRUD: CREATE OPERATION
+        self.create = function(url, body, headers)
+        {
+            return self.invoke('POST', url, body, headers);
         };
         //------------------------------------------------------------------------------
 
@@ -202,7 +227,6 @@
         //CRUD: GET OPERATION
         self.read = function(url, parameters, headers)
         {
-
             return self.invoke('GET', url, parameters, headers);
         };
         //------------------------------------------------------------------------------
@@ -210,10 +234,8 @@
 
         //------------------------------------------------------------------------------
         //CRUD: UPDATE OPERATION
-        self.update = function(url, id, body, headers)
+        self.update = function(url, body, headers)
         {
-            url += "/{0}".format([id]); //PUT url/id
-
             return self.invoke('PUT', url, body, headers);
         };
         //------------------------------------------------------------------------------
@@ -221,13 +243,9 @@
 
         //------------------------------------------------------------------------------
         //CRUD: DELETE OPERATION
-        self.delete = function(url, id, headers)
+        self.delete = function(url, parameters, headers)
         {
-
-            url += "/{0}".format([id]); //DELETE url/id
-
-            return self.invoke('DELETE', url,
-            {}, headers);
+            return self.invoke('DELETE', url, parameters, headers);
         };
         //------------------------------------------------------------------------------
 

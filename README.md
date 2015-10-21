@@ -1,18 +1,12 @@
 Angular-Gale
 =====================
 
-Angular-Gale es una libreria complementaria a Angular-Material que provee un set
-de componentes y filtros utiles para desarrollos de proyectos locales con enfoque 
-empresarial.
-
-El proyecto es Open Source ([https://es.wikipedia.org/wiki/Apache_License](Apache License 2.0)
-multiplataforma y provee un punto de inicio para desarrollos con enfoque empresarial.
-
-#
+Angular-Gale es un grupo de modulos necesarios para aumentar
+la productividad de los desarrollos de interfaces al utilizar la libreria de 
+desarrollo de API [Gale](http://gale.azurewebsites.net/)
 
 Sitio Web:
 [http://angular-gale.azurewebsites.net/](http://angular-gale.azurewebsites.net/)
-
 
 
 <br />
@@ -24,6 +18,6 @@ Referencias.
 - [Grupo Valentys](http://www.valentys.com)
 
 
-Angular-Gale (Dev Mode  - Compile Source Files)
+Angular-Gale (Build)
 =====================
 bash: grunt compile
