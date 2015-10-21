@@ -8,22 +8,36 @@
 // 
 /// NOTE: If you want to add dependdencies THIS IS THE FILE ;)!
 //------------------------------------------------------
-module.exports = function(grunt, options) {
+module.exports = function(grunt, options)
+{
+
+    var bower = grunt.file.readJSON('bower.json');
+    var banner = grunt.template.process(grunt.file.read('banner.txt'),
+    {
+        data:
+        {
+            authors: bower.authors[0],
+            description: bower.description,
+            homepage: bower.homepage,
+            version: bower.version
+        }
+    });
+
     var conf = {
-        production: {
-            options: {
+        production:
+        {
+            options:
+            {
                 separator: ';',
+                banner: banner
             },
-            files: {
+            files:
+            {
                 'dist/angular-gale.js': [
                     'src/globals.js',
                     'src/gale_templates.js',
                     'src/gale.js',
                     'src/js/**/*.js'
-                ],
-
-                'dist/angular-gale.css': [
-                    'src/**/*.css'
                 ]
             }
         }
