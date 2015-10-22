@@ -72,7 +72,7 @@ Please keep in mind that the issue tracker is for *issues*. Please do *not* post
 
 **(4)** Finally, commit some code and open a pull request. Code & commits should abide by the following rules:
 
-- *Always*
+*Always*
 - Commits should represent one logical change each; if a feature goes through multiple iterations, squash your commits down to one
 - Changes should always respect the coding style of the project
 
