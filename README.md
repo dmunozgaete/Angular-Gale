@@ -2,10 +2,11 @@
 
 #### The de-facto solution for using with C# Gale API
 ---
-**[Download RC Version](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1)**
+**[Download RC Version](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1) |**
 **[Guide](https://angular-gale.azurewebsites.net) |**
 **[C# API](https://gale.azurewebsites.net) |**
-**[Report an Issue](https://github.com/dmunozgaete/Angular-Gale/blob/master/README.md#report-an-issue) |**
+**[Report Issues](https://github.com/dmunozgaete/Angular-Gale/blob/master/README.md#report-an-issue)**
+ 
 ---
 
 Angular Gale is a complete library for using in conjunction with 
