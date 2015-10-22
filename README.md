@@ -5,7 +5,7 @@
 **[Download RC Version](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1) |**
 **[Guide](https://angular-gale.azurewebsites.net) |**
 **[C# API](https://gale.azurewebsites.net) |**
-**[Report Issues](https://github.com/dmunozgaete/Angular-Gale/blob/master/README.md#report-an-issue)**
+**[Report Issues](#report-an-issue)**
  
 ---
 
@@ -78,6 +78,7 @@ Please keep in mind that the issue tracker is for *issues*. Please do *not* post
 
 ## Resources 
 
+- [Angular Gale Doc's](http://angular-gale.azurewebsites.net/)
 - [Framework API](http://gale.azurewebsites.net/)
 - [Grupo Valentys](http://www.valentys.com)
 
