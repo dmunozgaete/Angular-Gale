@@ -21,12 +21,9 @@ the C# API Framework wich accelerate the production of quality software
  - [download the release](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1)
  - or via **[Bower](http://bower.io/)**: by running `$ bower install angular-gale --save` from your console
 
-**(2)** Include `angular-gale.js` (or `angular-gale.min.js`) in your `index.html`, after including Angular itself (For Inject Module users: ignore this step)
+**(2)** Include `angular-gale.js` (or `angular-gale.min.js`) in your `index.html`, after including Angular itself (For Inject package: ignore this step)
 
 **(3)** Add `'gale'` to your main module's list of dependencies
-
-**Note:** if you want the unstable version use: `$ bower install dmunozgaete/angular-gale#master --save` from your console
-
 
 When you're done, your setup should look similar to the following:
 
@@ -46,6 +43,9 @@ When you're done, your setup should look similar to the following:
 </body>
 </html>
 ```
+
+**Note:** if you want the unstable version use: `$ bower install dmunozgaete/angular-gale#master --save` from your console
+
 
 # Report an Issue
 
