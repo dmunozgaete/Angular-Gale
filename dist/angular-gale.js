@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.1
- Build Date:        2015-10-21 20:27:59
+ Build Date:        2015-10-22 13:56:15
 ------------------------------------------------------*/
 
 (function(angular) {
@@ -943,7 +943,7 @@ angular.module('gale.directives')
         var _logInRoute = null;
         var _enable = false;
         var _whiteListResolver = function() {
-            return true;
+            return false;   //Block All by default
         };
         //
         this.setIssuerEndpoint = function(value) {
