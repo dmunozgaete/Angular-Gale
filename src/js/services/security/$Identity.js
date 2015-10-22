@@ -16,7 +16,7 @@ angular.module('gale.services')
         var _logInRoute = null;
         var _enable = false;
         var _whiteListResolver = function() {
-            return true;
+            return false;   //Block All by default
         };
         //
         this.setIssuerEndpoint = function(value) {
