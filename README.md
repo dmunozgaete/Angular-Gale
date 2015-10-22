@@ -2,10 +2,11 @@
 
 #### The de-facto solution for using with C# Gale API
 ---
-**[Download RC Version](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1)**
+**[Download RC Version](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1) |**
 **[Guide](https://angular-gale.azurewebsites.net) |**
 **[C# API](https://gale.azurewebsites.net) |**
-**[Report an Issue](https://github.com/dmunozgaete/Angular-Gale/blob/master/README.md#report-an-issue) |**
+**[Report Issues](https://github.com/dmunozgaete/Angular-Gale/blob/master/README.md#report-an-issue)**
+ 
 ---
 
 Angular Gale is a complete library for using in conjunction with 
@@ -20,12 +21,9 @@ the C# API Framework wich accelerate the production of quality software
  - [download the release](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1)
  - or via **[Bower](http://bower.io/)**: by running `$ bower install angular-gale --save` from your console
 
-**(2)** Include `angular-gale.js` (or `angular-gale.min.js`) in your `index.html`, after including Angular itself (For Inject Module users: ignore this step)
+**(2)** Include `angular-gale.js` (or `angular-gale.min.js`) in your `index.html`, after including Angular itself (For Inject package: ignore this step)
 
 **(3)** Add `'gale'` to your main module's list of dependencies
-
-**Note:** if you want the unstable version use: `$ bower install dmunozgaete/angular-gale#master --save` from your console
-
 
 When you're done, your setup should look similar to the following:
 
@@ -45,6 +43,9 @@ When you're done, your setup should look similar to the following:
 </body>
 </html>
 ```
+
+**Note:** if you want the unstable version use: `$ bower install dmunozgaete/angular-gale#master --save` from your console
+
 
 # Report an Issue
 
@@ -71,7 +72,7 @@ Please keep in mind that the issue tracker is for *issues*. Please do *not* post
 
 **(4)** Finally, commit some code and open a pull request. Code & commits should abide by the following rules:
 
-- *Always*
+*Always*
 - Commits should represent one logical change each; if a feature goes through multiple iterations, squash your commits down to one
 - Changes should always respect the coding style of the project
 
