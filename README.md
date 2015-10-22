@@ -2,7 +2,7 @@
 
 #### The de-facto solution for using with C# Gale API
 ---
-**[Download Latest Version](https://github.com/dmunozgaete/Angular-Gale/blob/master/dist/angular-gale.js)**
+**[Download RC Version](https://github.com/dmunozgaete/Angular-Gale/releases/tag/v1.0.0-rc.1)**
 **[Guide](https://angular-gale.azurewebsites.net) |**
 **[C# API](https://gale.azurewebsites.net) |**
 **[Report an Issue](https://github.com/dmunozgaete/Angular-Gale/blob/master/README.md#report-an-issue) |**
@@ -24,9 +24,11 @@ the C# API Framework wich accelerate the production of quality software
 
 **(3)** Add `'gale'` to your main module's list of dependencies
 
+**Note:** if you want the unstable version use: `$ bower install dmunozgaete/angular-gale#master --save` from your console
+
+
 When you're done, your setup should look similar to the following:
 
->
 ```html
 <!doctype html>
 <html ng-app="myApp">
