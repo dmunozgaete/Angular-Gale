@@ -1,7 +1,8 @@
 angular.module('gale.services')
     .run(function($Identity) {})
     //----------------------------------------
-    .provider('$Identity', function() {
+    .provider('$Identity', function()
+    {
         var $ref = this;
         var AUTH_EVENTS = {
             loginSuccess: 'auth-login-success',
@@ -15,129 +16,183 @@ angular.module('gale.services')
         var _issuerEndpoint = null;
         var _logInRoute = null;
         var _enable = false;
-        var _whiteListResolver = function() {
-            return false;   //Block All by default
+        var _whiteListResolver = function()
+        {
+            return false; //Block All by default
         };
         //
-        this.setIssuerEndpoint = function(value) {
+        this.setIssuerEndpoint = function(value)
+        {
             _issuerEndpoint = value;
             return $ref;
         };
-        this.setLogInRoute = function(value) {
+        this.setLogInRoute = function(value)
+        {
             _logInRoute = value;
             return $ref;
         };
-        this.enable = function() {
+        this.enable = function()
+        {
             _enable = true;
             return $ref;
         };
-        this.setWhiteListResolver = function(value) {
-            if (typeof value !== "function") {
+        this.setWhiteListResolver = function(value)
+        {
+            if (typeof value !== "function")
+            {
                 throw Error("WHITELIST_RESOLVER_FUNCTION_EXPECTED");
             }
             _whiteListResolver = value;
             return $ref;
         };
 
-        function getIssuerEndpoint() {
-            if (!_issuerEndpoint) {
+        function getIssuerEndpoint()
+        {
+            if (!_issuerEndpoint)
+            {
                 throw Error("ISSUER_ENDPOINT_NOT_SET");
             }
             return _issuerEndpoint;
         }
 
-        function getLogInRoute() {
-            if (!_logInRoute) {
+        function getLogInRoute()
+        {
+            if (!_logInRoute)
+            {
                 throw Error("LOGINURL_NOT_SET");
             }
             return _logInRoute;
         }
 
-        function getAuthorizeResolver() {
+        function getAuthorizeResolver()
+        {
             return _authorizeResolver;
         }
 
-        this.$get = function($rootScope, $Api, $state, $LocalStorage) {
+        this.$get = function($rootScope, $Api, $state, $LocalStorage)
+        {
             var _token_key = "$_identity";
             var _properties = {};
             var _authResponse = $LocalStorage.getObject(_token_key);
             var self = this;
             //------------------------------------------------------------------------------
-            var _login = function(oauthToken) {
+            var _login = function(oauthToken)
+            {
                 $LocalStorage.setObject(_token_key, oauthToken);
                 _authResponse = oauthToken;
                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, oauthToken);
             };
-            var _logout = function() {
+            var _logout = function()
+            {
                 $LocalStorage.remove(_token_key);
                 _authResponse = null;
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
                 $state.go(getLogInRoute());
             };
-            var _addProperty = function(name, value) {
+            var _addProperty = function(name, value)
+            {
                 _properties[name] = value;
             };
             //------------------------------------------------------------------------------
-            self.authenticate = function(credentials) {
+            self.authenticate = function(credentials)
+            {
                 return $Api.invoke('POST', getIssuerEndpoint(), credentials)
-                    .success(function(data) {
-                        _login(data); //Internal Authentication
+                    .success(function(data)
+                    {
+                        self.logIn(data);  //Internal Authentication
                     })
-                    .error(function() {
+                    .error(function()
+                    {
                         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                     });
             };
-            self.extend = function(name, value) {
-                if (typeof name === "object") {
-                    for (var key in name) {
+            self.extend = function(name, value)
+            {
+                if (typeof name === "object")
+                {
+                    for (var key in name)
+                    {
                         _addProperty(key, name[key]);
                     }
                     return;
                 }
                 _addProperty(name, value);
             };
-            self.getAccessToken = function() {
+            self.getAccessToken = function()
+            {
                 return _authResponse.access_token;
             };
-            self.getTokenType = function() {
+            self.getTokenType = function()
+            {
                 return _authResponse.token_type;
             };
-            self.logOut = function() {
+            self.logIn = function(oauthToken)
+            {
+                //Check OAuthToken Format
+                if (!oauthToken.access_token)
+                {
+                    throw Error("OAUTHTOKEN_BADFORMAT: access_token (jwt)");
+                }
+                if (!oauthToken.expires_in)
+                {
+                    throw Error("OAUTHTOKEN_BADFORMAT: expires_in (unixTime)");
+                }
+                if (!oauthToken.token_type)
+                {
+                    throw Error("OAUTHTOKEN_BADFORMAT: token_type (string)");
+                }
+
+                _login(oauthToken);
+            };
+
+            self.logOut = function()
+            {
                 _logout();
             };
-            self.getCurrent = function() {
+            self.getCurrent = function()
+            {
                 //Get Payload
                 var payload = self.getAccessToken().split('.')[1];
-                if (atob) {
+                if (atob)
+                {
                     data = decodeURIComponent(escape(atob(payload)));
-                } else {
+                }
+                else
+                {
                     throw Error("ATOB_NOT_IMPLEMENTED");
                 }
                 data = JSON.parse(data);
                 //Extend Identity
-                data.property = function(name) {
+                data.property = function(name)
+                {
                     return _properties[name];
                 };
-                data.isInRole = function(roleName) {
+                data.isInRole = function(roleName)
+                {
                     return _.contains(data.role, roleName);
                 };
                 return data;
             };
-            self.isAuthenticated = function() {
+            self.isAuthenticated = function()
+            {
                 return _authResponse !== null;
             };
             //------------------------------------------------------------------------------
             //Add Hook if authentication is enabled
-            if (_enable) {
+            if (_enable)
+            {
                 //API HOOK
-                $Api.$on("before-send", function(headers) {
+                $Api.$on("before-send", function(headers)
+                {
                     //SET AUTHORIZATION HEADER IF USER IS AUTHENTICATED
-                    if (self.isAuthenticated()) {
+                    if (self.isAuthenticated())
+                    {
                         var jwt = _authResponse;
                         headers.Authorization = jwt.token_type + " " + jwt.access_token;
                     }
                 });
-                $Api.$on("error", function(data, status) {
+                $Api.$on("error", function(data, status)
+                {
                     /*
                         401 Unauthorized — The user is not logged in
                         403 Forbidden — The user is logged in but isn’t allowed access
@@ -145,7 +200,8 @@ angular.module('gale.services')
                         440 Login Timeout (Microsoft only) — Session has expired
                     */
                     var _event = null;
-                    switch (status) {
+                    switch (status)
+                    {
                         case 401:
                             _logout();
                             return; //Custom Action
@@ -157,15 +213,19 @@ angular.module('gale.services')
                             _event = AUTH_EVENTS.sessionTimeout;
                             break;
                     }
-                    if (_event) {
+                    if (_event)
+                    {
                         $rootScope.$broadcast(_event, data, status);
                     }
                 });
                 //EVENT HOOK
-                $rootScope.$on('$stateChangeStart', function(event, toState, current) {
-                    if (!self.isAuthenticated() && toState.name !== getLogInRoute()) {
+                $rootScope.$on('$stateChangeStart', function(event, toState, current)
+                {
+                    if (!self.isAuthenticated() && toState.name !== getLogInRoute())
+                    {
                         //Is in Whitelist??
-                        if (!_whiteListResolver(toState, current)) {
+                        if (!_whiteListResolver(toState, current))
+                        {
                             //Authentication is Required
                             $state.go(getLogInRoute());
                             event.preventDefault();
