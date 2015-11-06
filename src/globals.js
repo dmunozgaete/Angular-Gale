@@ -224,14 +224,18 @@
                         {
                             angular.forEach(registered_routes, function(route)
                             {
-                                //Register a 'angular like' route
-                                if (CONFIGURATION.debugging)
-                                {
-                                    logger.debug("route:", route);
-                                }
                                 $stateProvider
                                     .state(route.route, route.config);
                             });
+
+                            //Register a 'angular like' route
+                            if (CONFIGURATION.debugging)
+                            {
+                                logger.debug("registered routes:", registered_routes);
+                            }
+
+
+
                             registered_routes = [];
                         });
                         //MANUAL INITIALIZE ANGULAR

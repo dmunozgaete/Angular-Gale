@@ -34,6 +34,12 @@ module.exports = function(grunt, options) {
             ]
         },
 
+        classes: {
+            src: [
+                'src/js/classes/**/*.js'
+            ]
+        },
+
         global: {
             src: [
                 'src/gale.js',

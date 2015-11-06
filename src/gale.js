@@ -10,6 +10,7 @@
 //      http://angular-gale-docs.azurewebsites.net/
 //------------------------------------------------------
 angular.manifiest('gale', [
+    'gale.classes',
     'gale.directives',
     'gale.filters',
     'gale.services',
