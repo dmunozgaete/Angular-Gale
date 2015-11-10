@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.1
- Build Date:        2015-11-06 16:03:16
+ Build Date:        2015-11-10 11:33:49
 ------------------------------------------------------*/
 
 (function(angular)
@@ -737,7 +737,7 @@ angular.module('gale.directives')
     //---------------------------------------------------
 
     //---------------------------------------------------
-    this.$get = ['$rootScope', '$http', '$log', 'KQLBuilder', function($rootScope, $http, $log, KQLBuilder)
+    this.$get = ['$rootScope', '$http', '$log', 'KQLBuilder', '$q', function($rootScope, $http, $log, KQLBuilder, $q)
     {
         var self = this;
 
@@ -852,7 +852,7 @@ angular.module('gale.directives')
         //------------------------------------------------------------------------------
         self.invoke = function(method, url, body, headers)
         {
-
+            var defer = $q.defer();
             var _headers = {
                 'Content-Type': 'application/json'
             };
@@ -895,21 +895,26 @@ angular.module('gale.directives')
             var http = $http(cfg)
                 .success(function(data, status, headers, config)
                 {
+                    defer.resolve(data);
                     //---------------------------------------------------
                     fire(EVENTS.SUCCESS, [data, status, headers]);
                     //---------------------------------------------------
                 })
                 .error(function(data, status, headers, config)
                 {
+                    defer.reject(data);
 
                     //---------------------------------------------------
                     fire(EVENTS.ERROR, [data, status, headers]);
                     //---------------------------------------------------
 
-                    //$log.error(data, status, headers, config);
                 });
 
-            return http;
+            //Extend to mantain "compatibility"
+            defer.promise.success = http.success;
+            defer.promise.error = http.error;
+
+            return defer.promise;
         };
         //------------------------------------------------------------------------------
 
