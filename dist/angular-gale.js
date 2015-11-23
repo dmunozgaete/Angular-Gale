@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.1
- Build Date:        2015-11-10 11:33:49
+ Build Date:        2015-11-23 11:52:52
 ------------------------------------------------------*/
 
 (function(angular)
@@ -907,12 +907,12 @@ angular.module('gale.directives')
                     //---------------------------------------------------
                     fire(EVENTS.ERROR, [data, status, headers]);
                     //---------------------------------------------------
-
                 });
 
             //Extend to mantain "compatibility"
             defer.promise.success = http.success;
             defer.promise.error = http.error;
+            defer.promise.finally = http.finally;
 
             return defer.promise;
         };

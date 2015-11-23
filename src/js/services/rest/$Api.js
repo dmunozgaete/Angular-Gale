@@ -189,12 +189,12 @@
                     //---------------------------------------------------
                     fire(EVENTS.ERROR, [data, status, headers]);
                     //---------------------------------------------------
-
                 });
 
             //Extend to mantain "compatibility"
             defer.promise.success = http.success;
             defer.promise.error = http.error;
+            defer.promise.finally = http.finally;
 
             return defer.promise;
         };
