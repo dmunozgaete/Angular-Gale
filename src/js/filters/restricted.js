@@ -1,20 +1,54 @@
-(function(){
+(function()
+{
+    angular.module('gale.filters')
+        .filter('restricted', function($Api, $Identity, File)
+        {
+            return function(resource)
+            {
+                var url = resource;
+                if (!url)
+                {
+                    return null;
+                }
+                else
+                {
+                    if ($Identity.isAuthenticated())
+                    {
+                        url += "?access_token=" + $Identity.getAccessToken();
+                    }
 
-	var resourceUrl = function(resource , $Identity){
-		var url = resource;
-		if($Identity.isAuthenticated()){
-			url += "&access_token=" + $Identity.getAccessToken();
-		}
+                    url = File.getEndpoint() + url;
+                }
 
-		return url;
-	};
 
-	angular.module('gale.filters')
+                return url;
+            };
+        })
+        .provider('File', function()
+        {
+            //---------------------------------------------------
+            //Configurable Variable on .config Step
+            var _endpoint = null;
 
-	.filter('restricted', function ($Api, $Identity) {
-		return function (resource) {
-			return resourceUrl(resource, $Identity);
-		};
-	});
+            this.setEndpoint = function(endpoint)
+            {
+                _endpoint = endpoint;
+            };
+            //---------------------------------------------------
+
+            var getEndpoint = function()
+            {
+                return _endpoint;
+            };
+
+            //---------------------------------------------------
+            this.$get = function($log, $Api)
+            {
+                return {
+                    getEndpoint: getEndpoint
+                };
+            };
+
+        });
 
 })();

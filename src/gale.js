@@ -16,7 +16,8 @@ angular.manifiest('gale', [
     'gale.services.security',
     'gale.services.configuration',
     'gale.services.rest',
-    'gale.services.storage'
+    'gale.services.storage',
+    'gale.classes'
 ], [
     'ui.router' //NG ROUTE
 ])

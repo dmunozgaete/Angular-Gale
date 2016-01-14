@@ -2,12 +2,49 @@
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
-.directive('ngRut', function() {
+.directive('ngRut', function($filter) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, elem, attr, ctrl) {
 
+            elem.bind('blur', function() {
+                var tmp = [];
+                var rutCompleto = ctrl.$modelValue;
+                if(rutCompleto){
+                    if(rutCompleto.indexOf("-") > 0){
+                        tmp = rutCompleto.split('-');
+                    }else{
+                        //Sin Guion
+                        var rut = rutCompleto.replace("-", "");
+
+                        tmp.push(rut.substring(0, rut.length-1));
+                        tmp.push(rut.substring(rut.length-1));
+                    }
+                
+                    if(tmp.length === 2){
+                        var filter = "number";
+                        ctrl.$viewValue = $filter(filter)(tmp[0]) + "-" + tmp[1];
+                        
+                    }
+                }
+                ctrl.$render();
+                
+            });
+            
+            elem.bind('focus', function() {
+                if(ctrl.$modelValue){
+                    
+                    ctrl.$viewValue = ctrl.$modelValue;
+                }
+                ctrl.$render();
+            });
+            
+            scope.$watch('ctrl.$modelValue', function() {
+                
+                elem.triggerHandler('blur');
+            });
+        
             var validaRut = function (rutCompleto) {
                 var tmp = [];
 
@@ -19,7 +56,7 @@ angular.module('gale.directives')
                 }else{
                     //Sin Guion
                     var rut = rutCompleto.replace("-", "");
-
+                    
                     tmp.push(rut.substring(0, rut.length-1));
                     tmp.push(rut.substring(rut.length-1));
 

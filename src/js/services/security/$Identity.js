@@ -133,10 +133,15 @@ angular.module('gale.services')
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: access_token (jwt)");
                 }
+
+                //NOT ALWAYS REQUIRED ;)!
+                /*
                 if (!oauthToken.expires_in)
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: expires_in (unixTime)");
                 }
+                */
+
                 if (!oauthToken.token_type)
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: token_type (string)");

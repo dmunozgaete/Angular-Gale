@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.1
- Build Date:        2015-11-04 0:36:33
+ Build Date:        2016-01-14 12:03:33
 ------------------------------------------------------*/
 
 (function(angular)
@@ -283,7 +283,8 @@ angular.manifiest('gale', [
     'gale.services.security',
     'gale.services.configuration',
     'gale.services.rest',
-    'gale.services.storage'
+    'gale.services.storage',
+    'gale.classes'
 ], [
     'ui.router' //NG ROUTE
 ])
@@ -324,7 +325,75 @@ angular.manifiest('gale', [
     $LocalStorage.setObject(stored_key, app_conf);
 
 }]);
-;angular.module('gale.directives')
+;/*------------------------------------------------------
+ Company:           Valentys Ltda.
+ Author:            David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)
+ 
+ Description:       Event Handler Implementation for all Classes which need "Fire Events"
+------------------------------------------------------*/
+angular.module('gale.classes')
+
+.factory('BaseEventHandler', function()
+{
+
+    //Like {eventName: [handlers]}
+    var listeners = {};
+
+    //Prototype Function
+    var self = {};
+    //------------------------------------------------------------------------------
+    // EVENT IMPLEMENTATION
+    self.$on = function(name, handler)
+    {
+        var namedListeners = listeners[name];
+        if (!namedListeners)
+        {
+            listeners[name] = namedListeners = [];
+        }
+        namedListeners.push(handler);
+
+        //Return Destroy Function
+        return function()
+        {
+            var indexOf = namedListeners.indexOf(handler);
+            if (indexOf >= 0)
+            {
+                namedListeners[indexOf] = null;
+            }
+        };
+    };
+
+    self.hasEventHandlersFor = function(name)
+    {
+        return listeners[name] != null;
+    };
+
+    self.$fire = function(name, args)
+    {
+        if (self.hasEventHandlersFor(name))
+        {
+            var handlers = listeners[name];
+            angular.forEach(handlers, function(handler)
+            {
+                if (handler)
+                {
+                    handler.apply(handler, args);
+                }
+            });
+        }
+    };
+
+    self.$clear = function(name)
+    {
+        if (self.hasEventHandlersFor(name))
+        {
+            delete listeners[name];
+        }
+    };
+    //------------------------------------------------------------------------------
+
+    return self;
+});;angular.module('gale.directives')
 
 .directive('selectTextOnClick', function () {
     return {
@@ -451,12 +520,49 @@ angular.module('gale.directives')
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
-.directive('ngRut', function() {
+.directive('ngRut', ['$filter', function($filter) {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function(scope, elem, attr, ctrl) {
 
+            elem.bind('blur', function() {
+                var tmp = [];
+                var rutCompleto = ctrl.$modelValue;
+                if(rutCompleto){
+                    if(rutCompleto.indexOf("-") > 0){
+                        tmp = rutCompleto.split('-');
+                    }else{
+                        //Sin Guion
+                        var rut = rutCompleto.replace("-", "");
+
+                        tmp.push(rut.substring(0, rut.length-1));
+                        tmp.push(rut.substring(rut.length-1));
+                    }
+                
+                    if(tmp.length === 2){
+                        var filter = "number";
+                        ctrl.$viewValue = $filter(filter)(tmp[0]) + "-" + tmp[1];
+                        
+                    }
+                }
+                ctrl.$render();
+                
+            });
+            
+            elem.bind('focus', function() {
+                if(ctrl.$modelValue){
+                    
+                    ctrl.$viewValue = ctrl.$modelValue;
+                }
+                ctrl.$render();
+            });
+            
+            scope.$watch('ctrl.$modelValue', function() {
+                
+                elem.triggerHandler('blur');
+            });
+        
             var validaRut = function (rutCompleto) {
                 var tmp = [];
 
@@ -468,7 +574,7 @@ angular.module('gale.directives')
                 }else{
                     //Sin Guion
                     var rut = rutCompleto.replace("-", "");
-
+                    
                     tmp.push(rut.substring(0, rut.length-1));
                     tmp.push(rut.substring(rut.length-1));
 
@@ -511,7 +617,7 @@ angular.module('gale.directives')
 
         }
     };
-});;angular.module('gale.filters')
+}]);;angular.module('gale.filters')
 .filter('capitalize', function() {
     return function(input, all) {
         return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
@@ -541,24 +647,58 @@ angular.module('gale.directives')
 			return text;
 		}
 	};
-}]);;(function(){
+}]);;(function()
+{
+    angular.module('gale.filters')
+        .filter('restricted', ['$Api', '$Identity', 'File', function($Api, $Identity, File)
+        {
+            return function(resource)
+            {
+                var url = resource;
+                if (!url)
+                {
+                    return null;
+                }
+                else
+                {
+                    if ($Identity.isAuthenticated())
+                    {
+                        url += "?access_token=" + $Identity.getAccessToken();
+                    }
 
-	var resourceUrl = function(resource , $Identity){
-		var url = resource;
-		if($Identity.isAuthenticated()){
-			url += "&access_token=" + $Identity.getAccessToken();
-		}
+                    url = File.getEndpoint() + url;
+                }
 
-		return url;
-	};
 
-	angular.module('gale.filters')
+                return url;
+            };
+        }])
+        .provider('File', function()
+        {
+            //---------------------------------------------------
+            //Configurable Variable on .config Step
+            var _endpoint = null;
 
-	.filter('restricted', ['$Api', '$Identity', function ($Api, $Identity) {
-		return function (resource) {
-			return resourceUrl(resource, $Identity);
-		};
-	}]);
+            this.setEndpoint = function(endpoint)
+            {
+                _endpoint = endpoint;
+            };
+            //---------------------------------------------------
+
+            var getEndpoint = function()
+            {
+                return _endpoint;
+            };
+
+            //---------------------------------------------------
+            this.$get = ['$log', '$Api', function($log, $Api)
+            {
+                return {
+                    getEndpoint: getEndpoint
+                };
+            }];
+
+        });
 
 })();
 ;angular.module('gale.filters')	
@@ -1106,10 +1246,15 @@ angular.module('gale.directives')
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: access_token (jwt)");
                 }
+
+                //NOT ALWAYS REQUIRED ;)!
+                /*
                 if (!oauthToken.expires_in)
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: expires_in (unixTime)");
                 }
+                */
+
                 if (!oauthToken.token_type)
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: token_type (string)");
