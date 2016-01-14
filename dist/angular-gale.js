@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.1
- Build Date:        2016-01-14 12:10:42
+ Build Date:        2016-01-14 12:24:54
 ------------------------------------------------------*/
 
 (function(angular)
@@ -230,25 +230,26 @@
                     {
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
+
                         //ROUTE REGISTRATION STEP
                         angular.module(application_bundle).config(['$stateProvider', function($stateProvider)
                         {
                             angular.forEach(registered_routes, function(route)
                             {
-                                $stateProvider
-                                    .state(route.route, route.config);
+                                // Inject State
+                                $stateProvider.state(route.route, route.config);
+
+                                // Register a 'angular like' route
+                                if (CONFIGURATION.debugging)
+                                {
+                                    logger.debug("registered routes:", route);
+                                }
+
                             });
-
-                            //Register a 'angular like' route
-                            if (CONFIGURATION.debugging)
-                            {
-                                logger.debug("registered routes:", registered_routes);
-                            }
-
-
 
                             registered_routes = [];
                         }]);
+                        
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
                     })
