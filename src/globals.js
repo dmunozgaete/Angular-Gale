@@ -219,25 +219,26 @@
                     {
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
+
                         //ROUTE REGISTRATION STEP
                         angular.module(application_bundle).config(function($stateProvider)
                         {
                             angular.forEach(registered_routes, function(route)
                             {
-                                $stateProvider
-                                    .state(route.route, route.config);
+                                // Inject State
+                                $stateProvider.state(route.route, route.config);
+
+                                // Register a 'angular like' route
+                                if (CONFIGURATION.debugging)
+                                {
+                                    logger.debug("registered routes:", route);
+                                }
+
                             });
-
-                            //Register a 'angular like' route
-                            if (CONFIGURATION.debugging)
-                            {
-                                logger.debug("registered routes:", registered_routes);
-                            }
-
-
 
                             registered_routes = [];
                         });
+                        
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
                     })
