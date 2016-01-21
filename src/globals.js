@@ -231,7 +231,7 @@
                                 // Register a 'angular like' route
                                 if (CONFIGURATION.debugging)
                                 {
-                                    logger.debug("registered routes:", route);
+                                    logger.debug("route:", route);
                                 }
 
                             });

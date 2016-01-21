@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.1
- Build Date:        2016-01-14 12:24:54
+ Build Date:        2016-01-21 14:28:06
 ------------------------------------------------------*/
 
 (function(angular)
@@ -242,7 +242,7 @@
                                 // Register a 'angular like' route
                                 if (CONFIGURATION.debugging)
                                 {
-                                    logger.debug("registered routes:", route);
+                                    logger.debug("route:", route);
                                 }
 
                             });
@@ -876,7 +876,7 @@ angular.module('gale.directives')
                     if (regex.test(cfg.url))
                     {
                         var value = body[parameter];
-                        if (!value)
+                        if (typeof value === "undefined")
                         {
                             throw Error("URI_PARAMETER_UNDEFINED: " + parameter);
                         }
