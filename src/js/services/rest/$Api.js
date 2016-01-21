@@ -85,7 +85,7 @@
                     if (regex.test(cfg.url))
                     {
                         var value = body[parameter];
-                        if (!value)
+                        if (typeof value === "undefined")
                         {
                             throw Error("URI_PARAMETER_UNDEFINED: " + parameter);
                         }
