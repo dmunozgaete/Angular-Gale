@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.1
- Build Date:        2016-01-21 14:28:06
+ Build Date:        2016-01-28 12:34:11
 ------------------------------------------------------*/
 
 (function(angular)
@@ -810,7 +810,7 @@ angular.module('gale.directives')
     //---------------------------------------------------
 
     //---------------------------------------------------
-    this.$get = ['$rootScope', '$http', '$log', 'KQLBuilder', '$q', function($rootScope, $http, $log, KQLBuilder, $q)
+    this.$get = ['$rootScope', '$http', '$log', 'QueryableBuilder', '$q', function($rootScope, $http, $log, QueryableBuilder, $q)
     {
         var self = this;
 
@@ -998,7 +998,7 @@ angular.module('gale.directives')
         {
 
             //Has OData Configuration???
-            url = KQLBuilder.build(url, kql);
+            url = QueryableBuilder.build(url, kql);
 
             //Clean KQL default configuration
             delete kql.select;
@@ -1008,6 +1008,7 @@ angular.module('gale.directives')
 
             return self.invoke('GET', url, kql, headers);
         };
+        self.query = self.kql;
         //------------------------------------------------------------------------------
 
         //------------------------------------------------------------------------------
@@ -1052,45 +1053,51 @@ angular.module('gale.directives')
 });
 ;angular.module('gale.services')
 
-.factory('KQLBuilder', function() {
+.factory('QueryableBuilder', function()
+{
 
-	var self = this;
+    var self = this;
 
-	// Define the constructor function.
-    self.build = function(endpoint , configuration) {
+    // Define the constructor function.
+    self.build = function(endpoint, configuration)
+    {
 
-    	//Add Endpoint
+        //Add Endpoint
         var arr = [];
         var builder = [
-        	endpoint + "?"
+            endpoint + (endpoint.indexOf("?") >= 0 ? "&" : "?")
         ];
 
 
         //SELECT
-        if(configuration.select){
-    		builder.push("$select=");
-    		//---------------------------------
-    		arr = [];
-    		angular.forEach(function(key){
-    			arr.push(key);
-    		});
-			//---------------------------------
-    		builder.push(arr.join(","));
-    		builder.push("&");
+        if (configuration.select)
+        {
+            builder.push("$select=");
+            //---------------------------------
+            arr = [];
+            angular.forEach(function(key)
+            {
+                arr.push(key);
+            });
+            //---------------------------------
+            builder.push(arr.join(","));
+            builder.push("&");
         }
 
         //FILTER
-        if(configuration.filters){
+        if (configuration.filters)
+        {
             builder.push("$filter=");
             //---------------------------------
             arr = [];
-            angular.forEach(configuration.filters, function(item){
+            angular.forEach(configuration.filters, function(item)
+            {
                 arr.push(
                     item.property +
                     " " +
                     item.operator +
                     " '" +
-                    item.value  +
+                    item.value +
                     "'"
                 );
             });
@@ -1100,15 +1107,25 @@ angular.module('gale.directives')
         }
 
         //LIMIT
-        if(configuration.limit){
+        if (configuration.limit)
+        {
             builder.push("$limit=");
             builder.push(configuration.limit);
             builder.push("&");
         }
 
+        //LIMIT
+        if (configuration.offset)
+        {
+            builder.push("$offset=");
+            builder.push(configuration.offset);
+            builder.push("&");
+        }
+
 
         //ORDER BY
-        if(configuration.orderBy){
+        if (configuration.orderBy)
+        {
             builder.push("$orderBy=");
             builder.push(configuration.orderBy.property);
             builder.push(" ");
@@ -1123,7 +1140,8 @@ angular.module('gale.directives')
 
 
     return this;
-});;angular.module('gale.services')
+});
+;angular.module('gale.services')
     .run(['$Identity', function($Identity) {}])
     //----------------------------------------
     .provider('$Identity', function()
