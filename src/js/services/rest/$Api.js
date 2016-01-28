@@ -19,7 +19,7 @@
     //---------------------------------------------------
 
     //---------------------------------------------------
-    this.$get = function($rootScope, $http, $log, KQLBuilder, $q)
+    this.$get = function($rootScope, $http, $log, QueryableBuilder, $q)
     {
         var self = this;
 
@@ -207,7 +207,7 @@
         {
 
             //Has OData Configuration???
-            url = KQLBuilder.build(url, kql);
+            url = QueryableBuilder.build(url, kql);
 
             //Clean KQL default configuration
             delete kql.select;
@@ -217,6 +217,7 @@
 
             return self.invoke('GET', url, kql, headers);
         };
+        self.query = self.kql;
         //------------------------------------------------------------------------------
 
         //------------------------------------------------------------------------------
