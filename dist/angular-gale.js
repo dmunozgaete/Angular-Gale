@@ -5,7 +5,11 @@
  Description:       Angular Implementation for the Javascript Client GALE
  Github:            https://github.com/dmunozgaete/angular-gale
 
+<<<<<<< HEAD
  Versión:           1.0.0-rc.1
+=======
+ VersiÃ³n:          0.11.5
+>>>>>>> release/v0.11.5
  Build Date:        2015-11-23 11:52:52
 ------------------------------------------------------*/
 
@@ -1283,10 +1287,10 @@ angular.module('gale.directives')
                 $Api.$on("error", function(data, status)
                 {
                     /*
-                        401 Unauthorized — The user is not logged in
-                        403 Forbidden — The user is logged in but isn’t allowed access
-                        419 Authentication Timeout (non standard) — Session has expired
-                        440 Login Timeout (Microsoft only) — Session has expired
+                        401 Unauthorizedâ€Šâ€”â€ŠThe user is not logged in
+                        403 Forbiddenâ€Šâ€”â€ŠThe user is logged in but isnâ€™t allowed access
+                        419 Authentication Timeout (non standard)â€Šâ€”â€ŠSession has expired
+                        440 Login Timeout (Microsoft only)â€Šâ€”â€ŠSession has expired
                     */
                     var _event = null;
                     switch (status)
