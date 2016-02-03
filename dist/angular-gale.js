@@ -5,12 +5,8 @@
  Description:       Angular Implementation for the Javascript Client GALE
  Github:            https://github.com/dmunozgaete/angular-gale
 
-<<<<<<< HEAD
- Versión:           1.0.0-rc.1
-=======
- VersiÃ³n:          0.11.5
->>>>>>> release/v0.11.5
- Build Date:        2015-11-23 11:52:52
+ Versión:           1.0.0-rc.7
+ Build Date:        2016-02-03 11:11:12
 ------------------------------------------------------*/
 
 (function(angular)
@@ -234,25 +230,26 @@
                     {
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
+
                         //ROUTE REGISTRATION STEP
                         angular.module(application_bundle).config(['$stateProvider', function($stateProvider)
                         {
                             angular.forEach(registered_routes, function(route)
                             {
-                                $stateProvider
-                                    .state(route.route, route.config);
+                                // Inject State
+                                $stateProvider.state(route.route, route.config);
+
+                                // Register a 'angular like' route
+                                if (CONFIGURATION.debugging)
+                                {
+                                    logger.debug("route:", route);
+                                }
+
                             });
-
-                            //Register a 'angular like' route
-                            if (CONFIGURATION.debugging)
-                            {
-                                logger.debug("registered routes:", registered_routes);
-                            }
-
-
 
                             registered_routes = [];
                         }]);
+                        
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
                     })
@@ -292,7 +289,8 @@ angular.manifiest('gale', [
     'gale.services.security',
     'gale.services.configuration',
     'gale.services.rest',
-    'gale.services.storage'
+    'gale.services.storage',
+    'gale.classes'
 ], [
     'ui.router' //NG ROUTE
 ])
@@ -529,7 +527,7 @@ angular.module('gale.directives')
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
-.directive('ngRut', function($filter) {
+.directive('ngRut', ['$filter', function($filter) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -549,7 +547,7 @@ angular.module('gale.directives')
                         tmp.push(rut.substring(rut.length-1));
                     }
                 
-                    if(tmp.length == 2){
+                    if(tmp.length === 2){
                         var filter = "number";
                         ctrl.$viewValue = $filter(filter)(tmp[0]) + "-" + tmp[1];
                         
@@ -626,7 +624,7 @@ angular.module('gale.directives')
 
         }
     };
-});;angular.module('gale.filters')
+}]);;angular.module('gale.filters')
 .filter('capitalize', function() {
     return function(input, all) {
         return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
@@ -634,58 +632,92 @@ angular.module('gale.directives')
         }) : '';
     };
 });
-;angular.module('gale.filters') 
+;angular.module('gale.filters')	
 
 .filter('localize', ['$Localization', '$log', '$interpolate', function ($Localization, $log, $interpolate) {
-    return function (text, parameters) {
+	return function (text, parameters) {
 
-        try {
+		try {
 
-            var template = $Localization.get(text);
+			var template = $Localization.get(text);
 
-            if(parameters){
-                var exp = $interpolate(template);
-                template = exp({
-                    parameters: parameters
-                });
-            }
+			if(parameters){
+				var exp = $interpolate(template);
+	            template = exp({
+	            	parameters: parameters
+	            });
+	        }
 
             return template;
 
-        }catch(e){
-            return text;
-        }
-    };
-}]);;(function(){
-
-    var resourceUrl = function(resource , $Identity){
-        var url = resource;
-        if($Identity.isAuthenticated()){
-            url += "&access_token=" + $Identity.getAccessToken();
-        }
-
-        return url;
-    };
-
+		}catch(e){
+			return text;
+		}
+	};
+}]);;(function()
+{
     angular.module('gale.filters')
+        .filter('restricted', ['$Api', '$Identity', 'File', function($Api, $Identity, File)
+        {
+            return function(resource)
+            {
+                var url = resource;
+                if (!url)
+                {
+                    return null;
+                }
+                else
+                {
+                    if ($Identity.isAuthenticated())
+                    {
+                        url += "?access_token=" + $Identity.getAccessToken();
+                    }
 
-    .filter('restricted', ['$Api', '$Identity', function ($Api, $Identity) {
-        return function (resource) {
-            return resourceUrl(resource, $Identity);
-        };
-    }]);
+                    url = File.getEndpoint() + url;
+                }
+
+
+                return url;
+            };
+        }])
+        .provider('File', function()
+        {
+            //---------------------------------------------------
+            //Configurable Variable on .config Step
+            var _endpoint = null;
+
+            this.setEndpoint = function(endpoint)
+            {
+                _endpoint = endpoint;
+            };
+            //---------------------------------------------------
+
+            var getEndpoint = function()
+            {
+                return _endpoint;
+            };
+
+            //---------------------------------------------------
+            this.$get = ['$log', '$Api', function($log, $Api)
+            {
+                return {
+                    getEndpoint: getEndpoint
+                };
+            }];
+
+        });
 
 })();
-;angular.module('gale.filters') 
+;angular.module('gale.filters')	
 
 .filter('template', ['$log', '$interpolate', function ($log,$interpolate) {
-    return function (template, context) {
+	return function (template, context) {
 
             var exp = $interpolate(template);
             var content = exp(context);
            
            return content;
-    };
+	};
 }]);;angular.module('gale.services.configuration')
 
 .service('$Configuration', ['$rootScope', '$LocalStorage', 'CONFIGURATION', function ($rootScope, $LocalStorage, CONFIGURATION) {
@@ -778,7 +810,7 @@ angular.module('gale.directives')
     //---------------------------------------------------
 
     //---------------------------------------------------
-    this.$get = ['$rootScope', '$http', '$log', 'KQLBuilder', '$q', function($rootScope, $http, $log, KQLBuilder, $q)
+    this.$get = ['$rootScope', '$http', '$log', 'QueryableBuilder', '$q', function($rootScope, $http, $log, QueryableBuilder, $q)
     {
         var self = this;
 
@@ -844,7 +876,7 @@ angular.module('gale.directives')
                     if (regex.test(cfg.url))
                     {
                         var value = body[parameter];
-                        if (!value)
+                        if (typeof value === "undefined")
                         {
                             throw Error("URI_PARAMETER_UNDEFINED: " + parameter);
                         }
@@ -966,7 +998,7 @@ angular.module('gale.directives')
         {
 
             //Has OData Configuration???
-            url = KQLBuilder.build(url, kql);
+            url = QueryableBuilder.build(url, kql);
 
             //Clean KQL default configuration
             delete kql.select;
@@ -976,6 +1008,7 @@ angular.module('gale.directives')
 
             return self.invoke('GET', url, kql, headers);
         };
+        self.query = self.kql;
         //------------------------------------------------------------------------------
 
         //------------------------------------------------------------------------------
@@ -1020,26 +1053,30 @@ angular.module('gale.directives')
 });
 ;angular.module('gale.services')
 
-.factory('KQLBuilder', function() {
+.factory('QueryableBuilder', function()
+{
 
     var self = this;
 
     // Define the constructor function.
-    self.build = function(endpoint , configuration) {
+    self.build = function(endpoint, configuration)
+    {
 
         //Add Endpoint
         var arr = [];
         var builder = [
-            endpoint + "?"
+            endpoint + (endpoint.indexOf("?") >= 0 ? "&" : "?")
         ];
 
 
         //SELECT
-        if(configuration.select){
+        if (configuration.select)
+        {
             builder.push("$select=");
             //---------------------------------
             arr = [];
-            angular.forEach(function(key){
+            angular.forEach(function(key)
+            {
                 arr.push(key);
             });
             //---------------------------------
@@ -1048,17 +1085,19 @@ angular.module('gale.directives')
         }
 
         //FILTER
-        if(configuration.filters){
+        if (configuration.filters)
+        {
             builder.push("$filter=");
             //---------------------------------
             arr = [];
-            angular.forEach(configuration.filters, function(item){
+            angular.forEach(configuration.filters, function(item)
+            {
                 arr.push(
                     item.property +
                     " " +
                     item.operator +
                     " '" +
-                    item.value  +
+                    item.value +
                     "'"
                 );
             });
@@ -1068,15 +1107,25 @@ angular.module('gale.directives')
         }
 
         //LIMIT
-        if(configuration.limit){
+        if (configuration.limit)
+        {
             builder.push("$limit=");
             builder.push(configuration.limit);
             builder.push("&");
         }
 
+        //LIMIT
+        if (configuration.offset)
+        {
+            builder.push("$offset=");
+            builder.push(configuration.offset);
+            builder.push("&");
+        }
+
 
         //ORDER BY
-        if(configuration.orderBy){
+        if (configuration.orderBy)
+        {
             builder.push("$orderBy=");
             builder.push(configuration.orderBy.property);
             builder.push(" ");
@@ -1091,7 +1140,8 @@ angular.module('gale.directives')
 
 
     return this;
-});;angular.module('gale.services')
+});
+;angular.module('gale.services')
     .run(['$Identity', function($Identity) {}])
     //----------------------------------------
     .provider('$Identity', function()
@@ -1226,10 +1276,15 @@ angular.module('gale.directives')
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: access_token (jwt)");
                 }
+
+                //NOT ALWAYS REQUIRED ;)!
+                /*
                 if (!oauthToken.expires_in)
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: expires_in (unixTime)");
                 }
+                */
+
                 if (!oauthToken.token_type)
                 {
                     throw Error("OAUTHTOKEN_BADFORMAT: token_type (string)");
@@ -1287,10 +1342,10 @@ angular.module('gale.directives')
                 $Api.$on("error", function(data, status)
                 {
                     /*
-                        401 Unauthorizedâ€Šâ€”â€ŠThe user is not logged in
-                        403 Forbiddenâ€Šâ€”â€ŠThe user is logged in but isnâ€™t allowed access
-                        419 Authentication Timeout (non standard)â€Šâ€”â€ŠSession has expired
-                        440 Login Timeout (Microsoft only)â€Šâ€”â€ŠSession has expired
+                        401 Unauthorized — The user is not logged in
+                        403 Forbidden — The user is logged in but isn’t allowed access
+                        419 Authentication Timeout (non standard) — Session has expired
+                        440 Login Timeout (Microsoft only) — Session has expired
                     */
                     var _event = null;
                     switch (status)
