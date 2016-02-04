@@ -5,8 +5,8 @@
  Description:       Angular Implementation for the Javascript Client GALE
  Github:            https://github.com/dmunozgaete/angular-gale
 
- Versión:           1.0.0-rc.7
- Build Date:        2016-02-03 11:11:12
+ Versión:           1.0.0-rc.8
+ Build Date:        2016-02-04 1:32:35
 ------------------------------------------------------*/
 
 (function(angular)
@@ -105,6 +105,7 @@
 
 
         var viewPath = 'views{0}.html'.format([url]);
+        var isDefaultDocument = false;
 
         // "/index" => replace for default page
         if (url.endsWith(default_document))
@@ -112,6 +113,7 @@
             var regex = new RegExp(default_document, "ig");
             url = url.replace(regex, "");
             route = route.replace(regex, "");
+            isDefaultDocument = true;
         }
 
         //has parameter's bindng in url??
@@ -122,38 +124,54 @@
         }
 
 
-        var config = null;
-        if (layout === "")
+        var add = function(url, route)
         {
-            //Config Without Layout Base Content
-            config = {
-                url: url,
-                templateUrl: viewPath,
-                controller: controller
-            };
+
+            var config = null;
+            if (layout === "")
+            {
+                //Config Without Layout Base Content
+                config = {
+                    url: url,
+                    templateUrl: viewPath,
+                    controller: controller
+                };
+            }
+            else
+            {
+                //Config With Layout Template's
+                config = {
+                    url: url,
+                    views:
+                    {}
+                };
+
+                //add the view Name wich load the view
+                config.views[viewName] = {
+                    templateUrl: viewPath,
+                    controller: controller
+                };
+
+            }
+
+            registered_routes.push(
+            {
+                route: route,
+                config: config
+            });
+
+        };
+
+        add(url, route);
+
+        //When the page is default Document, add two url for the same controller
+        // and template: {url}/index && {url}
+        if (isDefaultDocument)
+        {
+            add(url + default_document, route + default_document);
         }
-        else
-        {
-            //Config With Layout Template's
-            config = {
-                url: url,
-                views:
-                {}
-            };
 
-            //add the view Name wich load the view
-            config.views[viewName] = {
-                templateUrl: viewPath,
-                controller: controller
-            };
 
-        }
-
-        registered_routes.push(
-        {
-            route: route,
-            config: config
-        });
     };
     /*
         String.format Like c# Utility
@@ -249,7 +267,7 @@
 
                             registered_routes = [];
                         }]);
-                        
+
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
                     })
@@ -440,77 +458,295 @@ angular.module('gale.classes')
  */
 angular.module('gale.directives')
 
-.directive('ngEmail', ['$log', function($log) {
+.directive('ngEmail', ['$log', function($log)
+{
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(scope, elem, attrs, ctrl) {
+        link: function(scope, elem, attrs, ctrl)
+        {
             var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-            ctrl.$validators.email = function(modelValue, viewValue) {
+            ctrl.$validators.email = function(modelValue, viewValue)
+            {
 
-                if (ctrl.$isEmpty(modelValue)) {
-                  // consider empty models to be valid
-                  return true;
+                if (ctrl.$isEmpty(modelValue))
+                {
+                    // consider empty models to be valid
+                    return true;
                 }
 
-                if (ctrl.$isEmpty(viewValue)) {
+                if (ctrl.$isEmpty(viewValue))
+                {
                     //is View Value is empty
                     return false;
                 }
 
                 //Validate
-                return pattern.test(viewValue);  // returns a boolean 
+                return pattern.test(viewValue); // returns a boolean 
             };
 
         }
     };
-}]);;/**
+}]);
+;angular.module('gale.directives')
+    .directive('ngNumber', ['$filter', '$locale', '$mdConstant', function($filter, $locale, $mdConstant)
+    {
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            scope:
+            {
+                ngNumberOptions: '=?'
+            },
+            link: function(scope, elm, attrs, ctrl)
+            {
+                //Default Configuration
+                var configuration = angular.extend(
+                {
+                    decimals: 0,
+                    integers: 9,
+                    format: true,
+                }, (scope.ngNumberOptions ||
+                {}));
+
+                var filter = "number";
+                var isReadonly = attrs.readonly;
+
+                //WHEN USER LEAVES, FORMAT TO HUMAN READ
+                elm.bind('blur', function(event)
+                {
+                    if (configuration.format)
+                    {
+                        //CHANGE TO HUMAN EASY READ
+                        ctrl.$viewValue = toHuman(ctrl.$modelValue);
+                        ctrl.$render();
+                    }
+                });
+
+                //WHEN USER ACTIVATE THE INPUT, FORMAT FOR ENTRY DATA
+                elm.bind('focus', function(event)
+                {
+                    if (!isReadonly)
+                    {
+                        //CHANGE FOR READY TO INPUT DATA
+                        ctrl.$viewValue = prepareForEntry(ctrl.$viewValue);
+                        ctrl.$render();
+                    }
+                });
+
+
+                //------------------------------------------------------------
+                //ACCEPT ONLY AVAILABLE KEY'S (NUMBER AND SOME SYMBOL'S)
+                var stopPropagation = function()
+                {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                };
+
+                elm.bind('keydown', function(event)
+                {
+                    var keyCode = event.which || event.keyCode;
+
+                    //ENABLE PASTE AND COPY AND CUT
+                    // ctrlKey = Ctrl Pressed
+                    // metaKey = CMD Pressed (MAC)
+                    // V = 86 Keycode
+                    // C = 67 Keycode
+                    // X = 88 Keycode
+                    if ((event.ctrlKey || event.metaKey) &&
+                        (keyCode === 86 || keyCode === 67 || keyCode === 88))
+                    {
+                        return true;
+                    }
+
+                    //ENABLE SOME SPECIAL KEYS!!
+                    if (!(
+                            //TAB
+                            (event.keyCode === $mdConstant.KEY_CODE.TAB) ||
+                            //DELETE 
+                            (event.keyCode === $mdConstant.KEY_CODE.BACKSPACE) ||
+                            (event.keyCode === $mdConstant.KEY_CODE.DELETE) ||
+                            //RIGHT AND LEFT ARROW
+                            (event.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) ||
+                            (event.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) ||
+                            //COMMA
+                            (event.keyCode === $mdConstant.KEY_CODE.COMMA) ||
+                            //0-9
+                            (event.keyCode >= 48 && event.keyCode <= 57) ||
+                            //KEYPAD 0-9
+                            (event.keyCode >= 96 && event.keyCode <= 105)))
+                    {
+                        return stopPropagation();
+                    }
+
+                });
+
+                //CHECK SOME VALIDATION
+                elm.bind('keypress', function(event)
+                {
+                    var keyCode = event.which || event.keyCode;
+                    var charPressed = String.fromCharCode(keyCode);
+
+                    //Only Allow 1 Decimal Separator in the input
+                    if ($locale.NUMBER_FORMATS.DECIMAL_SEP === charPressed)
+                    {
+                        //IF THE DECIMALS IS 0 , THEN BLOCK THE COMMA :P!!
+                        if (configuration.decimals <= 0)
+                        {
+                            return stopPropagation();
+                        }
+
+                        //ONLY 1 DECIMAL SEPARATOR IS ACCEPTED  :P
+                        var hasSeparator = ctrl.$viewValue.indexOf(",") > 0;
+                        if (hasSeparator)
+                        {
+                            return stopPropagation();
+                        }
+                    }
+                });
+
+                //------------------------------------------------------------
+
+                //CONVERT TO LOCALE FORMAT NUMBER
+                var toHuman = function(value)
+                {
+                    if (value)
+                    {
+                        return $filter(filter)(ctrl.$modelValue, configuration.decimals);
+                    }
+                };
+
+                //CONVERT TO INPUT READY STRING
+                var prepareForEntry = function(value)
+                {
+                    if (value)
+                    {
+                        var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.GROUP_SEP + "]");
+                        value = value.replace(regExp, "");
+
+                        return value;
+                    }
+                };
+
+                //CONVERT TO NUMBER (FOR MODEL VALUE)
+                var toNumber = function(value)
+                {
+                    if (value)
+                    {
+                        var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.DECIMAL_SEP + "]");
+                        value = parseFloat(value.replace(regExp, "."));
+
+                        return value;
+                    }
+                };
+
+
+                ctrl.$validators.validLength = function(modelValue, viewValue)
+                {
+                    // CHECK THE INTEGER PART!
+                    if (configuration.integers > 0 && modelValue)
+                    {
+                        var parts = (modelValue + "").split(".");
+
+                        if (configuration.integers > 0)
+                        {
+                            if (parts[0].length > configuration.integers)
+                            {
+                                ctrl.$viewValue = viewValue;
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+
+                };
+
+                //DISABLE FORMAT WHEN USER DISABLE
+                if (configuration.format)
+                {
+                    //PARSE VIEW VALUE WHEN VIEW VALUE CHANGES
+                    ctrl.$formatters.push(toHuman);
+                }
+
+                //PARSE MODEL VALUE WHEN DOM CHANGES!
+                ctrl.$parsers.push(toNumber);
+
+            }
+        };
+    }]);
+;/**
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
 
-.directive('ngRange', ['$log', function($log) {
+.directive('ngRange', ['$log', function($log)
+{
     return {
         restrict: 'A',
         require: 'ngModel',
-        link: function(scope, elem, attrs, ctrl) {
-            
-            var min = parseInt(attrs.min);
-            var max = parseInt(attrs.max);
+        scope:
+        {
+            ngRangeOptions: '=?'
+        },
+        link: function(scope, elem, attrs, ctrl)
+        {
 
-            ctrl.$validators.range = function(modelValue, viewValue) {
+            //Default Configuration
+            var configuration = angular.extend(
+            {
+                min: 0,
+                max: 999999999999
+            }, (scope.ngRangeOptions ||
+            {}));
+
+
+            var min = parseInt(configuration.min);
+            var max = parseInt(configuration.max);
+
+            ctrl.$validators.range = function(modelValue, viewValue)
+            {
 
                 var value = parseInt(viewValue);
 
-                if (ctrl.$isEmpty(modelValue)) {
-                  // consider empty models to be valid
-                  return true;
+                if (ctrl.$isEmpty(modelValue))
+                {
+                    // consider empty models to be valid
+                    return true;
                 }
 
-                if (ctrl.$isEmpty(viewValue)) {
+                if (ctrl.$isEmpty(viewValue))
+                {
                     //is View Value is empty
                     return false;
                 }
 
-                if(!isNaN(min) && !isNaN(max)){
+                if (!isNaN(min) && !isNaN(max))
+                {
 
-                    if (value >= min && value <= max) {
-                        return true; 
+                    if (value >= min && value <= max)
+                    {
+                        return true;
                     }
                     return false;
                 }
 
-                if(!isNaN(min)){
-                    if (value >= min) {
+                if (!isNaN(min))
+                {
+                    if (value >= min)
+                    {
                         // it is valid
                         return true;
                     }
                     return false;
                 }
 
-                if(!isNaN(max)){
-                    if (value <= max) {
+                if (!isNaN(max))
+                {
+                    if (value <= max)
+                    {
                         // it is valid
                         return true;
                     }
@@ -523,108 +759,134 @@ angular.module('gale.directives')
 
         }
     };
-}]);;/**
+}]);
+;/**
  * Created by Administrador on 26/08/14.
  */
 angular.module('gale.directives')
-.directive('ngRut', ['$filter', function($filter) {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, elem, attr, ctrl) {
+    .directive('ngRut', ['$filter', function($filter)
+    {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, elem, attr, ctrl)
+            {
 
-            elem.bind('blur', function() {
-                var tmp = [];
-                var rutCompleto = ctrl.$modelValue;
-                if(rutCompleto){
-                    if(rutCompleto.indexOf("-") > 0){
+                elem.bind('blur', function()
+                {
+                    var tmp = [];
+                    var rutCompleto = ctrl.$modelValue;
+                    if (rutCompleto)
+                    {
+                        if (rutCompleto.indexOf("-") > 0)
+                        {
+                            tmp = rutCompleto.split('-');
+                        }
+                        else
+                        {
+                            //Sin Guion
+                            var rut = rutCompleto.replace("-", "");
+
+                            tmp.push(rut.substring(0, rut.length - 1));
+                            tmp.push(rut.substring(rut.length - 1));
+                        }
+
+                        if (tmp.length === 2)
+                        {
+                            var filter = "number";
+                            ctrl.$viewValue = $filter(filter)(tmp[0]) + "-" + tmp[1];
+
+                        }
+                    }
+                    ctrl.$render();
+
+                });
+
+                elem.bind('focus', function()
+                {
+                    if (ctrl.$modelValue)
+                    {
+
+                        ctrl.$viewValue = ctrl.$modelValue;
+                    }
+                    ctrl.$render();
+                });
+
+                scope.$watch('ctrl.$modelValue', function()
+                {
+
+                    elem.triggerHandler('blur');
+                });
+
+                var validaRut = function(rutCompleto)
+                {
+                    var tmp = [];
+
+                    if (rutCompleto.indexOf("-") > 0)
+                    {
+                        if (!/^[0-9]+-[0-9kK]{1}$/.test(rutCompleto))
+                        {
+                            return false;
+                        }
                         tmp = rutCompleto.split('-');
-                    }else{
+                    }
+                    else
+                    {
                         //Sin Guion
                         var rut = rutCompleto.replace("-", "");
 
-                        tmp.push(rut.substring(0, rut.length-1));
-                        tmp.push(rut.substring(rut.length-1));
-                    }
-                
-                    if(tmp.length === 2){
-                        var filter = "number";
-                        ctrl.$viewValue = $filter(filter)(tmp[0]) + "-" + tmp[1];
-                        
-                    }
-                }
-                ctrl.$render();
-                
-            });
-            
-            elem.bind('focus', function() {
-                if(ctrl.$modelValue){
-                    
-                    ctrl.$viewValue = ctrl.$modelValue;
-                }
-                ctrl.$render();
-            });
-            
-            scope.$watch('ctrl.$modelValue', function() {
-                
-                elem.triggerHandler('blur');
-            });
-        
-            var validaRut = function (rutCompleto) {
-                var tmp = [];
+                        tmp.push(rut.substring(0, rut.length - 1));
+                        tmp.push(rut.substring(rut.length - 1));
 
-                if(rutCompleto.indexOf("-") > 0){
-                    if (!/^[0-9]+-[0-9kK]{1}$/.test( rutCompleto )){
+                    }
+                    if (tmp.length < 2)
+                    {
                         return false;
                     }
-                    tmp = rutCompleto.split('-');
-                }else{
-                    //Sin Guion
-                    var rut = rutCompleto.replace("-", "");
-                    
-                    tmp.push(rut.substring(0, rut.length-1));
-                    tmp.push(rut.substring(rut.length-1));
 
-                }
-                if(tmp.length<2){
+                    return (dv(tmp[0]) + "") === (tmp[1].toLowerCase() + "");
+                };
+
+                var dv = function(T)
+                {
+                    var M = 0,
+                        S = 1;
+                    for (; T; T = Math.floor(T / 10))
+                    {
+                        S = (S + T % 10 * (9 - M++ % 6)) % 11;
+                    }
+                    return S ? S - 1 : 'k';
+                };
+
+                ctrl.$validators.rut = function(modelValue, viewValue)
+                {
+
+                    if (ctrl.$isEmpty(modelValue))
+                    {
+                        // consider empty models to be valid
+                        return true;
+                    }
+
+                    if (ctrl.$isEmpty(viewValue))
+                    {
+                        //is View Value is empty
+                        return false;
+                    }
+
+                    if (validaRut(viewValue))
+                    {
+                        // it is valid
+                        return true;
+                    }
+
+                    // it is invalid
                     return false;
-                }
+                };
 
-                return (dv(tmp[0]) + "") === (tmp[1].toLowerCase() + "");
-            };
-
-            var dv  = function(T){
-                var M=0,S=1;
-                for(;T;T=Math.floor(T/10)){
-                    S=(S+T%10*(9-M++%6))%11;
-                }
-                return S?S-1:'k';
-            };
-
-            ctrl.$validators.rut = function(modelValue, viewValue) {
-                
-                if (ctrl.$isEmpty(modelValue)) {
-                  // consider empty models to be valid
-                  return true;
-                }
-
-                if (ctrl.$isEmpty(viewValue)) {
-                    //is View Value is empty
-                    return false;
-                }
-
-                if (validaRut(viewValue)) {
-                    // it is valid
-                    return true;
-                }
-
-                // it is invalid
-                return false;
-            };
-
-        }
-    };
-}]);;angular.module('gale.filters')
+            }
+        };
+    }]);
+;angular.module('gale.filters')
 .filter('capitalize', function() {
     return function(input, all) {
         return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
