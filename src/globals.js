@@ -94,6 +94,7 @@
 
 
         var viewPath = 'views{0}.html'.format([url]);
+        var isDefaultDocument = false;
 
         // "/index" => replace for default page
         if (url.endsWith(default_document))
@@ -101,6 +102,7 @@
             var regex = new RegExp(default_document, "ig");
             url = url.replace(regex, "");
             route = route.replace(regex, "");
+            isDefaultDocument = true;
         }
 
         //has parameter's bindng in url??
@@ -111,38 +113,54 @@
         }
 
 
-        var config = null;
-        if (layout === "")
+        var add = function(url, route)
         {
-            //Config Without Layout Base Content
-            config = {
-                url: url,
-                templateUrl: viewPath,
-                controller: controller
-            };
+
+            var config = null;
+            if (layout === "")
+            {
+                //Config Without Layout Base Content
+                config = {
+                    url: url,
+                    templateUrl: viewPath,
+                    controller: controller
+                };
+            }
+            else
+            {
+                //Config With Layout Template's
+                config = {
+                    url: url,
+                    views:
+                    {}
+                };
+
+                //add the view Name wich load the view
+                config.views[viewName] = {
+                    templateUrl: viewPath,
+                    controller: controller
+                };
+
+            }
+
+            registered_routes.push(
+            {
+                route: route,
+                config: config
+            });
+
+        };
+
+        add(url, route);
+
+        //When the page is default Document, add two url for the same controller
+        // and template: {url}/index && {url}
+        if (isDefaultDocument)
+        {
+            add(url + default_document, route + default_document);
         }
-        else
-        {
-            //Config With Layout Template's
-            config = {
-                url: url,
-                views:
-                {}
-            };
 
-            //add the view Name wich load the view
-            config.views[viewName] = {
-                templateUrl: viewPath,
-                controller: controller
-            };
 
-        }
-
-        registered_routes.push(
-        {
-            route: route,
-            config: config
-        });
     };
     /*
         String.format Like c# Utility
@@ -238,7 +256,7 @@
 
                             registered_routes = [];
                         });
-                        
+
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
                     })
