@@ -82,12 +82,17 @@ angular.module('gale.services')
                 _authResponse = oauthToken;
                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, oauthToken);
             };
-            var _logout = function()
+            var _logout = function(settings)
             {
                 $LocalStorage.remove(_token_key);
                 _authResponse = null;
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-                $state.go(getLogInRoute());
+
+                if (settings.redirectToLoginPage)
+                {
+                    $state.go(getLogInRoute());
+                }
+
             };
             var _addProperty = function(name, value)
             {
@@ -99,7 +104,7 @@ angular.module('gale.services')
                 return $Api.invoke('POST', getIssuerEndpoint(), credentials)
                     .success(function(data)
                     {
-                        self.logIn(data);  //Internal Authentication
+                        self.logIn(data); //Internal Authentication
                     })
                     .error(function()
                     {
@@ -150,9 +155,14 @@ angular.module('gale.services')
                 _login(oauthToken);
             };
 
-            self.logOut = function()
+            self.logOut = function(settings)
             {
-                _logout();
+                angular.extend(
+                {
+                    redirectToLoginPage: true
+                }, settings);
+
+                _logout(settings);
             };
             self.getCurrent = function()
             {

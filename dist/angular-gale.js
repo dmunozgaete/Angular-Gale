@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.8
- Build Date:        2016-02-04 1:32:35
+ Build Date:        2016-02-08 1:50:20
 ------------------------------------------------------*/
 
 (function(angular)
@@ -1487,12 +1487,17 @@ angular.module('gale.directives')
                 _authResponse = oauthToken;
                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, oauthToken);
             };
-            var _logout = function()
+            var _logout = function(settings)
             {
                 $LocalStorage.remove(_token_key);
                 _authResponse = null;
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-                $state.go(getLogInRoute());
+
+                if (settings.redirectToLoginPage)
+                {
+                    $state.go(getLogInRoute());
+                }
+
             };
             var _addProperty = function(name, value)
             {
@@ -1504,7 +1509,7 @@ angular.module('gale.directives')
                 return $Api.invoke('POST', getIssuerEndpoint(), credentials)
                     .success(function(data)
                     {
-                        self.logIn(data);  //Internal Authentication
+                        self.logIn(data); //Internal Authentication
                     })
                     .error(function()
                     {
@@ -1555,9 +1560,14 @@ angular.module('gale.directives')
                 _login(oauthToken);
             };
 
-            self.logOut = function()
+            self.logOut = function(settings)
             {
-                _logout();
+                angular.extend(
+                {
+                    redirectToLoginPage: true
+                }, settings);
+
+                _logout(settings);
             };
             self.getCurrent = function()
             {
