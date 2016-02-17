@@ -168,7 +168,7 @@ angular.module('gale.services')
 
             self.logOut = function()
             {
-                return _logout(settings);
+                return _logout();
             };
             
             self.getCurrent = function()

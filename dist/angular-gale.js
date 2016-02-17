@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.8
- Build Date:        2016-02-17 16:03:02
+ Build Date:        2016-02-17 16:06:16
 ------------------------------------------------------*/
 
 (function(angular)
@@ -1573,7 +1573,7 @@ angular.module('gale.directives')
 
             self.logOut = function()
             {
-                return _logout(settings);
+                return _logout();
             };
             
             self.getCurrent = function()
