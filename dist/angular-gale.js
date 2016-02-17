@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.8
- Build Date:        2016-02-08 1:50:20
+ Build Date:        2016-02-17 15:43:22
 ------------------------------------------------------*/
 
 (function(angular)
@@ -1493,7 +1493,7 @@ angular.module('gale.directives')
                 _authResponse = null;
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 
-                if (settings.redirectToLoginPage)
+                if (settings && settings.redirectToLoginPage)
                 {
                     $state.go(getLogInRoute());
                 }

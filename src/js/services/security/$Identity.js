@@ -88,7 +88,7 @@ angular.module('gale.services')
                 _authResponse = null;
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 
-                if (settings.redirectToLoginPage)
+                if (settings && settings.redirectToLoginPage)
                 {
                     $state.go(getLogInRoute());
                 }
