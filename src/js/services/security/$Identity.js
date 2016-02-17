@@ -16,6 +16,8 @@ angular.module('gale.services')
         var _issuerEndpoint = null;
         var _logInRoute = null;
         var _enable = false;
+        var _redirectToLoginOnLogout = true;
+
         var _whiteListResolver = function()
         {
             return false; //Block All by default
@@ -31,6 +33,14 @@ angular.module('gale.services')
             _logInRoute = value;
             return $ref;
         };
+
+        this.redirectToLoginOnLogout = function(value)
+        {
+            _redirectToLoginOnLogout = value;
+            return $ref;
+        };
+
+
         this.enable = function()
         {
             _enable = true;
@@ -69,7 +79,7 @@ angular.module('gale.services')
             return _authorizeResolver;
         }
 
-        this.$get = function($rootScope, $Api, $state, $LocalStorage)
+        this.$get = function($rootScope, $Api, $state, $LocalStorage, $q)
         {
             var _token_key = "$_identity";
             var _properties = {};
@@ -88,7 +98,8 @@ angular.module('gale.services')
                 _authResponse = null;
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 
-                if (settings && settings.redirectToLoginPage)
+                //Redirect to login Page when Logout??
+                if (_redirectToLoginOnLogout)
                 {
                     $state.go(getLogInRoute());
                 }
@@ -152,18 +163,14 @@ angular.module('gale.services')
                     throw Error("OAUTHTOKEN_BADFORMAT: token_type (string)");
                 }
 
-                _login(oauthToken);
+                return _login(oauthToken);
             };
 
-            self.logOut = function(settings)
+            self.logOut = function()
             {
-                angular.extend(
-                {
-                    redirectToLoginPage: true
-                }, settings);
-
-                _logout(settings);
+                return _logout(settings);
             };
+            
             self.getCurrent = function()
             {
                 //Get Payload
