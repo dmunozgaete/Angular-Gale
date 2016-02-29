@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.8
- Build Date:        2016-02-17 16:06:16
+ Build Date:        2016-02-29 18:28:59
 ------------------------------------------------------*/
 
 (function(angular)
@@ -490,7 +490,7 @@ angular.module('gale.directives')
     };
 }]);
 ;angular.module('gale.directives')
-    .directive('ngNumber', ['$filter', '$locale', '$mdConstant', function($filter, $locale, $mdConstant)
+    .directive('ngNumber', ['$filter', '$locale', '$mdConstant', '$log', function($filter, $locale, $mdConstant, $log)
     {
         return {
             require: 'ngModel',
@@ -609,10 +609,15 @@ angular.module('gale.directives')
 
                 //------------------------------------------------------------
 
+                var isUndefinedOrNull = function(val)
+                {
+                    return angular.isUndefined(val) || val === null;
+                };
+
                 //CONVERT TO LOCALE FORMAT NUMBER
                 var toHuman = function(value)
                 {
-                    if (value)
+                    if (!isUndefinedOrNull(value))
                     {
                         return $filter(filter)(ctrl.$modelValue, configuration.decimals);
                     }
@@ -623,7 +628,7 @@ angular.module('gale.directives')
                 {
                     if (value)
                     {
-                        var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.GROUP_SEP + "]");
+                        var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.GROUP_SEP + "]", "ig");
                         value = value.replace(regExp, "");
 
                         return value;
@@ -633,6 +638,7 @@ angular.module('gale.directives')
                 //CONVERT TO NUMBER (FOR MODEL VALUE)
                 var toNumber = function(value)
                 {
+                    $log.debug(value);
                     if (value)
                     {
                         var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.DECIMAL_SEP + "]");
@@ -641,7 +647,6 @@ angular.module('gale.directives')
                         return value;
                     }
                 };
-
 
                 ctrl.$validators.validLength = function(modelValue, viewValue)
                 {

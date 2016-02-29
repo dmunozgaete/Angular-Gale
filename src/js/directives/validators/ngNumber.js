@@ -1,5 +1,5 @@
 angular.module('gale.directives')
-    .directive('ngNumber', function($filter, $locale, $mdConstant)
+    .directive('ngNumber', function($filter, $locale, $mdConstant, $log)
     {
         return {
             require: 'ngModel',
@@ -118,10 +118,15 @@ angular.module('gale.directives')
 
                 //------------------------------------------------------------
 
+                var isUndefinedOrNull = function(val)
+                {
+                    return angular.isUndefined(val) || val === null;
+                };
+
                 //CONVERT TO LOCALE FORMAT NUMBER
                 var toHuman = function(value)
                 {
-                    if (value)
+                    if (!isUndefinedOrNull(value))
                     {
                         return $filter(filter)(ctrl.$modelValue, configuration.decimals);
                     }
@@ -132,7 +137,7 @@ angular.module('gale.directives')
                 {
                     if (value)
                     {
-                        var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.GROUP_SEP + "]");
+                        var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.GROUP_SEP + "]", "ig");
                         value = value.replace(regExp, "");
 
                         return value;
@@ -142,6 +147,7 @@ angular.module('gale.directives')
                 //CONVERT TO NUMBER (FOR MODEL VALUE)
                 var toNumber = function(value)
                 {
+                    $log.debug(value);
                     if (value)
                     {
                         var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.DECIMAL_SEP + "]");
@@ -150,7 +156,6 @@ angular.module('gale.directives')
                         return value;
                     }
                 };
-
 
                 ctrl.$validators.validLength = function(modelValue, viewValue)
                 {
