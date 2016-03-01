@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.8
- Build Date:        2016-02-29 18:28:59
+ Build Date:        2016-03-01 13:32:29
 ------------------------------------------------------*/
 
 (function(angular)
@@ -1580,7 +1580,7 @@ angular.module('gale.directives')
             {
                 return _logout();
             };
-            
+
             self.getCurrent = function()
             {
                 //Get Payload
@@ -1617,11 +1617,13 @@ angular.module('gale.directives')
                 $Api.$on("before-send", function(headers)
                 {
                     //SET AUTHORIZATION HEADER IF USER IS AUTHENTICATED
-                    if (self.isAuthenticated())
+                    // IF CUSTOM HEADER IS SENDED, CHECK IF AUTH WAS NOT OVERRIDE
+                    if (self.isAuthenticated() && !headers.Authorization)
                     {
                         var jwt = _authResponse;
                         headers.Authorization = jwt.token_type + " " + jwt.access_token;
                     }
+                    
                 });
                 $Api.$on("error", function(data, status)
                 {

@@ -170,7 +170,7 @@ angular.module('gale.services')
             {
                 return _logout();
             };
-            
+
             self.getCurrent = function()
             {
                 //Get Payload
@@ -207,11 +207,13 @@ angular.module('gale.services')
                 $Api.$on("before-send", function(headers)
                 {
                     //SET AUTHORIZATION HEADER IF USER IS AUTHENTICATED
-                    if (self.isAuthenticated())
+                    // IF CUSTOM HEADER IS SENDED, CHECK IF AUTH WAS NOT OVERRIDE
+                    if (self.isAuthenticated() && !headers.Authorization)
                     {
                         var jwt = _authResponse;
                         headers.Authorization = jwt.token_type + " " + jwt.access_token;
                     }
+                    
                 });
                 $Api.$on("error", function(data, status)
                 {
