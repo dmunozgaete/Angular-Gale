@@ -22,7 +22,7 @@ angular.module('gale.services')
             builder.push("$select=");
             //---------------------------------
             arr = [];
-            angular.forEach(function(key)
+            angular.forEach(configuration.select,function(key)
             {
                 arr.push(key);
             });
@@ -32,7 +32,7 @@ angular.module('gale.services')
         }
 
         //FILTER
-        if (configuration.filters)
+        if (configuration.filters && configuration.filters.length>0)
         {
             builder.push("$filter=");
             //---------------------------------

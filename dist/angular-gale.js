@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.0.0-rc.8
- Build Date:        2016-03-01 13:32:29
+ Build Date:        2016-04-21 15:11:28
 ------------------------------------------------------*/
 
 (function(angular)
@@ -1342,7 +1342,7 @@ angular.module('gale.directives')
             builder.push("$select=");
             //---------------------------------
             arr = [];
-            angular.forEach(function(key)
+            angular.forEach(configuration.select,function(key)
             {
                 arr.push(key);
             });
@@ -1352,7 +1352,7 @@ angular.module('gale.directives')
         }
 
         //FILTER
-        if (configuration.filters)
+        if (configuration.filters && configuration.filters.length>0)
         {
             builder.push("$filter=");
             //---------------------------------
