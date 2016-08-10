@@ -20,7 +20,7 @@
         clear: function () {
             $window.localStorage.clear();
         },
-        exists: function (name){
+        exists: function (key){
              return $window.localStorage[key] != null;
         }
     };
