@@ -1,32 +1,25 @@
 angular.module('gale.directives')
-    .directive('ngNumber', function($filter, $locale, $mdConstant, $log)
-    {
+    .directive('ngNumber', function($filter, $locale, $log) {
         return {
             require: 'ngModel',
             restrict: 'A',
-            scope:
-            {
+            scope: {
                 ngNumberOptions: '=?'
             },
-            link: function(scope, elm, attrs, ctrl)
-            {
+            link: function(scope, elm, attrs, ctrl) {
                 //Default Configuration
-                var configuration = angular.extend(
-                {
+                var configuration = angular.extend({
                     decimals: 0,
                     integers: 9,
                     format: true,
-                }, (scope.ngNumberOptions ||
-                {}));
+                }, (scope.ngNumberOptions || {}));
 
                 var filter = "number";
                 var isReadonly = attrs.readonly;
 
                 //WHEN USER LEAVES, FORMAT TO HUMAN READ
-                elm.bind('blur', function(event)
-                {
-                    if (configuration.format)
-                    {
+                elm.bind('blur', function(event) {
+                    if (configuration.format) {
                         //CHANGE TO HUMAN EASY READ
                         ctrl.$viewValue = toHuman(ctrl.$modelValue);
                         ctrl.$render();
@@ -34,10 +27,8 @@ angular.module('gale.directives')
                 });
 
                 //WHEN USER ACTIVATE THE INPUT, FORMAT FOR ENTRY DATA
-                elm.bind('focus', function(event)
-                {
-                    if (!isReadonly)
-                    {
+                elm.bind('focus', function(event) {
+                    if (!isReadonly) {
                         //CHANGE FOR READY TO INPUT DATA
                         ctrl.$viewValue = prepareForEntry(ctrl.$viewValue);
                         ctrl.$render();
@@ -47,15 +38,34 @@ angular.module('gale.directives')
 
                 //------------------------------------------------------------
                 //ACCEPT ONLY AVAILABLE KEY'S (NUMBER AND SOME SYMBOL'S)
-                var stopPropagation = function()
-                {
+                var stopPropagation = function() {
                     event.preventDefault();
                     event.stopPropagation();
                     return false;
                 };
 
-                elm.bind('keydown', function(event)
-                {
+                var $mdConstant = {
+                    KEY_CODE: {
+                        COMMA: 188,
+                        SEMICOLON: 186,
+                        ENTER: 13,
+                        ESCAPE: 27,
+                        SPACE: 32,
+                        PAGE_UP: 33,
+                        PAGE_DOWN: 34,
+                        END: 35,
+                        HOME: 36,
+                        LEFT_ARROW: 37,
+                        UP_ARROW: 38,
+                        RIGHT_ARROW: 39,
+                        DOWN_ARROW: 40,
+                        TAB: 9,
+                        BACKSPACE: 8,
+                        DELETE: 46
+                    }
+                };
+
+                elm.bind('keydown', function(event) {
                     var keyCode = event.which || event.keyCode;
 
                     //ENABLE PASTE AND COPY AND CUT
@@ -65,8 +75,7 @@ angular.module('gale.directives')
                     // C = 67 Keycode
                     // X = 88 Keycode
                     if ((event.ctrlKey || event.metaKey) &&
-                        (keyCode === 86 || keyCode === 67 || keyCode === 88))
-                    {
+                        (keyCode === 86 || keyCode === 67 || keyCode === 88)) {
                         return true;
                     }
 
@@ -85,32 +94,27 @@ angular.module('gale.directives')
                             //0-9
                             (event.keyCode >= 48 && event.keyCode <= 57) ||
                             //KEYPAD 0-9
-                            (event.keyCode >= 96 && event.keyCode <= 105)))
-                    {
+                            (event.keyCode >= 96 && event.keyCode <= 105))) {
                         return stopPropagation();
                     }
 
                 });
 
                 //CHECK SOME VALIDATION
-                elm.bind('keypress', function(event)
-                {
+                elm.bind('keypress', function(event) {
                     var keyCode = event.which || event.keyCode;
                     var charPressed = String.fromCharCode(keyCode);
 
                     //Only Allow 1 Decimal Separator in the input
-                    if ($locale.NUMBER_FORMATS.DECIMAL_SEP === charPressed)
-                    {
+                    if ($locale.NUMBER_FORMATS.DECIMAL_SEP === charPressed) {
                         //IF THE DECIMALS IS 0 , THEN BLOCK THE COMMA :P!!
-                        if (configuration.decimals <= 0)
-                        {
+                        if (configuration.decimals <= 0) {
                             return stopPropagation();
                         }
 
                         //ONLY 1 DECIMAL SEPARATOR IS ACCEPTED  :P
                         var hasSeparator = ctrl.$viewValue.indexOf(",") > 0;
-                        if (hasSeparator)
-                        {
+                        if (hasSeparator) {
                             return stopPropagation();
                         }
                     }
@@ -118,25 +122,20 @@ angular.module('gale.directives')
 
                 //------------------------------------------------------------
 
-                var isUndefinedOrNull = function(val)
-                {
+                var isUndefinedOrNull = function(val) {
                     return angular.isUndefined(val) || val === null;
                 };
 
                 //CONVERT TO LOCALE FORMAT NUMBER
-                var toHuman = function(value)
-                {
-                    if (!isUndefinedOrNull(value))
-                    {
+                var toHuman = function(value) {
+                    if (!isUndefinedOrNull(value)) {
                         return $filter(filter)(ctrl.$modelValue, configuration.decimals);
                     }
                 };
 
                 //CONVERT TO INPUT READY STRING
-                var prepareForEntry = function(value)
-                {
-                    if (value)
-                    {
+                var prepareForEntry = function(value) {
+                    if (value) {
                         var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.GROUP_SEP + "]", "ig");
                         value = value.replace(regExp, "");
 
@@ -145,11 +144,8 @@ angular.module('gale.directives')
                 };
 
                 //CONVERT TO NUMBER (FOR MODEL VALUE)
-                var toNumber = function(value)
-                {
-                    $log.debug(value);
-                    if (value)
-                    {
+                var toNumber = function(value) {
+                    if (value) {
                         var regExp = new RegExp("[" + $locale.NUMBER_FORMATS.DECIMAL_SEP + "]");
                         value = parseFloat(value.replace(regExp, "."));
 
@@ -157,17 +153,13 @@ angular.module('gale.directives')
                     }
                 };
 
-                ctrl.$validators.validLength = function(modelValue, viewValue)
-                {
+                ctrl.$validators.validLength = function(modelValue, viewValue) {
                     // CHECK THE INTEGER PART!
-                    if (configuration.integers > 0 && modelValue)
-                    {
+                    if (configuration.integers > 0 && modelValue) {
                         var parts = (modelValue + "").split(".");
 
-                        if (configuration.integers > 0)
-                        {
-                            if (parts[0].length > configuration.integers)
-                            {
+                        if (configuration.integers > 0) {
+                            if (parts[0].length > configuration.integers) {
                                 ctrl.$viewValue = viewValue;
                                 return false;
                             }
@@ -179,8 +171,7 @@ angular.module('gale.directives')
                 };
 
                 //DISABLE FORMAT WHEN USER DISABLE
-                if (configuration.format)
-                {
+                if (configuration.format) {
                     //PARSE VIEW VALUE WHEN VIEW VALUE CHANGES
                     ctrl.$formatters.push(toHuman);
                 }

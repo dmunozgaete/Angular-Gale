@@ -173,6 +173,8 @@ angular.module('gale.services')
 
             self.getCurrent = function()
             {
+                var data = null;
+                
                 //Get Payload
                 var payload = self.getAccessToken().split('.')[1];
                 if (atob)

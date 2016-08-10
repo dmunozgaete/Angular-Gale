@@ -72,19 +72,20 @@
         //------------------------------------------------------------------------------
         self.parseURI = function(cfg, body)
         {
-
+            var cloned_body = angular.copy(body);
+            
             //Has Any Replacement Character??
             if (cfg.url.indexOf("{") >= 0)
             {
                 //Check Each Parameter for matching in the URI
                 var parametersToRemove = [];
-                for (var parameter in body)
+                for (var parameter in cloned_body)
                 {
                     var regex = new RegExp("\{" + parameter + "\}", "g");
 
                     if (regex.test(cfg.url))
                     {
-                        var value = body[parameter];
+                        var value = cloned_body[parameter];
                         if (typeof value === "undefined")
                         {
                             throw Error("URI_PARAMETER_UNDEFINED: " + parameter);
@@ -97,16 +98,16 @@
                 //Remove Each Parameter we use to build the URI
                 angular.forEach(parametersToRemove, function(parameter)
                 {
-                    delete body[parameter];
+                    delete cloned_body[parameter];
                 });
 
                 //If the method is [POST or PUT], check the coherence with the
                 // RESTful restriction:
                 //    You can't send more than one parameter in the payload
                 //    (Only one entity can pass in the payload accord to the RESTFul Principales)
-                if (body && cfg.method === "POST" || cfg.method === "PUT")
+                if (cloned_body && cfg.method === "POST" || cfg.method === "PUT")
                 {
-                    var keys = Object.keys(body);
+                    var keys = Object.keys(cloned_body);
 
                     if (keys.length >= 2)
                     {
@@ -115,7 +116,7 @@
 
                     if (keys.length === 1)
                     {
-                        body = body[keys[0]];
+                        cloned_body = cloned_body[keys[0]];
                     }
                 }
 
@@ -123,7 +124,7 @@
 
 
             //Add Others Params on the URL or in the payload Body
-            cfg[(cfg.method === "GET" ? "params" : "data")] = body;
+            cfg[(cfg.method === "GET" ? "params" : "data")] = cloned_body;
 
             return cfg;
         };
