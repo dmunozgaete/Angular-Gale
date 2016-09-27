@@ -1,5 +1,5 @@
 /*------------------------------------------------------
- Company:           Valentys Ltda.
+ Company:           Gale Framework
  Author:            David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)
  
  Description:       Event Handler Implementation for all Classes which need "Fire Events"

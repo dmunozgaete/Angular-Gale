@@ -1,6 +1,6 @@
 {
   "name": "angular-gale",
-  "version": "1.0.0-rc.8",
+  "version": "1.0.0",
   "homepage": "https://github.com/dmunozgaete/angular-gale",
   "authors": [
     "David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)"
@@ -15,7 +15,6 @@
   "keywords": [
     "Gale",
     "AngularJS",
-    "Valentys",
     "Angular",
     "DmunozGaete"
   ],

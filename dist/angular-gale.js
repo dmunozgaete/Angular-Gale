@@ -1,25 +1,20 @@
 /*------------------------------------------------------
- Company:           Valentys Ltda.
+ Company:           Gale Framework
  Author:            David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)
  
  Description:       Angular Implementation for the Javascript Client GALE
  Github:            https://github.com/dmunozgaete/angular-gale
 
- Versión:           1.0.0-rc.8
- Build Date:        2016-08-28 16:27:33
+ Versión:           1.0.0
+ Build Date:        2016-09-26 19:14:55
 ------------------------------------------------------*/
 
-(function(angular)
-{
+(function(angular) {
     var registered_routes = [];
-    var getLogger = function()
-    {
-        if (!this.$log)
-        {
-            var $injector = angular.injector(['ng']);
-            this.$log = $injector.get('$log');
-        }
-        return this.$log;
+
+    var getLogger = function() {
+        var $injector = angular.injector(['ng']);
+        return $injector.get('$log');
     };
     /**
      * Create "method" function to prototypes existing Classes
@@ -28,8 +23,7 @@
      * @param func {string} function to extend
      * @returns Object extended.
      */
-    Function.prototype.method = function(name, func)
-    {
+    Function.prototype.method = function(name, func) {
         this.prototype[name] = func;
         return this;
     };
@@ -41,19 +35,14 @@
      * @param dependencies {array} list of modules this module depends upon.
      * @returns {*} the created/existing module.
      */
-    angular.manifiest = function(bundle, namespaces, dependencies)
-    {
+    angular.manifiest = function(bundle, namespaces, dependencies) {
         //Create the namespace via angular style
-        angular.forEach(namespaces, function(name)
-        {
+        angular.forEach(namespaces, function(name) {
 
             //Angular don't have "exists" method, so , try and catch =(
-            try
-            {
+            try {
                 angular.module(name);
-            }
-            catch (err)
-            {
+            } catch (err) {
                 angular.module(name, dependencies || []);
             }
 
@@ -69,30 +58,26 @@
      * @param view {string} View Identifier , to configure the controller and template
      * @returns {*}.
      */
-    angular.route = function(route, controller, view)
-    {
+    angular.route = function(route, controller, view) {
         var separator = "/";
         var parameter_separator = "/:";
         var layout_separator = ".";
         var logger = getLogger();
         var default_document = "/index";
-        if (!route)
-        {
+        if (!route) {
             logger.error("route value is required");
         }
         var layout = "";
         var module = route.substring(0, route.indexOf(separator));
         var path = route.substring(route.indexOf(separator) + 1);
         var viewName = "content"; //Default View Name to Place in Route
-        if (view && view.length > 0)
-        {
+        if (view && view.length > 0) {
             //Override the view Name wich configure the route
             viewName = view;
         }
 
         //Exist's Layout inheritance??
-        if (module.indexOf(layout_separator) > 0)
-        {
+        if (module.indexOf(layout_separator) > 0) {
             var baseParts = module.split(layout_separator);
             layout = baseParts[0];
             module = baseParts[1];
@@ -108,8 +93,7 @@
         var isDefaultDocument = false;
 
         // "/index" => replace for default page
-        if (url.endsWith(default_document))
-        {
+        if (url.endsWith(default_document)) {
             var regex = new RegExp(default_document, "ig");
             url = url.replace(regex, "");
             route = route.replace(regex, "");
@@ -117,33 +101,27 @@
         }
 
         //has parameter's bindng in url??
-        if (route.indexOf(parameter_separator) >= 0)
-        {
+        if (route.indexOf(parameter_separator) >= 0) {
             viewPath = viewPath.substring(0, viewPath.indexOf(parameter_separator)) + ".html";
             route = route.substring(0, route.indexOf(parameter_separator));
         }
 
 
-        var add = function(url, route)
-        {
+        var add = function(url, route) {
 
             var config = null;
-            if (layout === "")
-            {
+            if (layout === "") {
                 //Config Without Layout Base Content
                 config = {
                     url: url,
                     templateUrl: viewPath,
                     controller: controller
                 };
-            }
-            else
-            {
+            } else {
                 //Config With Layout Template's
                 config = {
                     url: url,
-                    views:
-                    {}
+                    views: {}
                 };
 
                 //add the view Name wich load the view
@@ -154,8 +132,7 @@
 
             }
 
-            registered_routes.push(
-            {
+            registered_routes.push({
                 route: route,
                 config: config
             });
@@ -166,8 +143,7 @@
 
         //When the page is default Document, add two url for the same controller
         // and template: {url}/index && {url}
-        if (isDefaultDocument)
-        {
+        if (isDefaultDocument) {
             add(url + default_document, route + default_document);
         }
 
@@ -177,51 +153,39 @@
         String.format Like c# Utility
         https://msdn.microsoft.com/es-es/library/system.string.format%28v=vs.110%29.aspx
      */
-    var format = function(template, values, pattern)
-    {
+    var format = function(template, values, pattern) {
         pattern = pattern || /\{([^\{\}]*)\}/g;
-        return template.replace(pattern, function(a, b)
-        {
+        return template.replace(pattern, function(a, b) {
             var p = b.split('.'),
                 r = values;
-            try
-            {
-                for (var s in p)
-                {
+            try {
+                for (var s in p) {
                     r = r[p[s]];
                 }
-            }
-            catch (e)
-            {
+            } catch (e) {
                 r = a;
             }
             return (typeof r === 'string' || typeof r === 'number') ? r : a;
         });
     };
-    var endsWith = function(template, value)
-    {
+    var endsWith = function(template, value) {
         /*jslint eqeq: true*/
         return template.match(value + "$") == value;
     };
-    var startsWith = function(template, value)
-    {
+    var startsWith = function(template, value) {
         return template.indexOf(value) === 0;
     };
-    String.method("format", function(values, pattern)
-    {
+    String.method("format", function(values, pattern) {
         return format(this, values, pattern);
     });
-    String.method("endsWith", function(value)
-    {
+    String.method("endsWith", function(value) {
         return endsWith(this, value);
     });
-    String.method("startsWith", function(value)
-    {
+    String.method("startsWith", function(value) {
         return startsWith(this, value);
     });
     //MANUAL BOOTSTRAP
-    angular.element(document).ready(function()
-    {
+    angular.element(document).ready(function() {
 
         //Namespace Searching
         var application_bundle = "App";
@@ -233,8 +197,7 @@
         //ENVIRONMENT CONFIGURATION
         var environment = (INITIAL_CONFIGURATION.application.environment + "").toLowerCase();
         $http.get('config/env/' + environment + '.json')
-            .success(function(ENVIRONMENT_CONFIGURATION)
-            {
+            .success(function(ENVIRONMENT_CONFIGURATION) {
                 //MERGE CONFIGURATION'S
                 var CONFIGURATION = angular.extend(INITIAL_CONFIGURATION, ENVIRONMENT_CONFIGURATION);
 
@@ -244,22 +207,18 @@
                 //RESOURCES LOCALIZATION
                 var lang = (INITIAL_CONFIGURATION.application.language + "").toLowerCase();
                 $http.get('config/locale/' + lang + '.json')
-                    .success(function(data)
-                    {
+                    .success(function(data) {
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
 
                         //ROUTE REGISTRATION STEP
-                        angular.module(application_bundle).config(['$stateProvider', function($stateProvider)
-                        {
-                            angular.forEach(registered_routes, function(route)
-                            {
+                        angular.module(application_bundle).config(['$stateProvider', function($stateProvider) {
+                            angular.forEach(registered_routes, function(route) {
                                 // Inject State
                                 $stateProvider.state(route.route, route.config);
 
                                 // Register a 'angular like' route
-                                if (CONFIGURATION.debugging)
-                                {
+                                if (CONFIGURATION.debugging) {
                                     logger.debug("route:", route);
                                 }
 
@@ -271,14 +230,12 @@
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
                     })
-                    .error(function(data, status, headers, config)
-                    {
+                    .error(function(data, status, headers, config) {
                         logger.error("Can't get resources file (config/resources/" + lang + ".json)");
                     });
                 //--------------------------------------------------------------------------------------------------------------------
             })
-            .error(function(data, status, headers, config)
-            {
+            .error(function(data, status, headers, config) {
                 logger.error("Can't get configuration file (config/env/" + environment + ".json)");
             });
         //--------------------------------------------------------------------------------------------------------------------
@@ -289,7 +246,7 @@
 
 }]);
 ;//------------------------------------------------------
-// Company: Valentys Ltda.
+// Company: Gale Framework
 // Author: dmunozgaete@gmail.com
 // 
 // Description: Angular Gale Implementation
@@ -297,7 +254,7 @@
 // URL: https://github.com/dmunozgaete/angular-gale
 // 
 // Documentation:
-//      http://angular-gale-docs.azurewebsites.net/
+//      http://angular-gale.azurewebsites.net/
 //------------------------------------------------------
 angular.manifiest('gale', [
     'gale.classes',
@@ -308,7 +265,7 @@ angular.manifiest('gale', [
     'gale.services.configuration',
     'gale.services.rest',
     'gale.services.storage',
-    'gale.classes'
+    'gale.components'
 ], [
     'ui.router' //NG ROUTE
 ])
@@ -350,7 +307,7 @@ angular.manifiest('gale', [
 
 }]);
 ;/*------------------------------------------------------
- Company:           Valentys Ltda.
+ Company:           Gale Framework
  Author:            David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)
  
  Description:       Event Handler Implementation for all Classes which need "Fire Events"
@@ -883,13 +840,13 @@ angular.module('gale.directives')
         };
     }]);
 ;angular.module('gale.filters')
-.filter('capitalize', function() {
-    return function(input, all) {
-        return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        }) : '';
-    };
-});
+    .filter('capitalize', function() {
+        return function(input, all) {
+            return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }) : '';
+        };
+    });
 ;angular.module('gale.filters')	
 
 .filter('localize', ['$Localization', '$log', '$interpolate', function ($Localization, $log, $interpolate) {
@@ -1049,8 +1006,7 @@ angular.module('gale.directives')
 }]);
 ;angular.module('gale.services')
 
-.provider('$Api', function()
-{
+.provider('$Api', function() {
 
     //---------------------------------------------------
     //Configurable Variable on .config Step
@@ -1061,57 +1017,47 @@ angular.module('gale.directives')
         ERROR: 'error'
     };
 
-    this.setEndpoint = function(endpoint)
-    {
+    this.setEndpoint = function(endpoint) {
         _endpoint = endpoint;
     };
     //---------------------------------------------------
 
     //---------------------------------------------------
-    this.$get = ['$rootScope', '$http', '$log', 'QueryableBuilder', '$q', function($rootScope, $http, $log, QueryableBuilder, $q)
-    {
+    this.$get = ['$rootScope', '$http', '$log', 'QueryableBuilder', '$q', '$httpParamSerializer', function($rootScope, $http, $log, QueryableBuilder, $q, $httpParamSerializer) {
         var self = this;
 
         //------------------------------------------------------------------------------
         // EVENT IMPLEMENTATION
         var $$listeners = {};
-        self.$on = function(name, listener)
-        {
+        self.$on = function(name, listener) {
 
             var namedListeners = $$listeners[name];
-            if (!namedListeners)
-            {
+            if (!namedListeners) {
                 $$listeners[name] = namedListeners = [];
             }
             namedListeners.push(listener);
 
             //de-register Function
-            return function()
-            {
+            return function() {
                 namedListeners[indexOf(namedListeners, listener)] = null;
             };
         };
 
-        var fire = function(name, args)
-        {
+        var fire = function(name, args) {
             var listeners = $$listeners[name];
-            if (!listeners)
-            {
+            if (!listeners) {
                 return;
             }
 
-            angular.forEach(listeners, function(listener)
-            {
+            angular.forEach(listeners, function(listener) {
                 listener.apply(listener, args);
             });
         };
         //------------------------------------------------------------------------------
 
         //------------------------------------------------------------------------------
-        self.getEndpoint = function(value)
-        {
-            if (!_endpoint)
-            {
+        self.getEndpoint = function(value) {
+            if (!_endpoint) {
                 throw Error("ENDPOINT_NOT_CONFIGURED");
             }
             return _endpoint;
@@ -1119,24 +1065,19 @@ angular.module('gale.directives')
         //------------------------------------------------------------------------------
 
         //------------------------------------------------------------------------------
-        self.parseURI = function(cfg, body)
-        {
+        self.parseURI = function(cfg, body) {
             var cloned_body = angular.copy(body);
-            
+
             //Has Any Replacement Character??
-            if (cfg.url.indexOf("{") >= 0)
-            {
+            if (cfg.url.indexOf("{") >= 0) {
                 //Check Each Parameter for matching in the URI
                 var parametersToRemove = [];
-                for (var parameter in cloned_body)
-                {
+                for (var parameter in cloned_body) {
                     var regex = new RegExp("\{" + parameter + "\}", "g");
 
-                    if (regex.test(cfg.url))
-                    {
+                    if (regex.test(cfg.url)) {
                         var value = cloned_body[parameter];
-                        if (typeof value === "undefined")
-                        {
+                        if (typeof value === "undefined") {
                             throw Error("URI_PARAMETER_UNDEFINED: " + parameter);
                         }
                         cfg.url = cfg.url.replace("{" + parameter + "}", value.toString());
@@ -1145,8 +1086,7 @@ angular.module('gale.directives')
                 }
 
                 //Remove Each Parameter we use to build the URI
-                angular.forEach(parametersToRemove, function(parameter)
-                {
+                angular.forEach(parametersToRemove, function(parameter) {
                     delete cloned_body[parameter];
                 });
 
@@ -1154,23 +1094,28 @@ angular.module('gale.directives')
                 // RESTful restriction:
                 //    You can't send more than one parameter in the payload
                 //    (Only one entity can pass in the payload accord to the RESTFul Principales)
-                if (cloned_body && cfg.method === "POST" || cfg.method === "PUT")
-                {
+                if (cloned_body && cfg.method === "POST" || cfg.method === "PUT") {
                     var keys = Object.keys(cloned_body);
 
-                    if (keys.length >= 2)
-                    {
+                    if (keys.length >= 2) {
                         throw Error("RESTFUL_RESTRICTION: ONLY_ONE_PARAMETER_IS_PERMITTED_IN_PAYLOAD");
                     }
 
-                    if (keys.length === 1)
-                    {
+                    if (keys.length === 1) {
                         cloned_body = cloned_body[keys[0]];
                     }
                 }
 
             }
 
+            // If the content-type is "application/x-www-form-urlencoded"
+            // parse to properly format
+            var contentType = cfg.headers['Content-Type'];
+            if (cfg.method !== "GET" && contentType && contentType === "application/x-www-form-urlencoded") {
+
+                //Parse to form data format (string)
+                cloned_body = $httpParamSerializer(cloned_body);
+            }
 
             //Add Others Params on the URL or in the payload Body
             cfg[(cfg.method === "GET" ? "params" : "data")] = cloned_body;
@@ -1182,18 +1127,15 @@ angular.module('gale.directives')
 
 
         //------------------------------------------------------------------------------
-        self.invoke = function(method, url, body, headers)
-        {
+        self.invoke = function(method, url, body, headers) {
             var defer = $q.defer();
             var _headers = {
                 'Content-Type': 'application/json'
             };
 
             //Custom Header's??
-            if (headers)
-            {
-                for (var name in headers)
-                {
+            if (headers) {
+                for (var name in headers) {
                     _headers[name] = headers[name];
                 }
             }
@@ -1203,37 +1145,31 @@ angular.module('gale.directives')
             fire(EVENTS.BEFORE_SEND, [_headers, url, body]);
             //---------------------------------------------------
 
-            //Supposing is a Fragment and need to use the API
-            var fullURL = self.getEndpoint() + url;
-
-            //Url is a valid URL ??
-            var regex = /(http|https):\/\//;
-            if (regex.test(url))
-            {
-                fullURL = url;
-            }
-
             var cfg = {
-                url: fullURL,
+                url: url,
                 method: method,
                 headers: _headers
             };
-
             self.parseURI(cfg, body);
+
+            //Url is a valid URL ??
+            var regex = /(http|https):\/\//;
+            if (!regex.test(cfg.url)) {
+                //Supposing is a Fragment and need to use the API
+                cfg.url = self.getEndpoint() + cfg.url;
+            }
 
 
             $log.debug("[" + method + " " + url + "] parameters: ", body);
 
             var http = $http(cfg)
-                .success(function(data, status, headers, config)
-                {
+                .success(function(data, status, headers, config) {
                     defer.resolve(data);
                     //---------------------------------------------------
                     fire(EVENTS.SUCCESS, [data, status, headers]);
                     //---------------------------------------------------
                 })
-                .error(function(data, status, headers, config)
-                {
+                .error(function(data, status, headers, config) {
                     defer.reject(data);
 
                     //---------------------------------------------------
@@ -1253,8 +1189,7 @@ angular.module('gale.directives')
 
         //------------------------------------------------------------------------------
         //CRUD: GET OPERATION
-        self.kql = function(url, kql, headers)
-        {
+        self.kql = function(url, kql, headers) {
 
             //Has OData Configuration???
             url = QueryableBuilder.build(url, kql);
@@ -1272,8 +1207,7 @@ angular.module('gale.directives')
 
         //------------------------------------------------------------------------------
         //CRUD: CREATE OPERATION
-        self.create = function(url, body, headers)
-        {
+        self.create = function(url, body, headers) {
             return self.invoke('POST', url, body, headers);
         };
         //------------------------------------------------------------------------------
@@ -1281,8 +1215,7 @@ angular.module('gale.directives')
 
         //------------------------------------------------------------------------------
         //CRUD: GET OPERATION
-        self.read = function(url, parameters, headers)
-        {
+        self.read = function(url, parameters, headers) {
             return self.invoke('GET', url, parameters, headers);
         };
         //------------------------------------------------------------------------------
@@ -1290,8 +1223,7 @@ angular.module('gale.directives')
 
         //------------------------------------------------------------------------------
         //CRUD: UPDATE OPERATION
-        self.update = function(url, body, headers)
-        {
+        self.update = function(url, body, headers) {
             return self.invoke('PUT', url, body, headers);
         };
         //------------------------------------------------------------------------------
@@ -1299,8 +1231,7 @@ angular.module('gale.directives')
 
         //------------------------------------------------------------------------------
         //CRUD: DELETE OPERATION
-        self.delete = function(url, parameters, headers)
-        {
+        self.delete = function(url, parameters, headers) {
             return self.invoke('DELETE', url, parameters, headers);
         };
         //------------------------------------------------------------------------------
@@ -1413,11 +1344,18 @@ angular.module('gale.directives')
             notAuthenticated: 'auth-not-authenticated',
             notAuthorized: 'auth-not-authorized'
         };
+        var FLOW_TYPES = {
+            oauth2: 'oauth2',
+            basic: 'basic',
+            custom: 'custom'
+        };
+
         //Configurable Variable on .config Step
         var _issuerEndpoint = null;
         var _logInRoute = null;
         var _enable = false;
         var _redirectToLoginOnLogout = true;
+        var _authenticationFlow = FLOW_TYPES.custom;
 
         var _whiteListResolver = function() {
             return false; //Block All by default
@@ -1431,13 +1369,14 @@ angular.module('gale.directives')
             _logInRoute = value;
             return $ref;
         };
-
+        this.setAuthenticationFlow = function(value) {
+            _authenticationFlow = (value || "").toLowerCase();
+            return $ref;
+        };
         this.redirectToLoginOnLogout = function(value) {
             _redirectToLoginOnLogout = value;
             return $ref;
         };
-
-
         this.enable = function() {
             _enable = true;
             return $ref;
@@ -1494,14 +1433,57 @@ angular.module('gale.directives')
                 _properties[name] = value;
             };
             //------------------------------------------------------------------------------
-            self.authenticate = function(credentials) {
-                return $Api.invoke('POST', getIssuerEndpoint(), credentials)
-                    .success(function(data) {
-                        self.logIn(data); //Internal Authentication
-                    })
-                    .error(function() {
-                        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                    });
+            self.authenticate = function(parameters, authenticationFlow) {
+                //overrides??
+                var _flowType = authenticationFlow || _authenticationFlow;
+                var defer = $q.defer();
+
+                switch (_flowType) {
+                    case FLOW_TYPES.custom:
+                        $Api.invoke('POST', getIssuerEndpoint(), parameters)
+                            .success(function(data) {
+                                self.logIn(data); //Internal Authentication
+                                defer.resolve(data);
+                            })
+                            .error(function(ex) {
+                                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                                defer.reject(ex);
+                            });
+                        break;
+                    case FLOW_TYPES.basic:
+                        //According to the RFC 6749
+                        //  https://tools.ietf.org/html/rfc6749#section-4.4
+                        var grant_type = (parameters.grant_type || "password");
+                        var body = {
+                            grant_type: grant_type
+                        };
+
+                        //base64(username:password)
+                        var base64String = btoa("{0}:{1}".format([
+                            parameters.username,
+                            parameters.password
+                        ]));
+
+                        var headers = {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "Authorization": "Basic " + base64String
+                        };
+
+                        $Api.invoke('POST', getIssuerEndpoint(), body, headers)
+                            .success(function(data) {
+                                self.logIn(data); //Internal Authentication
+                                defer.resolve(data);
+                            })
+                            .error(function(ex) {
+                                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                                defer.reject(ex);
+                            });
+                        break;
+                    default:
+                        throw Error("NotImplementedFlowException");
+                }
+
+                return defer.promise;
             };
             self.extend = function(name, value) {
                 if (typeof name === "object") {
@@ -1521,19 +1503,11 @@ angular.module('gale.directives')
             self.logIn = function(oauthToken) {
                 //Check OAuthToken Format
                 if (!oauthToken.access_token) {
-                    throw Error("OAUTHTOKEN_BADFORMAT: access_token (jwt)");
+                    throw Error("JWT_TOKEN_BADFORMAT: access_token (jwt)");
                 }
-
-                //NOT ALWAYS REQUIRED ;)!
-                /*
-                if (!oauthToken.expires_in)
-                {
-                    throw Error("OAUTHTOKEN_BADFORMAT: expires_in (unixTime)");
-                }
-                */
 
                 if (!oauthToken.token_type) {
-                    throw Error("OAUTHTOKEN_BADFORMAT: token_type (string)");
+                    throw Error("JWT_TOKEN_BADFORMAT: token_type (string)");
                 }
 
                 return _login(oauthToken);
@@ -1648,127 +1622,4 @@ angular.module('gale.directives')
              return $window.localStorage[key] != null;
         }
     };
-}]);;angular.module('gale.services')
-
-.factory("$Timer", ['$timeout', function( $timeout ) {
-
-    // I provide a simple wrapper around the core $timeout that allows for
-    // the timer to be easily reset.
-    function Timer( callback, duration, invokeApply ) {
-
-        var self = this;
-
-        // Store properties.
-        this._callback = callback;
-        this._duration = ( duration || 0 );
-        this._invokeApply = ( invokeApply !== false );
-
-        // I hold the $timeout promise. This will only be non-null when the
-        // timer is actively counting down to callback invocation.
-        this._timer = null;
-
-    }
-
-    // Define the instance methods.
-    Timer.prototype = {
-
-        // Set constructor to help with instanceof operations.
-        constructor: Timer,
-
-
-        // I determine if the timer is currently counting down.
-        isActive: function() {
-
-            return( !! this._timer );
-
-        },
-
-
-        // I stop (if it is running) and then start the timer again.
-        restart: function() {
-
-            this.stop();
-            this.start();
-
-        },
-
-        flush: function(){
-            if(this._resolveFunction){
-                this._resolveFunction();
-            }
-        },
-
-        // I start the timer, which will invoke the callback upon timeout.
-        start: function() {
-
-            var self = this;
-
-            if(self._timer){
-               self.stop();    //Destroy any previously timer;
-            }
-
-
-            // NOTE: Instead of passing the callback directly to the timeout,
-            // we're going to wrap it in an anonymous function so we can set
-            // the enable flag. We need to do this approach, rather than
-            // binding to the .then() event since the .then() will initiate a
-            // digest, which the user may not want.
-            this._timer = $timeout(
-                function handleTimeoutResolve() {
-                    try {
-                        self._callback.call( null );
-                    } finally {
-                        self._timer = null;
-                    }
-
-                },
-                this._duration,
-                this._invokeApply
-            );
-
-        },
-
-
-        // I stop the current timer, if it is running, which will prevent the
-        // callback from being invoked.
-        stop: function() {
-
-            $timeout.cancel( this._timer );
-
-            this._timer = false;
-
-        },
-
-
-        // I clean up the internal object references to help garbage
-        // collection (hopefully).
-        destroy: function() {
-
-            this.stop();
-            this._callback = null;
-            this._duration = null;
-            this._invokeApply = null;
-            this._timer = null;
-
-        }
-
-    };
-
-
-    // Create a factory that will call the constructor. This will simplify
-    // the calling context.
-    function timerFactory( callback, duration, invokeApply ) {
-
-        return( new Timer( callback, duration, invokeApply ) );
-
-    }
-
-    // Store the actual constructor as a factory property so that it is still
-    // accessible if anyone wants to use it directly.
-    timerFactory.Timer = Timer;
-
-
-    // Return the factory.
-    return( timerFactory );
-
 }]);
