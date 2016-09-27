@@ -11,11 +11,18 @@ angular.module('gale.services')
             notAuthenticated: 'auth-not-authenticated',
             notAuthorized: 'auth-not-authorized'
         };
+        var FLOW_TYPES = {
+            oauth2: 'oauth2',
+            basic: 'basic',
+            custom: 'custom'
+        };
+
         //Configurable Variable on .config Step
         var _issuerEndpoint = null;
         var _logInRoute = null;
         var _enable = false;
         var _redirectToLoginOnLogout = true;
+        var _authenticationFlow = FLOW_TYPES.custom;
 
         var _whiteListResolver = function() {
             return false; //Block All by default
@@ -29,13 +36,14 @@ angular.module('gale.services')
             _logInRoute = value;
             return $ref;
         };
-
+        this.setAuthenticationFlow = function(value) {
+            _authenticationFlow = (value || "").toLowerCase();
+            return $ref;
+        };
         this.redirectToLoginOnLogout = function(value) {
             _redirectToLoginOnLogout = value;
             return $ref;
         };
-
-
         this.enable = function() {
             _enable = true;
             return $ref;
@@ -92,14 +100,57 @@ angular.module('gale.services')
                 _properties[name] = value;
             };
             //------------------------------------------------------------------------------
-            self.authenticate = function(credentials) {
-                return $Api.invoke('POST', getIssuerEndpoint(), credentials)
-                    .success(function(data) {
-                        self.logIn(data); //Internal Authentication
-                    })
-                    .error(function() {
-                        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                    });
+            self.authenticate = function(parameters, authenticationFlow) {
+                //overrides??
+                var _flowType = authenticationFlow || _authenticationFlow;
+                var defer = $q.defer();
+
+                switch (_flowType) {
+                    case FLOW_TYPES.custom:
+                        $Api.invoke('POST', getIssuerEndpoint(), parameters)
+                            .success(function(data) {
+                                self.logIn(data); //Internal Authentication
+                                defer.resolve(data);
+                            })
+                            .error(function(ex) {
+                                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                                defer.reject(ex);
+                            });
+                        break;
+                    case FLOW_TYPES.basic:
+                        //According to the RFC 6749
+                        //  https://tools.ietf.org/html/rfc6749#section-4.4
+                        var grant_type = (parameters.grant_type || "password");
+                        var body = {
+                            grant_type: grant_type
+                        };
+
+                        //base64(username:password)
+                        var base64String = btoa("{0}:{1}".format([
+                            parameters.username,
+                            parameters.password
+                        ]));
+
+                        var headers = {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "Authorization": "Basic " + base64String
+                        };
+
+                        $Api.invoke('POST', getIssuerEndpoint(), body, headers)
+                            .success(function(data) {
+                                self.logIn(data); //Internal Authentication
+                                defer.resolve(data);
+                            })
+                            .error(function(ex) {
+                                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                                defer.reject(ex);
+                            });
+                        break;
+                    default:
+                        throw Error("NotImplementedFlowException");
+                }
+
+                return defer.promise;
             };
             self.extend = function(name, value) {
                 if (typeof name === "object") {
@@ -119,19 +170,11 @@ angular.module('gale.services')
             self.logIn = function(oauthToken) {
                 //Check OAuthToken Format
                 if (!oauthToken.access_token) {
-                    throw Error("OAUTHTOKEN_BADFORMAT: access_token (jwt)");
+                    throw Error("JWT_TOKEN_BADFORMAT: access_token (jwt)");
                 }
-
-                //NOT ALWAYS REQUIRED ;)!
-                /*
-                if (!oauthToken.expires_in)
-                {
-                    throw Error("OAUTHTOKEN_BADFORMAT: expires_in (unixTime)");
-                }
-                */
 
                 if (!oauthToken.token_type) {
-                    throw Error("OAUTHTOKEN_BADFORMAT: token_type (string)");
+                    throw Error("JWT_TOKEN_BADFORMAT: token_type (string)");
                 }
 
                 return _login(oauthToken);

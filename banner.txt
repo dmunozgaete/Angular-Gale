@@ -1,5 +1,5 @@
 /*------------------------------------------------------
- Company:           Valentys Ltda.
+ Company:           Gale Framework
  Author:            <%= authors %>
  
  Description:       <%= description %>

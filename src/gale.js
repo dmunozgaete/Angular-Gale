@@ -1,5 +1,5 @@
 //------------------------------------------------------
-// Company: Valentys Ltda.
+// Company: Gale Framework
 // Author: dmunozgaete@gmail.com
 // 
 // Description: Angular Gale Implementation
@@ -7,7 +7,7 @@
 // URL: https://github.com/dmunozgaete/angular-gale
 // 
 // Documentation:
-//      http://angular-gale-docs.azurewebsites.net/
+//      http://angular-gale.azurewebsites.net/
 //------------------------------------------------------
 angular.manifiest('gale', [
     'gale.classes',
@@ -18,7 +18,7 @@ angular.manifiest('gale', [
     'gale.services.configuration',
     'gale.services.rest',
     'gale.services.storage',
-    'gale.classes'
+    'gale.components'
 ], [
     'ui.router' //NG ROUTE
 ])
