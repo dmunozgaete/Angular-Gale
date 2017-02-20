@@ -1,12 +1,12 @@
 /*------------------------------------------------------
- Company:           Gale Framework
+ Company:           Peanut Hub Ltda.
  Author:            David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)
  
  Description:       Angular Implementation for the Javascript Client GALE
  Github:            https://github.com/dmunozgaete/angular-gale
 
- Versión:           1.0.0
- Build Date:        2016-09-26 19:14:55
+ Versión:           1.0.1
+ Build Date:        2017-02-20 19:39:39
 ------------------------------------------------------*/
 
 (function(angular) {
@@ -967,43 +967,59 @@ angular.module('gale.directives')
         exists: exists
     };
 }]);;angular.module('gale.services.configuration')
-.service('$Localization', ['RESOURCES', function(RESOURCES) {
-    function get(name, defaultValue) {
-        var v = RESOURCES[name];
-        if (typeof v === 'undefined') {
-            ns = name.split(".");
-            index = RESOURCES;
-            for (var n in ns) {
-                if (index[ns[n]] !== undefined) {
-                    index = index[ns[n]];
-                    error = false;
+    .service('$Localization', ['RESOURCES', function(RESOURCES) {
+        function get(name, defaultValue) {
+            var v = RESOURCES[name];
+            if (typeof v === 'undefined') {
+                var ns = name.split(".");
+                var value = RESOURCES;
+                for (var n in ns) {
+                    if (value[ns[n]] !== undefined) {
+                        value = value[ns[n]];
+                        error = false;
+                    } else {
+                        error = true;
+                    }
                 }
-                else {
-                    error = true;
+                if (!error) {
+                    return value;
+                } else {
+                    if (defaultValue) {
+                        return defaultValue;
+                    }
+                    throw Error(name + " don't exists in resources");
                 }
             }
-            if (!error) {
-                return index;
-            }
-            else {
-                if (defaultValue) {
-                    return defaultValue;
-                }
-                throw Error(name + " don't exists in resources");
-            }
+            return RESOURCES[name];
         }
-        return RESOURCES[name];
-    }
 
-    function exists(name) {
-        return RESOURCES[name] != null;
-    }
+        function exists(name) {
+            var v = RESOURCES[name];
+            if (typeof v === 'undefined' && name && name.length > 0) {
+                var ns = name.split(".");
+                var value = RESOURCES;
+                for (var n in ns) {
+                    if (value[ns[n]] !== undefined) {
+                        value = value[ns[n]];
+                        error = false;
+                    } else {
+                        error = true;
+                    }
+                }
+                if (!error) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return v ? true : false;
+        }
 
-    return {
-        get: get,
-        exists: exists
-    };
-}]);
+        return {
+            get: get,
+            exists: exists
+        };
+    }]);
 ;angular.module('gale.services')
 
 .provider('$Api', function() {
@@ -1411,6 +1427,7 @@ angular.module('gale.directives')
             var _token_key = "$_identity";
             var _properties = {};
             var _authResponse = $LocalStorage.getObject(_token_key);
+            var _lastBlockedState = null;
             var self = this;
             //------------------------------------------------------------------------------
             var _login = function(oauthToken) {
@@ -1500,6 +1517,9 @@ angular.module('gale.directives')
             self.getTokenType = function() {
                 return _authResponse.token_type;
             };
+            self.getLastBlockedState = function() {
+                return _lastBlockedState;
+            };
             self.logIn = function(oauthToken) {
                 //Check OAuthToken Format
                 if (!oauthToken.access_token) {
@@ -1578,11 +1598,17 @@ angular.module('gale.directives')
                     }
                 });
                 //EVENT HOOK
-                $rootScope.$on('$stateChangeStart', function(event, toState, current) {
+                $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
                     if (_enable) {
                         if (!self.isAuthenticated() && toState.name !== getLogInRoute()) {
                             //Is in Whitelist??
-                            if (!_whiteListResolver(toState, current)) {
+                            if (!_whiteListResolver(toState, fromState)) {
+                                //SET the last blocked URL , for redirection function :P
+                                _lastBlockedState = {
+                                    state: toState,
+                                    params: toParams
+                                };
+
                                 //Authentication is Required
                                 $state.go(getLogInRoute());
                                 event.preventDefault();

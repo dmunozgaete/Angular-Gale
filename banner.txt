@@ -1,5 +1,5 @@
 /*------------------------------------------------------
- Company:           Gale Framework
+ Company:           Peanut Hub Ltda.
  Author:            <%= authors %>
  
  Description:       <%= description %>
