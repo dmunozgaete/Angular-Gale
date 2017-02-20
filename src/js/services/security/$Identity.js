@@ -78,6 +78,7 @@ angular.module('gale.services')
             var _token_key = "$_identity";
             var _properties = {};
             var _authResponse = $LocalStorage.getObject(_token_key);
+            var _lastBlockedState = null;
             var self = this;
             //------------------------------------------------------------------------------
             var _login = function(oauthToken) {
@@ -167,6 +168,9 @@ angular.module('gale.services')
             self.getTokenType = function() {
                 return _authResponse.token_type;
             };
+            self.getLastBlockedState = function() {
+                return _lastBlockedState;
+            };
             self.logIn = function(oauthToken) {
                 //Check OAuthToken Format
                 if (!oauthToken.access_token) {
@@ -245,11 +249,17 @@ angular.module('gale.services')
                     }
                 });
                 //EVENT HOOK
-                $rootScope.$on('$stateChangeStart', function(event, toState, current) {
+                $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
                     if (_enable) {
                         if (!self.isAuthenticated() && toState.name !== getLogInRoute()) {
                             //Is in Whitelist??
-                            if (!_whiteListResolver(toState, current)) {
+                            if (!_whiteListResolver(toState, fromState)) {
+                                //SET the last blocked URL , for redirection function :P
+                                _lastBlockedState = {
+                                    state: toState,
+                                    params: toParams
+                                };
+
                                 //Authentication is Required
                                 $state.go(getLogInRoute());
                                 event.preventDefault();
