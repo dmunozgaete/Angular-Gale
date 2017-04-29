@@ -5,8 +5,8 @@
  Description:       Angular Implementation for the Javascript Client GALE
  Github:            https://github.com/dmunozgaete/angular-gale
 
- Versión:           1.0.1
- Build Date:        2017-02-20 19:39:39
+ Versión:           1.1.0
+ Build Date:        2017-04-29 20:11:48
 ------------------------------------------------------*/
 
 (function(angular) {
@@ -197,7 +197,7 @@
         //ENVIRONMENT CONFIGURATION
         var environment = (INITIAL_CONFIGURATION.application.environment + "").toLowerCase();
         $http.get('config/env/' + environment + '.json')
-            .success(function(ENVIRONMENT_CONFIGURATION) {
+            .then(function(ENVIRONMENT_CONFIGURATION) {
                 //MERGE CONFIGURATION'S
                 var CONFIGURATION = angular.extend(INITIAL_CONFIGURATION, ENVIRONMENT_CONFIGURATION);
 
@@ -207,7 +207,7 @@
                 //RESOURCES LOCALIZATION
                 var lang = (INITIAL_CONFIGURATION.application.language + "").toLowerCase();
                 $http.get('config/locale/' + lang + '.json')
-                    .success(function(data) {
+                    .then(function(data) {
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
 
@@ -229,13 +229,11 @@
 
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
-                    })
-                    .error(function(data, status, headers, config) {
+                    },function(data, status, headers, config) {
                         logger.error("Can't get resources file (config/resources/" + lang + ".json)");
                     });
                 //--------------------------------------------------------------------------------------------------------------------
-            })
-            .error(function(data, status, headers, config) {
+            },function(data, status, headers, config) {
                 logger.error("Can't get configuration file (config/env/" + environment + ".json)");
             });
         //--------------------------------------------------------------------------------------------------------------------

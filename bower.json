@@ -1,6 +1,6 @@
 {
   "name": "angular-gale",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "homepage": "https://github.com/dmunozgaete/angular-gale",
   "authors": [
     "David Gaete <dmunozgaete@gmail.com> (https://github.com/dmunozgaete)"
@@ -30,7 +30,8 @@
     "package.json"
   ],
   "dependencies": {
-    "angular-ui-router": "0.2.13",
-    "lodash": "~3.10.1"
+    "angular": "^1.6.4",
+    "angular-ui-router": "^0.4.2",
+    "lodash": "^4.12.0"
   }
 }

@@ -186,7 +186,7 @@
         //ENVIRONMENT CONFIGURATION
         var environment = (INITIAL_CONFIGURATION.application.environment + "").toLowerCase();
         $http.get('config/env/' + environment + '.json')
-            .success(function(ENVIRONMENT_CONFIGURATION) {
+            .then(function(ENVIRONMENT_CONFIGURATION) {
                 //MERGE CONFIGURATION'S
                 var CONFIGURATION = angular.extend(INITIAL_CONFIGURATION, ENVIRONMENT_CONFIGURATION);
 
@@ -196,7 +196,7 @@
                 //RESOURCES LOCALIZATION
                 var lang = (INITIAL_CONFIGURATION.application.language + "").toLowerCase();
                 $http.get('config/locale/' + lang + '.json')
-                    .success(function(data) {
+                    .then(function(data) {
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
 
@@ -218,13 +218,11 @@
 
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
-                    })
-                    .error(function(data, status, headers, config) {
+                    },function(data, status, headers, config) {
                         logger.error("Can't get resources file (config/resources/" + lang + ".json)");
                     });
                 //--------------------------------------------------------------------------------------------------------------------
-            })
-            .error(function(data, status, headers, config) {
+            },function(data, status, headers, config) {
                 logger.error("Can't get configuration file (config/env/" + environment + ".json)");
             });
         //--------------------------------------------------------------------------------------------------------------------
