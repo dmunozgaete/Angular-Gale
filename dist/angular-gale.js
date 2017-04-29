@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.1.0
- Build Date:        2017-04-29 20:11:48
+ Build Date:        2017-04-29 20:23:47
 ------------------------------------------------------*/
 
 (function(angular) {
@@ -197,7 +197,8 @@
         //ENVIRONMENT CONFIGURATION
         var environment = (INITIAL_CONFIGURATION.application.environment + "").toLowerCase();
         $http.get('config/env/' + environment + '.json')
-            .then(function(ENVIRONMENT_CONFIGURATION) {
+            .then(function(xhr) {
+                var ENVIRONMENT_CONFIGURATION = xhr.data;
                 //MERGE CONFIGURATION'S
                 var CONFIGURATION = angular.extend(INITIAL_CONFIGURATION, ENVIRONMENT_CONFIGURATION);
 
@@ -207,7 +208,9 @@
                 //RESOURCES LOCALIZATION
                 var lang = (INITIAL_CONFIGURATION.application.language + "").toLowerCase();
                 $http.get('config/locale/' + lang + '.json')
-                    .then(function(data) {
+                    .then(function(xhr) {
+                        var data = xhr.data;
+
                         //SAVE CONSTANT WITH BASE COONFIGURATION
                         angular.module(application_bundle).constant('RESOURCES', data);
 
@@ -229,11 +232,11 @@
 
                         //MANUAL INITIALIZE ANGULAR
                         angular.bootstrap(document, [application_bundle]);
-                    },function(data, status, headers, config) {
+                    }, function(data, status, headers, config) {
                         logger.error("Can't get resources file (config/resources/" + lang + ".json)");
                     });
                 //--------------------------------------------------------------------------------------------------------------------
-            },function(data, status, headers, config) {
+            }, function(data, status, headers, config) {
                 logger.error("Can't get configuration file (config/env/" + environment + ".json)");
             });
         //--------------------------------------------------------------------------------------------------------------------
