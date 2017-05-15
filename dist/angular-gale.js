@@ -5,8 +5,8 @@
  Description:       Angular Implementation for the Javascript Client GALE
  Github:            https://github.com/dmunozgaete/angular-gale
 
- Versión:           1.1.0
- Build Date:        2017-05-15 12:20:02
+ Versión:           1.1.2
+ Build Date:        2017-05-15 12:44:25
 ------------------------------------------------------*/
 
 (function(angular) {
@@ -1180,16 +1180,16 @@ angular.module('gale.directives')
             $log.debug("[" + method + " " + url + "] parameters: ", body);
 
             var http = $http(cfg)
-                .then(function(data, status, headers, config) {
-                    defer.resolve(data);
+                .then(function(xhr) {
+                    defer.resolve(xhr.data);
                     //---------------------------------------------------
-                    fire(EVENTS.SUCCESS, [data, status, headers]);
+                    fire(EVENTS.SUCCESS, [xhr.data, xhr.status, xhr.headers]);
                     //---------------------------------------------------
-                }, function(data, status, headers, config) {
-                    defer.reject(data);
+                }, function(xhr) {
+                    defer.reject(xhr.data);
 
                     //---------------------------------------------------
-                    fire(EVENTS.ERROR, [data, status, headers]);
+                    fire(EVENTS.ERROR, [xhr.data, xhr.status, xhr.headers]);
                     //---------------------------------------------------
                 });
 
