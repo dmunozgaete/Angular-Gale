@@ -157,13 +157,12 @@
             $log.debug("[" + method + " " + url + "] parameters: ", body);
 
             var http = $http(cfg)
-                .success(function(data, status, headers, config) {
+                .then(function(data, status, headers, config) {
                     defer.resolve(data);
                     //---------------------------------------------------
                     fire(EVENTS.SUCCESS, [data, status, headers]);
                     //---------------------------------------------------
-                })
-                .error(function(data, status, headers, config) {
+                }, function(data, status, headers, config) {
                     defer.reject(data);
 
                     //---------------------------------------------------
@@ -172,9 +171,9 @@
                 });
 
             //Extend to mantain "compatibility"
-            defer.promise.success = http.success;
-            defer.promise.error = http.error;
-            defer.promise.finally = http.finally;
+            //defer.promise.success = http.success;
+            //defer.promise.error = http.error;
+            //defer.promise.finally = http.finally;
 
             return defer.promise;
         };
