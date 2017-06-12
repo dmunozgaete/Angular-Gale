@@ -6,7 +6,7 @@
  Github:            https://github.com/dmunozgaete/angular-gale
 
  Versión:           1.1.2
- Build Date:        2017-05-15 12:44:25
+ Build Date:        2017-06-12 2:02:20
 ------------------------------------------------------*/
 
 (function(angular) {
@@ -378,16 +378,30 @@ angular.module('gale.classes')
 });
 ;angular.module('gale.directives')
 
-.directive('selectTextOnClick', function () {
+.directive('selectTextOnClick', function() {
     return {
         restrict: 'A',
-        link: function (scope, element, attrs) {
-            element.on('click', function () {
-                this.select();
+        link: function(scope, element, attrs) {
+            element.on('click', function() {
+                if (this.tagName === "INPUT" || this.tagName === "TEXTAREA") {
+                    this.select();
+                } else {
+                    if (document.selection) {
+                        var range1 = document.body.createTextRange();
+                        range1.moveToElementText(this);
+                        range1.select();
+                    } else if (window.getSelection) {
+                        var range = document.createRange();
+                        range.selectNode(this);
+                        window.getSelection().removeAllRanges();
+                        window.getSelection().addRange(range);
+                    }
+                }
             });
         }
     };
-});;angular.module('gale.directives')
+});
+;angular.module('gale.directives')
     .directive('toNumberOnBlur', ['$filter', '$locale', function($filter, $locale) {
         return {
             require: 'ngModel',
